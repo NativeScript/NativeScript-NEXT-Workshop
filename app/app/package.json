@@ -1,0 +1,6 @@
+{
+	"name": "tns-samples-template-hello-world",
+	"main": "app.js",
+	"version": "0.4.2",
+	"description": "Nativescript template-hello-world sample application"
+}
