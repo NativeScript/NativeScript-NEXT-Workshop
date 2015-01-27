@@ -2,5 +2,8 @@
 	"id": "org.nativescript.telerikmemegenerator",
 	"tns-ios": {
 		"version": "0.4.2"
+	},
+	"tns-android": {
+		"version": "0.4.2"
 	}
 }
