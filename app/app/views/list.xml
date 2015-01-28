@@ -1,18 +1,8 @@
-<Page loaded="load">
+<Page navigatedTo="load">
 	<GridPanel>
-		<GridPanel.rowDefinitions>
-			<RowDefinition height="auto" />
-			<RowDefinition height="*" />
-		</GridPanel.rowDefinitions>
-
-		<StackPanel orientation="horizontal" row="0">
-			<TextField width="200" hint="Add a language" text="{{ language }}" />
-			<Button text="Add" click="add"></Button>
-		</StackPanel>
-
-		<ListView items="{{ list }}" row="1">
+		<ListView items="{{ memes }}">
 			<ListView.itemTemplate>
-				<Label text="{{ name }}" />
+				<Image source="{{ url }}" />
 			</ListView.itemTemplate>
 		</ListView>
 	</GridPanel>

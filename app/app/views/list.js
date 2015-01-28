@@ -1,28 +1,13 @@
 var observableModule = require( "data/observable" ),
 	observableArray = require( "data/observable-array" ),
-	data = new observableModule.Observable(),
-	view;
+	data = new observableModule.Observable();
 
-data.set( "language", "" );
-data.set( "list", new observableArray.ObservableArray([
-	{ name: "C#" },
-	{ name: "Java" },
-	{ name: "JavaScript" }
+data.set( "memes", new observableArray.ObservableArray([
+	{ url: "https://google.com/favicon.ico" },
+	{ url: "https://twitter.com/favicon.ico" },
+	{ url: "https://telerik.com/favicon.ico" }
 ]));
 
 exports.load = function( args ) {
-	view = args.object;
-	view.bindingContext = data;
-};
-exports.add = function() {
-	var language = data.get( "language" ),
-		list = data.get( "list" );
-
-	// Hide the keyboard on iOS (UIView.endEditing)
-	if ( view._nativeView.endEditing ) { // Guard against Android, WP, etc
-		view._nativeView.endEditing( true );
-	}
-
-	list.push({ name: language });
-	data.set( "language", "" );
+	args.object.bindingContext = data;
 };
