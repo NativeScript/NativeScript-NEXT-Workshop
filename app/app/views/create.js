@@ -9,6 +9,7 @@ exports.load = function(args) {
 
 exports.takePicture = function() {
 	camera.takePicture().then(function(result) {
-
+		// This doesn't work atm. See https://github.com/NativeScript/cross-platform-modules/issues/201
+		data.set("imageSource", result);
 	});
 };

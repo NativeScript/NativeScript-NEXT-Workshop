@@ -364,6 +364,71 @@ var TextViewStyler = (function () {
     return TextViewStyler;
 })();
 exports.TextViewStyler = TextViewStyler;
+var SegmentedBarStyler = (function () {
+    function SegmentedBarStyler() {
+    }
+    SegmentedBarStyler.setColorProperty = function (view, newValue) {
+        var bar = view.ios;
+        var attrs = NSMutableDictionary.new();
+        attrs.setValueForKey(newValue, NSForegroundColorAttributeName);
+        bar.setTitleTextAttributesForState(attrs, UIControlState.UIControlStateNormal);
+    };
+    SegmentedBarStyler.resetColorProperty = function (view, nativeValue) {
+        var bar = view.ios;
+        var attrs = NSMutableDictionary.new();
+        attrs.setValueForKey(nativeValue, NSForegroundColorAttributeName);
+        bar.setTitleTextAttributesForState(attrs, UIControlState.UIControlStateNormal);
+    };
+    SegmentedBarStyler.registerHandlers = function () {
+        style.registerHandler(style.colorProperty, new stylersCommon.StylePropertyChangedHandler(SegmentedBarStyler.setColorProperty, SegmentedBarStyler.resetColorProperty), "SegmentedBar");
+    };
+    return SegmentedBarStyler;
+})();
+exports.SegmentedBarStyler = SegmentedBarStyler;
+var SearchBarStyler = (function () {
+    function SearchBarStyler() {
+    }
+    SearchBarStyler.setBackgroundColorProperty = function (view, newValue) {
+        var bar = view.ios;
+        bar.barTintColor = newValue;
+    };
+    SearchBarStyler.getBackgroundColorProperty = function (view) {
+        var bar = view.ios;
+        return bar.barTintColor;
+    };
+    SearchBarStyler.resetBackgroundColorProperty = function (view, nativeValue) {
+        var bar = view.ios;
+        bar.barTintColor = nativeValue;
+    };
+    SearchBarStyler.getColorProperty = function (view) {
+        var bar = view.ios;
+        var sf = bar.valueForKey("_searchField");
+        if (sf) {
+            return sf.textColor;
+        }
+        return undefined;
+    };
+    SearchBarStyler.setColorProperty = function (view, newValue) {
+        var bar = view.ios;
+        var sf = bar.valueForKey("_searchField");
+        if (sf) {
+            sf.textColor = newValue;
+        }
+    };
+    SearchBarStyler.resetColorProperty = function (view, nativeValue) {
+        var bar = view.ios;
+        var sf = bar.valueForKey("_searchField");
+        if (sf) {
+            sf.textColor = nativeValue;
+        }
+    };
+    SearchBarStyler.registerHandlers = function () {
+        style.registerHandler(style.backgroundColorProperty, new stylersCommon.StylePropertyChangedHandler(SearchBarStyler.setBackgroundColorProperty, SearchBarStyler.resetBackgroundColorProperty, SearchBarStyler.getBackgroundColorProperty), "SearchBar");
+        style.registerHandler(style.colorProperty, new stylersCommon.StylePropertyChangedHandler(SearchBarStyler.setColorProperty, SearchBarStyler.resetColorProperty, SearchBarStyler.getColorProperty), "SearchBar");
+    };
+    return SearchBarStyler;
+})();
+exports.SearchBarStyler = SearchBarStyler;
 function _registerDefaultStylers() {
     style.registerNoStylingClass("Frame");
     DefaultStyler.registerHandlers();
@@ -371,5 +436,7 @@ function _registerDefaultStylers() {
     LabelStyler.registerHandlers();
     TextFieldStyler.registerHandlers();
     TextViewStyler.registerHandlers();
+    SegmentedBarStyler.registerHandlers();
+    SearchBarStyler.registerHandlers();
 }
 exports._registerDefaultStylers = _registerDefaultStylers;

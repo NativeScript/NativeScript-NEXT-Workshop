@@ -79,3 +79,15 @@ var Dock;
     Dock.right = "right";
     Dock.bottom = "bottom";
 })(Dock = exports.Dock || (exports.Dock = {}));
+var AutocapitalizationType;
+(function (AutocapitalizationType) {
+    AutocapitalizationType.none = "none";
+    AutocapitalizationType.words = "words";
+    AutocapitalizationType.sentences = "sentences";
+    AutocapitalizationType.allCharacters = "allCharacters";
+})(AutocapitalizationType = exports.AutocapitalizationType || (exports.AutocapitalizationType = {}));
+var ImageFormat;
+(function (ImageFormat) {
+    ImageFormat.png = "png";
+    ImageFormat.jpeg = "jpeg";
+})(ImageFormat = exports.ImageFormat || (exports.ImageFormat = {}));
