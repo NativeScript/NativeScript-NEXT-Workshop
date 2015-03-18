@@ -1,3 +1,5 @@
 <Page>
-	<Label text="Create!" />
+	<StackLayout>
+		<Button text="Take a picture" tap="takePicture" />
+	</StackLayout>
 </Page>
