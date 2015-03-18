@@ -9,49 +9,44 @@ function onTextPropertyChanged(data) {
     var bar = data.object;
     bar.ios.text = data.newValue;
 }
-common.textProperty.metadata.onSetNativeValue = onTextPropertyChanged;
+common.SearchBar.textProperty.metadata.onSetNativeValue = onTextPropertyChanged;
 require("utils/module-merge").merge(common, exports);
-var OWNER = "_owner";
-var EMPTY = "";
-var SEARCHTEXT = "searchText";
-var SearchBarDelegateClass = NSObject.extend({
-    searchBarTextDidChange: function (searchBar, searchText) {
-        var owner = this.getOwner();
-        if (owner) {
-            owner._onPropertyChangedFromNative(common.textProperty, searchText);
-            if (searchText === EMPTY && this[SEARCHTEXT] !== searchText) {
-                owner._emit(common.knownEvents.clear);
-            }
-            this[SEARCHTEXT] = searchText;
-        }
-    },
-    searchBarCancelButtonClicked: function (searchBar) {
-        searchBar.resignFirstResponder();
-        var owner = this.getOwner();
-        if (owner) {
-            owner._emit(common.knownEvents.clear);
-        }
-    },
-    searchBarSearchButtonClicked: function (searchBar) {
-        searchBar.resignFirstResponder();
-        var owner = this.getOwner();
-        if (owner) {
-            owner._emit(common.knownEvents.submit);
-        }
-    },
-    getOwner: function () {
-        return this[OWNER].get();
+var UISearchBarDelegateImpl = (function (_super) {
+    __extends(UISearchBarDelegateImpl, _super);
+    function UISearchBarDelegateImpl() {
+        _super.apply(this, arguments);
     }
-}, {
-    protocols: [UISearchBarDelegate]
-});
+    UISearchBarDelegateImpl.new = function () {
+        return _super.new.call(this);
+    };
+    UISearchBarDelegateImpl.prototype.initWithOwner = function (owner) {
+        this._owner = owner;
+        return this;
+    };
+    UISearchBarDelegateImpl.prototype.searchBarTextDidChange = function (searchBar, searchText) {
+        this._owner._onPropertyChangedFromNative(common.SearchBar.textProperty, searchText);
+        if (searchText === "" && this._searchText !== searchText) {
+            this._owner._emit(common.knownEvents.clear);
+        }
+        this._searchText = searchText;
+    };
+    UISearchBarDelegateImpl.prototype.searchBarCancelButtonClicked = function (searchBar) {
+        searchBar.resignFirstResponder();
+        this._owner._emit(common.knownEvents.clear);
+    };
+    UISearchBarDelegateImpl.prototype.searchBarSearchButtonClicked = function (searchBar) {
+        searchBar.resignFirstResponder();
+        this._owner._emit(common.knownEvents.submit);
+    };
+    UISearchBarDelegateImpl.ObjCProtocols = [UISearchBarDelegate];
+    return UISearchBarDelegateImpl;
+})(NSObject);
 var SearchBar = (function (_super) {
     __extends(SearchBar, _super);
     function SearchBar() {
         _super.call(this);
         this._ios = new UISearchBar();
-        this._delegate = SearchBarDelegateClass.alloc();
-        this._delegate[OWNER] = new WeakRef(this);
+        this._delegate = UISearchBarDelegateImpl.new().initWithOwner(this);
         this._ios.delegate = this._delegate;
     }
     Object.defineProperty(SearchBar.prototype, "ios", {

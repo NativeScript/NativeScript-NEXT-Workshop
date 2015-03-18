@@ -30,7 +30,7 @@ var CssSelector = (function () {
     });
     Object.defineProperty(CssSelector.prototype, "specificity", {
         get: function () {
-            throw "Specificity property should is abstract";
+            throw "Specificity property is abstract";
         },
         enumerable: true,
         configurable: true
@@ -38,7 +38,7 @@ var CssSelector = (function () {
     CssSelector.prototype.matches = function (view) {
         return false;
     };
-    CssSelector.prototype.apply = function (view, scope) {
+    CssSelector.prototype.apply = function (view) {
         this.eachSetter(function (property, value) {
             view.style._setValue(property, value, observable.ValueSource.Css);
         });
@@ -106,7 +106,10 @@ var CssClassSelector = (function (_super) {
         configurable: true
     });
     CssClassSelector.prototype.matches = function (view) {
-        return this.expression === view.cssClass;
+        var expectedClass = this.expression;
+        return view._cssClasses.some(function (cssClass, i, arr) {
+            return cssClass === expectedClass;
+        });
     };
     return CssClassSelector;
 })(CssSelector);
@@ -157,7 +160,10 @@ var CssVisualStateSelector = (function (_super) {
             matches = this._match === view.id;
         }
         if (this._isByClass) {
-            matches = this._match === view.cssClass;
+            var expectedClass = this._match;
+            matches = view._cssClasses.some(function (cssClass, i, arr) {
+                return cssClass === expectedClass;
+            });
         }
         if (this._isByType) {
             matches = this._match === view.cssType.toLowerCase();
@@ -182,3 +188,20 @@ function createSelector(expression, declarations) {
     return new CssTypeSelector(expression, declarations);
 }
 exports.createSelector = createSelector;
+var InlineStyleSelector = (function (_super) {
+    __extends(InlineStyleSelector, _super);
+    function InlineStyleSelector(declarations) {
+        _super.call(this, undefined, declarations);
+    }
+    InlineStyleSelector.prototype.apply = function (view) {
+        this.eachSetter(function (property, value) {
+            view.style._setValue(property, value, observable.ValueSource.Local);
+        });
+    };
+    return InlineStyleSelector;
+})(CssSelector);
+function applyInlineSyle(view, declarations) {
+    var localStyleSelector = new InlineStyleSelector(declarations);
+    localStyleSelector.apply(view);
+}
+exports.applyInlineSyle = applyInlineSyle;

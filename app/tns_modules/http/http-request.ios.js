@@ -23,9 +23,6 @@ function request(options) {
             if (types.isString(options.content)) {
                 urlRequest.HTTPBody = NSString.alloc().initWithString(options.content).dataUsingEncoding(4);
             }
-            else if (types.isDefined(options.content)) {
-                urlRequest.HTTPBody = options.content;
-            }
             var dataTask = session.dataTaskWithRequestCompletionHandler(urlRequest, function (data, response, error) {
                 if (error) {
                     reject(new Error(error.localizedDescription));

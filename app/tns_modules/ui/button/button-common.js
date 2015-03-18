@@ -8,13 +8,13 @@ var dependencyObservable = require("ui/core/dependency-observable");
 var view = require("ui/core/view");
 var proxy = require("ui/core/proxy");
 var observable = require("data/observable");
-var weakEventListener = require("ui/core/weakEventListener");
+var weakEventListener = require("ui/core/weak-event-listener");
 var knownEvents;
 (function (knownEvents) {
-    knownEvents.click = "click";
+    knownEvents.tap = "tap";
 })(knownEvents = exports.knownEvents || (exports.knownEvents = {}));
-exports.textProperty = new dependencyObservable.Property("text", "Button", new proxy.PropertyMetadata("", dependencyObservable.PropertyMetadataOptions.AffectsMeasure));
-exports.formattedTextProperty = new dependencyObservable.Property("formattedText", "Button", new proxy.PropertyMetadata("", dependencyObservable.PropertyMetadataOptions.AffectsMeasure));
+var textProperty = new dependencyObservable.Property("text", "Button", new proxy.PropertyMetadata("", dependencyObservable.PropertyMetadataSettings.AffectsLayout));
+var formattedTextProperty = new dependencyObservable.Property("formattedText", "Button", new proxy.PropertyMetadata("", dependencyObservable.PropertyMetadataSettings.AffectsLayout));
 function onTextPropertyChanged(data) {
     var button = data.object;
     button._onTextPropertyChanged(data);
@@ -23,33 +23,39 @@ function onFormattedTextPropertyChanged(data) {
     var button = data.object;
     button._onFormattedTextPropertyChanged(data);
 }
-exports.textProperty.metadata.onSetNativeValue = onTextPropertyChanged;
-exports.formattedTextProperty.metadata.onSetNativeValue = onFormattedTextPropertyChanged;
+textProperty.metadata.onSetNativeValue = onTextPropertyChanged;
+formattedTextProperty.metadata.onSetNativeValue = onFormattedTextPropertyChanged;
 var Button = (function (_super) {
     __extends(Button, _super);
     function Button() {
         _super.apply(this, arguments);
     }
+    Button.prototype._onBindingContextChanged = function (oldValue, newValue) {
+        _super.prototype._onBindingContextChanged.call(this, oldValue, newValue);
+        if (this.formattedText) {
+            this.formattedText.updateSpansBindingContext(newValue);
+        }
+    };
     Object.defineProperty(Button.prototype, "text", {
         get: function () {
-            return this._getValue(exports.textProperty);
+            return this._getValue(Button.textProperty);
         },
         set: function (value) {
-            this._setValue(exports.textProperty, value);
+            this._setValue(Button.textProperty, value);
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(Button.prototype, "formattedText", {
         get: function () {
-            return this._getValue(exports.formattedTextProperty);
+            return this._getValue(Button.formattedTextProperty);
         },
         set: function (value) {
             if (this.formattedText !== value) {
                 var weakEventOptions = {
-                    target: new WeakRef(this),
+                    targetWeakRef: new WeakRef(this),
                     eventName: observable.knownEvents.propertyChange,
-                    source: new WeakRef(value),
+                    sourceWeakRef: new WeakRef(value),
                     handler: this.onFormattedTextChanged,
                     handlerContext: this,
                     key: "formattedText"
@@ -57,7 +63,7 @@ var Button = (function (_super) {
                 if (this.formattedText) {
                     weakEventListener.WeakEventListener.removeWeakEventListener(weakEventOptions);
                 }
-                this._setValue(exports.formattedTextProperty, value);
+                this._setValue(Button.formattedTextProperty, value);
                 if (value) {
                     weakEventListener.WeakEventListener.addWeakEventListener(weakEventOptions);
                 }
@@ -71,10 +77,10 @@ var Button = (function (_super) {
     };
     Button.prototype._onTextPropertyChanged = function (data) {
         if (this.android) {
-            this.android.setText(data.newValue);
+            this.android.setText(data.newValue + "");
         }
         if (this.ios) {
-            this.ios.setTitleForState(data.newValue, UIControlState.UIControlStateNormal);
+            this.ios.setTitleForState(data.newValue + "", UIControlState.UIControlStateNormal);
         }
     };
     Button.prototype.setFormattedTextPropertyToNative = function (value) {
@@ -88,6 +94,8 @@ var Button = (function (_super) {
     Button.prototype._onFormattedTextPropertyChanged = function (data) {
         this.setFormattedTextPropertyToNative(data.newValue);
     };
+    Button.textProperty = textProperty;
+    Button.formattedTextProperty = formattedTextProperty;
     return Button;
 })(view.View);
 exports.Button = Button;

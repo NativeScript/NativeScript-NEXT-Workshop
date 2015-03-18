@@ -8,32 +8,41 @@ var dependencyObservable = require("ui/core/dependency-observable");
 var view = require("ui/core/view");
 var proxy = require("ui/core/proxy");
 var imageSource = require("image-source");
-var geometry = require("utils/geometry");
 var trace = require("trace");
 var enums = require("ui/enums");
+var utils = require("utils/utils");
 var SOURCE = "source";
 var URL = "url";
 var IMAGE = "Image";
 var ISLOADING = "isLoading";
 var STRETCH = "stretch";
+function isValidUrl(url) {
+    var value = url ? url.trim() : "";
+    return value !== "" && (value.indexOf("~/") === 0 || value.indexOf("http://") === 0 || value.indexOf("https://") === 0);
+}
 function onUrlPropertyChanged(data) {
     var image = data.object;
     var value = data.newValue;
-    image.source = null;
-    if (value !== "") {
-        image._setValue(exports.isLoadingProperty, true);
-        imageSource.fromUrl(value).then(function (r) {
-            if (image["_url"] === value) {
-                image.source = r;
-                image._setValue(exports.isLoadingProperty, false);
+    if (isValidUrl(value)) {
+        image.source = null;
+        image["_url"] = value;
+        if (value !== "") {
+            image._setValue(Image.isLoadingProperty, true);
+            if (value.trim().indexOf("~/") === 0) {
+                image.source = imageSource.fromFile(value.trim());
+                image._setValue(Image.isLoadingProperty, false);
             }
-        });
+            else {
+                imageSource.fromUrl(value).then(function (r) {
+                    if (image["_url"] === value) {
+                        image.source = r;
+                        image._setValue(Image.isLoadingProperty, false);
+                    }
+                });
+            }
+        }
     }
 }
-exports.urlProperty = new dependencyObservable.Property(URL, IMAGE, new proxy.PropertyMetadata("", dependencyObservable.PropertyMetadataOptions.None, onUrlPropertyChanged));
-exports.sourceProperty = new dependencyObservable.Property(SOURCE, IMAGE, new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataOptions.None));
-exports.isLoadingProperty = new dependencyObservable.Property(ISLOADING, IMAGE, new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataOptions.None));
-exports.stretchProperty = new dependencyObservable.Property(STRETCH, IMAGE, new proxy.PropertyMetadata(enums.Stretch.aspectFit, dependencyObservable.PropertyMetadataOptions.AffectsMeasure));
 var Image = (function (_super) {
     __extends(Image, _super);
     function Image(options) {
@@ -41,69 +50,71 @@ var Image = (function (_super) {
     }
     Object.defineProperty(Image.prototype, "source", {
         get: function () {
-            return this._getValue(exports.sourceProperty);
+            return this._getValue(Image.sourceProperty);
         },
         set: function (value) {
-            this._setValue(exports.sourceProperty, value);
+            this._setValue(Image.sourceProperty, value);
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(Image.prototype, "url", {
         get: function () {
-            return this._getValue(exports.urlProperty);
+            return this._getValue(Image.urlProperty);
         },
         set: function (value) {
-            this._setValue(exports.urlProperty, value);
-            this._url = value;
+            this._setValue(Image.urlProperty, value);
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(Image.prototype, "isLoading", {
         get: function () {
-            return this._getValue(exports.isLoadingProperty);
+            return this._getValue(Image.isLoadingProperty);
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(Image.prototype, "stretch", {
         get: function () {
-            return this._getValue(exports.stretchProperty);
+            return this._getValue(Image.stretchProperty);
         },
         set: function (value) {
-            this._setValue(exports.stretchProperty, value);
+            this._setValue(Image.stretchProperty, value);
         },
         enumerable: true,
         configurable: true
     });
-    Image.prototype._measureOverride = function (availableSize) {
-        var nativeSize = this._measureNativeView(new geometry.Size(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY));
-        var infinteWidth = !isFinite(availableSize.width);
-        var infinteHight = !isFinite(availableSize.height);
-        if (infinteWidth && infinteHight) {
-            return nativeSize;
+    Image.prototype.onMeasure = function (widthMeasureSpec, heightMeasureSpec) {
+        var width = utils.layout.getMeasureSpecSize(widthMeasureSpec);
+        var widthMode = utils.layout.getMeasureSpecMode(widthMeasureSpec);
+        var height = utils.layout.getMeasureSpecSize(heightMeasureSpec);
+        var heightMode = utils.layout.getMeasureSpecMode(heightMeasureSpec);
+        trace.write(this + " :onMeasure: " + utils.layout.getMode(widthMode) + " " + width + ", " + utils.layout.getMode(heightMode) + " " + height, trace.categories.Layout);
+        var nativeWidth = this.source ? this.source.width : 0;
+        var nativeHeight = this.source ? this.source.height : 0;
+        var measureWidth = Math.max(nativeWidth, this.minWidth);
+        var measureHeight = Math.max(nativeHeight, this.minHeight);
+        var finiteWidth = widthMode !== utils.layout.UNSPECIFIED;
+        var finiteHeight = heightMode !== utils.layout.UNSPECIFIED;
+        if (nativeWidth !== 0 && nativeHeight !== 0 && (finiteWidth || finiteHeight)) {
+            var scale = Image.computeScaleFactor(width, height, finiteWidth, finiteHeight, nativeWidth, nativeHeight, this.stretch);
+            var resultW = nativeWidth * scale.width;
+            var resultH = nativeHeight * scale.height;
+            measureWidth = finiteWidth ? Math.min(resultW, width) : resultW;
+            measureHeight = finiteHeight ? Math.min(resultH, height) : resultH;
+            trace.write("Image stretch: " + this.stretch + ", nativeWidth: " + nativeWidth + ", nativeHeight: " + nativeHeight, trace.categories.Layout);
         }
-        if (nativeSize.width === 0 || nativeSize.height === 0) {
-            return new geometry.Size(0, 0);
-        }
-        var scale = Image.computeScaleFactor(availableSize, nativeSize, this.stretch);
-        var resultW = nativeSize.width * scale.width;
-        var resultH = nativeSize.height * scale.height;
-        resultW = Math.min(resultW, availableSize.width);
-        resultH = Math.min(resultH, availableSize.height);
-        var result = new geometry.Size(resultW, resultH);
-        trace.write("Image measureOverride stretch: " + this.stretch + ", availableSize: " + availableSize + ", nativeSize: " + nativeSize + ", result: " + result, trace.categories.Layout);
-        return result;
+        var widthAndState = view.View.resolveSizeAndState(measureWidth, width, widthMode, 0);
+        var heightAndState = view.View.resolveSizeAndState(measureHeight, height, heightMode, 0);
+        this.setMeasuredDimension(widthAndState, heightAndState);
     };
-    Image.computeScaleFactor = function (availableSize, contentSize, imageStretch) {
+    Image.computeScaleFactor = function (measureWidth, measureHeight, widthIsFinite, heightIsFinite, nativeWidth, nativeHeight, imageStretch) {
         var scaleW = 1;
         var scaleH = 1;
-        var widthIsFinite = isFinite(availableSize.width);
-        var heightIsFinite = isFinite(availableSize.height);
         if ((imageStretch === enums.Stretch.aspectFill || imageStretch === enums.Stretch.aspectFit || imageStretch === enums.Stretch.fill) && (widthIsFinite || heightIsFinite)) {
-            scaleW = (contentSize.width > 0) ? availableSize.width / contentSize.width : 0;
-            scaleH = (contentSize.height > 0) ? availableSize.height / contentSize.height : 0;
+            scaleW = (nativeWidth > 0) ? measureWidth / nativeWidth : 0;
+            scaleH = (nativeHeight > 0) ? measureHeight / nativeHeight : 0;
             if (!widthIsFinite) {
                 scaleW = scaleH;
             }
@@ -123,8 +134,12 @@ var Image = (function (_super) {
                 }
             }
         }
-        return new geometry.Size(scaleW, scaleH);
+        return { width: scaleW, height: scaleH };
     };
+    Image.urlProperty = new dependencyObservable.Property(URL, IMAGE, new proxy.PropertyMetadata("", dependencyObservable.PropertyMetadataSettings.None, onUrlPropertyChanged));
+    Image.sourceProperty = new dependencyObservable.Property(SOURCE, IMAGE, new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataSettings.None));
+    Image.isLoadingProperty = new dependencyObservable.Property(ISLOADING, IMAGE, new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataSettings.None));
+    Image.stretchProperty = new dependencyObservable.Property(STRETCH, IMAGE, new proxy.PropertyMetadata(enums.Stretch.aspectFit, dependencyObservable.PropertyMetadataSettings.AffectsLayout));
     return Image;
 })(view.View);
 exports.Image = Image;

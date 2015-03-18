@@ -1,6 +1,5 @@
 var color = require("color");
 var enums = require("ui/enums");
-var geometry = require("utils/geometry");
 var types = require("utils/types");
 function colorConverter(cssValue) {
     return new color.Color(cssValue);
@@ -24,10 +23,6 @@ function textAlignConverter(cssValue) {
     }
 }
 exports.textAlignConverter = textAlignConverter;
-function thicknessConverter(cssValue) {
-    return geometry.Thickness.convert(cssValue);
-}
-exports.thicknessConverter = thicknessConverter;
 exports.numberConverter = parseFloat;
 function visibilityConverter(cssValue) {
     if (types.isString(cssValue) && cssValue.toLowerCase() === enums.Visibility.collapsed) {

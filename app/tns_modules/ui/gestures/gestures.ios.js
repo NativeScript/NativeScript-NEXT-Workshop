@@ -1,10 +1,47 @@
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
 var common = require("ui/gestures/gestures-common");
 var definition = require("ui/gestures");
-var OWNER = "_owner";
-var CALLBACK = "_callback";
-var TYPE = "_type";
-var TARGET = "_target";
 require("utils/module-merge").merge(common, exports);
+var UIGestureRecognizerImpl = (function (_super) {
+    __extends(UIGestureRecognizerImpl, _super);
+    function UIGestureRecognizerImpl() {
+        _super.apply(this, arguments);
+    }
+    UIGestureRecognizerImpl.new = function () {
+        return _super.new.call(this);
+    };
+    UIGestureRecognizerImpl.prototype.initWithOwnerTypeCallback = function (owner, type, callback) {
+        this._owner = owner;
+        this._type = type;
+        if (callback) {
+            this._callback = callback;
+        }
+        return this;
+    };
+    UIGestureRecognizerImpl.prototype.recognize = function (recognizer) {
+        var callback = this._callback ? this._callback : this._owner._callback;
+        var type = this._type;
+        var target = this._owner._target;
+        var args = {
+            type: type,
+            view: target,
+            ios: recognizer,
+            android: undefined
+        };
+        if (callback) {
+            callback(args);
+        }
+    };
+    UIGestureRecognizerImpl.ObjCExposedMethods = {
+        "recognize": { returns: interop.types.void, params: [UIGestureRecognizer] }
+    };
+    return UIGestureRecognizerImpl;
+})(NSObject);
 var GesturesObserver = (function () {
     function GesturesObserver(callback) {
         this._callback = callback;
@@ -30,7 +67,9 @@ var GesturesObserver = (function () {
                 }));
             }
             if (type & definition.GestureTypes.Pan) {
-                nativeView.addGestureRecognizer(this._createRecognizer(definition.GestureTypes.Pan));
+                nativeView.addGestureRecognizer(this._createRecognizer(definition.GestureTypes.Pan, function (args) {
+                    _this._executeCallback(_getPanData(args, _this._target.ios));
+                }));
             }
             if (type & definition.GestureTypes.Swipe) {
                 nativeView.addGestureRecognizer(this._createRecognizer(definition.GestureTypes.Swipe, function (args) {
@@ -49,11 +88,13 @@ var GesturesObserver = (function () {
     };
     GesturesObserver.prototype.disconnect = function () {
         if (this._target && this._target.ios) {
-            for (var i in this._recognizers) {
-                var item = i;
-                this._target.ios.removeGestureRecognizer(item.recognizer);
-                item.recognizer = null;
-                item.target = null;
+            for (var name in this._recognizers) {
+                if (this._recognizers.hasOwnProperty(name)) {
+                    var item = this._recognizers[name];
+                    this._target.ios.removeGestureRecognizer(item.recognizer);
+                    item.recognizer = null;
+                    item.target = null;
+                }
             }
             this._recognizers = {};
         }
@@ -81,36 +122,8 @@ var GesturesObserver = (function () {
 })();
 exports.GesturesObserver = GesturesObserver;
 function _createUIGestureRecognizerTarget(owner, type, callback) {
-    var target = UIGestureRecognizerTargetClass.alloc();
-    target[OWNER] = new WeakRef(owner);
-    target[TYPE] = type;
-    target[CALLBACK] = callback;
-    return target;
+    return UIGestureRecognizerImpl.new().initWithOwnerTypeCallback(owner, type, callback);
 }
-var UIGestureRecognizerTargetClass = NSObject.extend({
-    recognize: function (recognizer) {
-        var weakRef = this[OWNER];
-        if (weakRef) {
-            var owner = weakRef.get();
-            if (owner) {
-                var callback = this[CALLBACK] ? this[CALLBACK] : owner[CALLBACK];
-                var type = this[TYPE];
-                var target = owner[TARGET];
-                var args = {
-                    type: type,
-                    view: target,
-                    ios: recognizer,
-                    android: undefined
-                };
-                if (callback) {
-                    callback(args);
-                }
-            }
-        }
-    }
-}, {
-    exposedMethods: { "recognize": "v@" }
-});
 function _getUIGestureRecognizerType(type) {
     var nativeType = null;
     if (type === definition.GestureTypes.Tap) {
@@ -168,6 +181,17 @@ function _getSwipeData(args) {
         ios: args.ios,
         android: undefined,
         direction: _getSwipeDirection(recognizer.direction),
+    };
+}
+function _getPanData(args, view) {
+    var recognizer = args.ios;
+    return {
+        type: args.type,
+        view: args.view,
+        ios: args.ios,
+        android: undefined,
+        deltaX: recognizer.translationInView(view).x,
+        deltaY: recognizer.translationInView(view).y
     };
 }
 function _getRotationData(args) {

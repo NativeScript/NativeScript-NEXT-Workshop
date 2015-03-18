@@ -5,103 +5,116 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var common = require("ui/list-view/list-view-common");
-var geometry = require("utils/geometry");
 var utils = require("utils/utils");
-var OWNER = "_owner";
+var view = require("ui/core/view");
 var CELLIDENTIFIER = "cell";
 var ITEMLOADING = common.knownEvents.itemLoading;
 var LOADMOREITEMS = common.knownEvents.loadMoreItems;
 var ITEMTAP = common.knownEvents.itemTap;
 var DEFAULT_HEIGHT = 80;
 require("utils/module-merge").merge(common, exports);
-var ListViewCell = UITableViewCell.extend({}, {});
+var infinity = utils.layout.makeMeasureSpec(0, utils.layout.UNSPECIFIED);
+var ListViewCell = (function (_super) {
+    __extends(ListViewCell, _super);
+    function ListViewCell() {
+        _super.apply(this, arguments);
+    }
+    ListViewCell.new = function () {
+        return _super.new.call(this);
+    };
+    ListViewCell.class = function () {
+        return ListViewCell;
+    };
+    return ListViewCell;
+})(UITableViewCell);
 function notifyForItemAtIndex(listView, cell, eventName, indexPath) {
     var args = { eventName: eventName, object: listView, index: indexPath.row, view: cell.view };
     listView.notify(args);
     return args;
 }
-var DataSourceClass = NSObject.extend({
-    get owner() {
-        var owner = null;
-        var weakRef = this[OWNER];
-        if (weakRef) {
-            owner = weakRef.get();
-        }
-        return owner;
-    },
-    tableViewNumberOfRowsInSection: function (tableView, section) {
-        return this.owner ? (this.owner.items ? this.owner.items.length : 0) : 0;
-    },
-    tableViewCellForRowAtIndexPath: function (tableView, indexPath) {
+var DataSource = (function (_super) {
+    __extends(DataSource, _super);
+    function DataSource() {
+        _super.apply(this, arguments);
+    }
+    DataSource.new = function () {
+        return _super.new.call(this);
+    };
+    DataSource.prototype.initWithOwner = function (owner) {
+        this._owner = owner;
+        return this;
+    };
+    DataSource.prototype.tableViewNumberOfRowsInSection = function (tableView, section) {
+        return this._owner.items ? this._owner.items.length : 0;
+    };
+    DataSource.prototype.tableViewCellForRowAtIndexPath = function (tableView, indexPath) {
         var cell = tableView.dequeueReusableCellWithIdentifier(CELLIDENTIFIER) || ListViewCell.new();
-        this.owner._prepareCell(cell, indexPath);
-        var view = cell.view;
-        if (view) {
-            var height = view._getDesiredSize().height;
-            var rect = new geometry.Rect(0, 0, this.owner._availableSize.width, height);
-            view.arrange(rect);
-            view._layoutInfo.resumeLayoutDispatching();
+        this._owner._prepareCell(cell, indexPath);
+        var cellView = cell.view;
+        if (cellView) {
+            var specs = this._owner._getCurrentMeasureSpecs();
+            var width = utils.layout.getMeasureSpecSize(specs.widthMeasureSpec);
+            var cellHeight = this._owner.getHeight(indexPath.row);
+            view.View.layoutChild(this._owner, cellView, 0, 0, width, cellHeight);
         }
         return cell;
+    };
+    DataSource.ObjCProtocols = [UITableViewDataSource];
+    return DataSource;
+})(NSObject);
+var UITableViewDelegateImpl = (function (_super) {
+    __extends(UITableViewDelegateImpl, _super);
+    function UITableViewDelegateImpl() {
+        _super.apply(this, arguments);
     }
-}, {
-    protocols: [UITableViewDataSource]
-});
-var UITableViewDelegateClass = NSObject.extend({
-    get owner() {
-        var owner = null;
-        var weakRef = this[OWNER];
-        if (weakRef) {
-            owner = weakRef.get();
+    UITableViewDelegateImpl.new = function () {
+        return _super.new.call(this);
+    };
+    UITableViewDelegateImpl.prototype.initWithOwner = function (owner) {
+        this._owner = owner;
+        return this;
+    };
+    UITableViewDelegateImpl.prototype.tableViewWillDisplayCellForRowAtIndexPath = function (tableView, cell, indexPath) {
+        if (indexPath.row === this._owner.items.length - 1) {
+            this._owner.notify({ eventName: LOADMOREITEMS, object: this._owner });
         }
-        return owner;
-    },
-    tableViewWillDisplayCellForRowAtIndexPath: function (tableView, cell, indexPath) {
-        if (this.owner) {
-            if (indexPath.row === this.owner.items.length - 1) {
-                this.owner.notify({ eventName: LOADMOREITEMS, object: this.owner });
+    };
+    UITableViewDelegateImpl.prototype.tableViewWillSelectRowAtIndexPath = function (tableView, indexPath) {
+        var cell = tableView.cellForRowAtIndexPath(indexPath);
+        notifyForItemAtIndex(this._owner, cell, ITEMTAP, indexPath);
+        cell.highlighted = false;
+        return indexPath;
+    };
+    UITableViewDelegateImpl.prototype.tableViewHeightForRowAtIndexPath = function (tableView, indexPath) {
+        if (utils.ios.MajorVersion < 8) {
+            var cell = this._measureCell;
+            if (!cell) {
+                this._measureCell = tableView.dequeueReusableCellWithIdentifier(CELLIDENTIFIER) || ListViewCell.new();
+                cell = this._measureCell;
             }
+            return this._owner._prepareCell(cell, indexPath);
         }
-    },
-    tableViewWillSelectRowAtIndexPath: function (tableView, indexPath) {
-        if (this.owner) {
-            var cell = tableView.cellForRowAtIndexPath(indexPath);
-            notifyForItemAtIndex(this.owner, cell, ITEMTAP, indexPath);
-            cell.highlighted = false;
-        }
-    },
-    tableViewHeightForRowAtIndexPath: function (tableView, indexPath) {
-        if (this.owner) {
-            if (utils.ios.MajorVersion < 8) {
-                var cell = this.owner.measureCell || tableView.dequeueReusableCellWithIdentifier(CELLIDENTIFIER) || ListViewCell.new();
-                return this.owner._prepareCell(cell, indexPath);
-            }
-            return this.owner.getHeight(indexPath.row);
-        }
+        return this._owner.getHeight(indexPath.row);
+    };
+    UITableViewDelegateImpl.prototype.tableViewEstimatedHeightForRowAtIndexPath = function (tableView, indexPath) {
         return DEFAULT_HEIGHT;
-    },
-    tableViewEstimatedHeightForRowAtIndexPath: function (tableView, indexPath) {
-        return DEFAULT_HEIGHT;
-    }
-}, {
-    protocols: [UITableViewDelegate]
-});
+    };
+    UITableViewDelegateImpl.ObjCProtocols = [UITableViewDelegate];
+    return UITableViewDelegateImpl;
+})(NSObject);
 var ListView = (function (_super) {
     __extends(ListView, _super);
     function ListView() {
         _super.call(this);
-        this._cellSize = geometry.Size.zero;
-        this._availableSize = geometry.Size.empty;
+        this._preparingCell = false;
         this._ios = new UITableView();
         this._ios.registerClassForCellReuseIdentifier(ListViewCell.class(), CELLIDENTIFIER);
         this._ios.autoresizesSubviews = false;
         this._ios.autoresizingMask = UIViewAutoresizing.UIViewAutoresizingNone;
-        var dataSource = DataSourceClass.new();
-        dataSource[OWNER] = new WeakRef(this);
+        var dataSource = DataSource.new().initWithOwner(this);
         this._dataSource = dataSource;
         this._ios.dataSource = this._dataSource;
-        this._uiTableViewDelegate = UITableViewDelegateClass.new();
-        this._uiTableViewDelegate[OWNER] = new WeakRef(this);
+        this._uiTableViewDelegate = UITableViewDelegateImpl.new().initWithOwner(this);
         this._ios.delegate = this._uiTableViewDelegate;
         this._heights = new Array();
     }
@@ -115,47 +128,33 @@ var ListView = (function (_super) {
     ListView.prototype.refresh = function () {
         this._ios.reloadData();
     };
-    ListView.prototype._measureOverride = function (availableSize) {
-        var sizeChanged = !this._availableSize.equals(availableSize);
-        this._availableSize = availableSize;
-        this._cellSize = new geometry.Size(availableSize.width, Number.POSITIVE_INFINITY);
-        if (sizeChanged) {
-            this._ios.reloadData();
-        }
-        return _super.prototype._measureOverride.call(this, availableSize);
-    };
-    ListView.prototype._onSubviewDesiredSizeChanged = function () {
-    };
     ListView.prototype.getHeight = function (index) {
         return this._heights[index];
     };
     ListView.prototype.setHeight = function (index, value) {
         this._heights[index] = value;
     };
-    ListView.prototype._layoutCell = function (cell, indexPath) {
-        var view = cell.view;
-        if (view) {
-            if (utils.ios.MajorVersion < 8) {
-                this._invalidateMeasureRecursive(view);
-            }
-            else {
-                view._invalidateMeasure();
-            }
-            view.measure(this._cellSize);
-            var height = view._getDesiredSize().height;
+    ListView.prototype.requestLayout = function () {
+        if (!this._preparingCell) {
+            _super.prototype.requestLayout.call(this);
+        }
+    };
+    ListView.prototype.measure = function (widthMeasureSpec, heightMeasureSpec) {
+        var changed = this._setCurrentMeasureSpecs(widthMeasureSpec, heightMeasureSpec);
+        _super.prototype.measure.call(this, widthMeasureSpec, heightMeasureSpec);
+        if (changed) {
+            this._ios.reloadData();
+        }
+    };
+    ListView.prototype._layoutCell = function (cellView, indexPath) {
+        if (cellView) {
+            var widthMeasureSpecs = this._getCurrentMeasureSpecs().widthMeasureSpec;
+            var measuredSize = view.View.measureChild(this, cellView, widthMeasureSpecs, infinity);
+            var height = measuredSize.measuredHeight;
             this.setHeight(indexPath.row, height);
             return height;
         }
         return 0;
-    };
-    ListView.prototype._invalidateMeasureRecursive = function (view) {
-        var _this = this;
-        view._invalidateMeasure();
-        var forEachChild = function (subView) {
-            _this._invalidateMeasureRecursive(subView);
-            return true;
-        };
-        view._eachChildView(forEachChild);
     };
     ListView.prototype._prepareCell = function (tableCell, indexPath) {
         var cell = tableCell;
@@ -168,11 +167,16 @@ var ListView = (function (_super) {
             cell.contentView.addSubview(view.ios);
             this._addView(view);
         }
-        if (view) {
-            view._layoutInfo.suspendLayoutDispatching();
+        var cellHeight;
+        try {
+            this._preparingCell = true;
+            this._prepareItem(view, indexPath.row);
+            cellHeight = this._layoutCell(view, indexPath);
         }
-        this._prepareItem(view, indexPath.row);
-        return this._layoutCell(cell, indexPath);
+        finally {
+            this._preparingCell = false;
+        }
+        return cellHeight;
     };
     return ListView;
 })(common.ListView);

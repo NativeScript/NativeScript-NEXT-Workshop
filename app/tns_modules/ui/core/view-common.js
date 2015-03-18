@@ -4,15 +4,18 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+var types = require("utils/types");
 var proxy = require("ui/core/proxy");
 var style = require("ui/styling/style");
-var geometry = require("utils/geometry");
-var layout = require("ui/core/layout");
+var styling = require("ui/styling");
 var visualStateConstants = require("ui/styling/visual-state-constants");
 var trace = require("trace");
 var dependencyObservable = require("ui/core/dependency-observable");
 var gestures = require("ui/gestures");
 var bindable = require("ui/core/bindable");
+var styleScope = require("ui/styling/style-scope");
+var enums = require("ui/enums");
+var utils = require("utils/utils");
 function getViewById(view, id) {
     if (!view) {
         return undefined;
@@ -61,16 +64,36 @@ var knownEvents;
     knownEvents.unloaded = "unloaded";
 })(knownEvents = exports.knownEvents || (exports.knownEvents = {}));
 var viewIdCounter = 0;
-exports.idProperty = new dependencyObservable.Property("id", "View", new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataOptions.AffectsStyle));
-exports.cssClassProperty = new dependencyObservable.Property("cssClass", "View", new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataOptions.AffectsStyle));
-exports.isEnabledProperty = new dependencyObservable.Property("isEnabled", "View", new proxy.PropertyMetadata(true));
+function onCssClassPropertyChanged(data) {
+    var view = data.object;
+    if (types.isString(data.newValue)) {
+        view._cssClasses = data.newValue.split(" ");
+    }
+    else {
+        view._cssClasses.length = 0;
+    }
+}
+var idProperty = new dependencyObservable.Property("id", "View", new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataSettings.AffectsStyle));
+var cssClassProperty = new dependencyObservable.Property("cssClass", "View", new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataSettings.AffectsStyle, onCssClassPropertyChanged));
+var isEnabledProperty = new dependencyObservable.Property("isEnabled", "View", new proxy.PropertyMetadata(true));
+var isUserInteractionEnabledProperty = new dependencyObservable.Property("isUserInteractionEnabled", "View", new proxy.PropertyMetadata(true));
 var View = (function (_super) {
     __extends(View, _super);
     function View(options) {
         _super.call(this);
+        this._isVisibleCache = true;
+        this._measuredWidth = Number.NaN;
+        this._measuredHeight = Number.NaN;
+        this._oldWidthMeasureSpec = Number.NaN;
+        this._oldHeightMeasureSpec = Number.NaN;
+        this._oldLeft = 0;
+        this._oldTop = 0;
+        this._oldRight = 0;
+        this._oldBottom = 0;
+        this._isLayoutValid = false;
         this._isAddedToNativeVisualTree = false;
+        this._cssClasses = [];
         this._options = options;
-        this._layoutInfo = new layout.LayoutInfo(this);
         this._style = new style.Style(this);
         this._domId = viewIdCounter++;
         this._visualState = visualStateConstants.Normal;
@@ -78,6 +101,9 @@ var View = (function (_super) {
     View.prototype.observe = function (type, callback) {
         this._gesturesObserver = gestures.observe(this, type, callback);
         return this._gesturesObserver;
+    };
+    View.prototype.getViewById = function (id) {
+        return getViewById(this, id);
     };
     Object.defineProperty(View.prototype, "width", {
         get: function () {
@@ -95,26 +121,6 @@ var View = (function (_super) {
         },
         set: function (value) {
             this.style.height = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(View.prototype, "maxWidth", {
-        get: function () {
-            return this.style.maxWidth;
-        },
-        set: function (value) {
-            this.style.maxWidth = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(View.prototype, "maxHeight", {
-        get: function () {
-            return this.style.maxHeight;
-        },
-        set: function (value) {
-            this.style.maxHeight = value;
         },
         enumerable: true,
         configurable: true
@@ -159,12 +165,42 @@ var View = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(View.prototype, "margin", {
+    Object.defineProperty(View.prototype, "marginLeft", {
         get: function () {
-            return this.style.margin;
+            return this.style.marginLeft;
         },
         set: function (value) {
-            this.style.margin = geometry.Thickness.convert(value);
+            this.style.marginLeft = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(View.prototype, "marginTop", {
+        get: function () {
+            return this.style.marginTop;
+        },
+        set: function (value) {
+            this.style.marginTop = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(View.prototype, "marginRight", {
+        get: function () {
+            return this.style.marginRight;
+        },
+        set: function (value) {
+            this.style.marginRight = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(View.prototype, "marginBottom", {
+        get: function () {
+            return this.style.marginBottom;
+        },
+        set: function (value) {
+            this.style.marginBottom = value;
         },
         enumerable: true,
         configurable: true
@@ -181,30 +217,40 @@ var View = (function (_super) {
     });
     Object.defineProperty(View.prototype, "isEnabled", {
         get: function () {
-            return this._getValue(exports.isEnabledProperty);
+            return this._getValue(View.isEnabledProperty);
         },
         set: function (value) {
-            this._setValue(exports.isEnabledProperty, value);
+            this._setValue(View.isEnabledProperty, value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(View.prototype, "isUserInteractionEnabled", {
+        get: function () {
+            return this._getValue(View.isUserInteractionEnabledProperty);
+        },
+        set: function (value) {
+            this._setValue(View.isUserInteractionEnabledProperty, value);
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(View.prototype, "id", {
         get: function () {
-            return this._getValue(exports.idProperty);
+            return this._getValue(View.idProperty);
         },
         set: function (value) {
-            this._setValue(exports.idProperty, value);
+            this._setValue(View.idProperty, value);
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(View.prototype, "cssClass", {
         get: function () {
-            return this._getValue(exports.cssClassProperty);
+            return this._getValue(View.cssClassProperty);
         },
         set: function (value) {
-            this._setValue(exports.cssClassProperty, value);
+            this._setValue(View.cssClassProperty, value);
         },
         enumerable: true,
         configurable: true
@@ -212,6 +258,19 @@ var View = (function (_super) {
     Object.defineProperty(View.prototype, "style", {
         get: function () {
             return this._style;
+        },
+        set: function (value) {
+            this._applyInlineStyle(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(View.prototype, "isLayoutValid", {
+        get: function () {
+            return this._isLayoutValid;
+        },
+        set: function (value) {
+            throw new Error("isLayoutValid is read-only property.");
         },
         enumerable: true,
         configurable: true
@@ -244,22 +303,14 @@ var View = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    View.prototype.measure = function (availableSize, options) {
-        this._layoutInfo.measure(availableSize, options);
-        return this._layoutInfo.desiredSize;
-    };
-    View.prototype.arrange = function (finalRect, options) {
-        this._layoutInfo.arrange(finalRect, options);
-    };
     View.prototype.onLoaded = function () {
         this._loadEachChildView();
         this._applyStyleFromScope();
-        this.style._inheritStyleProperties();
         this._isLoaded = true;
         this._emit("loaded");
     };
     View.prototype._loadEachChildView = function () {
-        if (this.ios && this._childrenCount > 0) {
+        if (this._childrenCount > 0) {
             var eachChild = function (child) {
                 child.onLoaded();
                 return true;
@@ -273,7 +324,7 @@ var View = (function (_super) {
         this._emit("unloaded");
     };
     View.prototype._unloadEachChildView = function () {
-        if (this.ios && this._childrenCount > 0) {
+        if (this._childrenCount > 0) {
             var eachChild = function (child) {
                 child.onUnloaded();
                 return true;
@@ -283,28 +334,211 @@ var View = (function (_super) {
     };
     View.prototype._onPropertyChanged = function (property, oldValue, newValue) {
         _super.prototype._onPropertyChanged.call(this, property, oldValue, newValue);
+        if (this._childrenCount > 0) {
+            var shouldUpdateInheritableProps = ((property.metadata && property.metadata.inheritable) && property.name !== "bindingContext" && !(property instanceof styling.Property));
+            if (shouldUpdateInheritableProps) {
+                var notifyEachChild = function (child) {
+                    child._setValue(property, newValue, dependencyObservable.ValueSource.Inherited);
+                    return true;
+                };
+                this._eachChildView(notifyEachChild);
+            }
+        }
         this._checkMetadataOnPropertyChanged(property.metadata);
     };
     View.prototype._checkMetadataOnPropertyChanged = function (metadata) {
-        if (metadata.affectsMeasure) {
-            this._invalidateMeasure();
-        }
-        if (metadata.affectsArrange) {
-            this._invalidateArrange();
-        }
-        var parent = this.parent;
-        if (this.parent) {
-            if (metadata.affectsParentMeasure) {
-                parent._invalidateMeasure();
-            }
-            if (metadata.affectsParentArrange) {
-                parent._invalidateArrange();
-            }
+        if (metadata.affectsLayout) {
+            this.requestLayout();
         }
         if (metadata.affectsStyle) {
             this.style._resetCssValues();
             this._applyStyleFromScope();
         }
+    };
+    View.prototype.measure = function (widthMeasureSpec, heightMeasureSpec) {
+        this._setCurrentMeasureSpecs(widthMeasureSpec, heightMeasureSpec);
+    };
+    View.prototype.layout = function (left, top, right, bottom) {
+        this._setCurrentLayoutBounds(left, top, right, bottom);
+    };
+    View.prototype.getMeasuredWidth = function () {
+        return this._measuredWidth;
+    };
+    View.prototype.getMeasuredHeight = function () {
+        return this._measuredHeight;
+    };
+    View.prototype.setMeasuredDimension = function (measuredWidth, measuredHeight) {
+        this._measuredWidth = measuredWidth;
+        this._measuredHeight = measuredHeight;
+        trace.write(this + " :setMeasuredDimension: " + measuredWidth + ", " + measuredHeight, trace.categories.Layout);
+    };
+    View.prototype.requestLayout = function () {
+        this._isLayoutValid = false;
+    };
+    View.prototype.onMeasure = function (widthMeasureSpec, heightMeasureSpec) {
+    };
+    View.prototype.onLayout = function (left, top, right, bottom) {
+    };
+    View.prototype.layoutNativeView = function (left, top, right, bottom) {
+    };
+    View.resolveSizeAndState = function (size, specSize, specMode, childMeasuredState) {
+        var result = size;
+        switch (specMode) {
+            case utils.layout.UNSPECIFIED:
+                result = size;
+                break;
+            case utils.layout.AT_MOST:
+                if (specSize < size) {
+                    result = Math.round(specSize) | utils.layout.MEASURED_STATE_TOO_SMALL;
+                }
+                break;
+            case utils.layout.EXACTLY:
+                result = specSize;
+                break;
+        }
+        return Math.round(result) | (childMeasuredState & utils.layout.MEASURED_STATE_MASK);
+    };
+    View.layoutChild = function (parent, child, left, top, right, bottom) {
+        if (!child || !child._isVisible) {
+            return;
+        }
+        var density = utils.layout.getDisplayDensity();
+        var childTop;
+        var childLeft;
+        var childWidth = child.getMeasuredWidth();
+        var childHeight = child.getMeasuredHeight();
+        var vAlignment;
+        if (!isNaN(child.height) && child.verticalAlignment === enums.VerticalAlignment.stretch) {
+            vAlignment = enums.VerticalAlignment.center;
+        }
+        else {
+            vAlignment = child.verticalAlignment;
+        }
+        switch (vAlignment) {
+            case enums.VerticalAlignment.top:
+                childTop = top + child.marginTop * density;
+                break;
+            case enums.VerticalAlignment.center:
+                childTop = top + ((bottom - top - childHeight) / 2) + (child.marginTop - child.marginBottom) * density;
+                break;
+            case enums.VerticalAlignment.bottom:
+                childTop = bottom - childHeight - (child.marginBottom * density);
+                break;
+            case enums.VerticalAlignment.stretch:
+            default:
+                childTop = top + child.marginTop * density;
+                childHeight = bottom - top - (child.marginTop + child.marginBottom) * density;
+                break;
+        }
+        var hAlignment;
+        if (!isNaN(child.width) && child.horizontalAlignment === enums.HorizontalAlignment.stretch) {
+            hAlignment = enums.HorizontalAlignment.center;
+        }
+        else {
+            hAlignment = child.horizontalAlignment;
+        }
+        switch (hAlignment) {
+            case enums.HorizontalAlignment.left:
+                childLeft = left + child.marginLeft * density;
+                break;
+            case enums.HorizontalAlignment.center:
+                childLeft = left + ((right - left - childWidth) / 2) + (child.marginLeft - child.marginRight) * density;
+                break;
+            case enums.HorizontalAlignment.right:
+                childLeft = right - childWidth - child.marginRight * density;
+                break;
+            case enums.HorizontalAlignment.stretch:
+            default:
+                childLeft = left + child.marginLeft * density;
+                childWidth = right - left - (child.marginLeft + child.marginRight) * density;
+                break;
+        }
+        var childRight = Math.round(childLeft + childWidth);
+        var childBottom = Math.round(childTop + childHeight);
+        childLeft = Math.round(childLeft);
+        childTop = Math.round(childTop);
+        trace.write(parent + " :layoutChild: " + child + " " + childLeft + ", " + childTop + ", " + childRight + ", " + childBottom, trace.categories.Layout);
+        child.layout(childLeft, childTop, childRight, childBottom);
+    };
+    View.measureChild = function (parent, child, widthMeasureSpec, heightMeasureSpec) {
+        var measureWidth = 0;
+        var measureHeight = 0;
+        if (child && child._isVisible) {
+            var width = utils.layout.getMeasureSpecSize(widthMeasureSpec);
+            var widthMode = utils.layout.getMeasureSpecMode(widthMeasureSpec);
+            var height = utils.layout.getMeasureSpecSize(heightMeasureSpec);
+            var heightMode = utils.layout.getMeasureSpecMode(heightMeasureSpec);
+            trace.write(parent + " :measureChild: " + child + " " + utils.layout.getMode(widthMode) + " " + width + ", " + utils.layout.getMode(heightMode) + " " + height, trace.categories.Layout);
+            var childWidthMeasureSpec = View.getMeasureSpec(child, width, widthMode, true);
+            var childHeightMeasureSpec = View.getMeasureSpec(child, height, heightMode, false);
+            child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+            measureWidth = child.getMeasuredWidth();
+            measureHeight = child.getMeasuredHeight();
+            var density = utils.layout.getDisplayDensity();
+            measureWidth = Math.round(measureWidth + (child.marginLeft + child.marginRight) * density);
+            measureHeight = Math.round(measureHeight + (child.marginTop + child.marginBottom) * density);
+        }
+        return { measuredWidth: measureWidth, measuredHeight: measureHeight };
+    };
+    View.getMeasureSpec = function (view, parentLength, parentSpecMode, horizontal) {
+        var density = utils.layout.getDisplayDensity();
+        var margins = horizontal ? view.marginLeft + view.marginRight : view.marginTop + view.marginBottom;
+        margins = Math.round(margins * density);
+        var resultSize = 0;
+        var resultMode = 0;
+        var measureLength = Math.max(0, parentLength - margins);
+        var childLength = Math.round((horizontal ? view.width : view.height) * density);
+        if (!isNaN(childLength)) {
+            if (parentSpecMode !== utils.layout.UNSPECIFIED) {
+                resultSize = Math.min(parentLength, childLength);
+            }
+            else {
+                resultSize = childLength;
+            }
+            resultMode = utils.layout.EXACTLY;
+        }
+        else {
+            switch (parentSpecMode) {
+                case utils.layout.EXACTLY:
+                    resultSize = measureLength;
+                    var stretched = horizontal ? view.horizontalAlignment === enums.HorizontalAlignment.stretch : view.verticalAlignment === enums.VerticalAlignment.stretch;
+                    resultMode = stretched ? utils.layout.EXACTLY : utils.layout.AT_MOST;
+                    break;
+                case utils.layout.AT_MOST:
+                    resultSize = measureLength;
+                    resultMode = utils.layout.AT_MOST;
+                    break;
+                case utils.layout.UNSPECIFIED:
+                    resultSize = 0;
+                    resultMode = utils.layout.UNSPECIFIED;
+                    break;
+            }
+        }
+        return utils.layout.makeMeasureSpec(resultSize, resultMode);
+    };
+    View.prototype._getCurrentMeasureSpecs = function () {
+        return {
+            widthMeasureSpec: this._oldWidthMeasureSpec,
+            heightMeasureSpec: this._oldHeightMeasureSpec
+        };
+    };
+    View.prototype._setCurrentMeasureSpecs = function (widthMeasureSpec, heightMeasureSpec) {
+        var changed = this._oldWidthMeasureSpec !== widthMeasureSpec || this._oldHeightMeasureSpec !== heightMeasureSpec;
+        this._oldWidthMeasureSpec = widthMeasureSpec;
+        this._oldHeightMeasureSpec = heightMeasureSpec;
+        return changed;
+    };
+    View.prototype._getCurrentLayoutBounds = function () {
+        return { left: this._oldLeft, top: this._oldTop, right: this._oldRight, bottom: this._oldBottom };
+    };
+    View.prototype._setCurrentLayoutBounds = function (left, top, right, bottom) {
+        this._isLayoutValid = true;
+        var changed = this._oldLeft !== left || this._oldTop !== top || this._oldRight !== right || this._oldBottom !== bottom;
+        this._oldLeft = left;
+        this._oldTop = top;
+        this._oldRight = right;
+        this._oldBottom = bottom;
+        return changed;
     };
     View.prototype._onBindingContextChanged = function (oldValue, newValue) {
         _super.prototype._onBindingContextChanged.call(this, oldValue, newValue);
@@ -313,33 +547,10 @@ var View = (function (_super) {
         }
         var thatContext = this.bindingContext;
         var eachChild = function (child) {
-            child._setValue(bindable.bindingContextProperty, thatContext, dependencyObservable.ValueSource.Inherited);
+            child._setValue(bindable.Bindable.bindingContextProperty, thatContext, dependencyObservable.ValueSource.Inherited);
             return true;
         };
         this._eachChildView(eachChild);
-    };
-    View.prototype._invalidateMeasure = function () {
-        return this._layoutInfo.invalidateMeasure();
-    };
-    View.prototype._invalidateArrange = function () {
-        return this._layoutInfo.invalidateArrange();
-    };
-    View.prototype._measureOverride = function (availableSize, options) {
-        return geometry.Size.zero;
-    };
-    View.prototype._arrangeOverride = function (finalSize) {
-    };
-    View.prototype._measureNativeView = function (availableSize, options) {
-        return geometry.Size.zero;
-    };
-    View.prototype._setBounds = function (rect) {
-        this._layoutBounds = rect;
-    };
-    View.prototype._getBounds = function () {
-        return this._layoutBounds;
-    };
-    View.prototype._getDesiredSize = function () {
-        return this._layoutInfo.desiredSize;
     };
     View.prototype._applyStyleFromScope = function () {
         var rootPage = getAncestor(this, "Page");
@@ -349,6 +560,11 @@ var View = (function (_super) {
         var scope = rootPage._getStyleScope();
         scope.applySelectors(this);
     };
+    View.prototype._applyInlineStyle = function (inlineStyle) {
+        if (types.isString(inlineStyle)) {
+            styleScope.applyInlineSyle(this, inlineStyle);
+        }
+    };
     View.prototype._onAttached = function (context) {
     };
     View.prototype._onDetached = function (force) {
@@ -357,12 +573,7 @@ var View = (function (_super) {
     };
     View.prototype._onContextChanged = function () {
     };
-    View.prototype._getMeasureSpec = function (length, horizontal) {
-        return undefined;
-    };
     View.prototype._prepareNativeView = function (view) {
-    };
-    View.prototype._onSubviewDesiredSizeChanged = function () {
     };
     Object.defineProperty(View.prototype, "_childrenCount", {
         get: function () {
@@ -385,13 +596,31 @@ var View = (function (_super) {
         trace.write("called _addView on view " + this._domId + " for a child " + view._domId, trace.categories.ViewHierarchy);
     };
     View.prototype._addViewCore = function (view) {
-        view._setValue(bindable.bindingContextProperty, this.bindingContext, dependencyObservable.ValueSource.Inherited);
-        if (this.ios && this._isLoaded) {
-            view.onLoaded();
-        }
+        view._setValue(bindable.Bindable.bindingContextProperty, this.bindingContext, dependencyObservable.ValueSource.Inherited);
+        view._inheritProperties(this);
+        view.style._inheritStyleProperties();
         if (!view._isAddedToNativeVisualTree) {
             view._isAddedToNativeVisualTree = this._addViewToNativeVisualTree(view);
         }
+        if (this._isLoaded) {
+            view.onLoaded();
+        }
+    };
+    View.prototype._inheritProperties = function (parentView) {
+        var that = this;
+        var inheritablePropertySetCallback = function (property) {
+            if (property instanceof styling.Property || property.name === "bindingContext") {
+                return true;
+            }
+            if (property.metadata && property.metadata.inheritable) {
+                var baseValue = parentView._getValue(property);
+                if (baseValue) {
+                    that._setValue(property, baseValue, dependencyObservable.ValueSource.Inherited);
+                }
+            }
+            return true;
+        };
+        parentView._eachSetProperty(inheritablePropertySetCallback);
     };
     View.prototype._removeView = function (view) {
         if (view._parent !== this) {
@@ -403,10 +632,20 @@ var View = (function (_super) {
     };
     View.prototype._removeViewCore = function (view) {
         this._removeViewFromNativeVisualTree(view);
-        if (this.ios && view.isLoaded) {
+        if (view.isLoaded) {
             view.onUnloaded();
         }
-        view._setValue(bindable.bindingContextProperty, undefined, dependencyObservable.ValueSource.Inherited);
+        view._setValue(bindable.Bindable.bindingContextProperty, undefined, dependencyObservable.ValueSource.Inherited);
+        var inheritablePropertiesSetCallback = function (property) {
+            if (property instanceof styling.Property || property.name === "bindingContext") {
+                return true;
+            }
+            if (property.metadata && property.metadata.inheritable) {
+                view._resetValue(property, dependencyObservable.ValueSource.Inherited);
+            }
+            return true;
+        };
+        view._eachSetProperty(inheritablePropertiesSetCallback);
     };
     View.prototype._addViewToNativeVisualTree = function (view) {
         if (view._isAddedToNativeVisualTree) {
@@ -431,7 +670,6 @@ var View = (function (_super) {
         this._requestedVisualState = state;
     };
     View.prototype._updateLayout = function () {
-        this._layoutInfo.updateLayout();
     };
     Object.defineProperty(View.prototype, "_nativeView", {
         get: function () {
@@ -442,11 +680,29 @@ var View = (function (_super) {
     });
     Object.defineProperty(View.prototype, "_isVisible", {
         get: function () {
-            return this._layoutInfo.isVisible;
+            return this._isVisibleCache;
         },
         enumerable: true,
         configurable: true
     });
+    View.prototype.applyXmlAttribute = function (attributeName, attributeValue) {
+        if (attributeName === "margin") {
+            this.style.margin = attributeValue;
+            return true;
+        }
+        else if (attributeName === "padding") {
+            this.style.padding = attributeValue;
+            return true;
+        }
+        return false;
+    };
+    View.prototype.focus = function () {
+        return undefined;
+    };
+    View.idProperty = idProperty;
+    View.cssClassProperty = cssClassProperty;
+    View.isEnabledProperty = isEnabledProperty;
+    View.isUserInteractionEnabledProperty = isUserInteractionEnabledProperty;
     return View;
 })(proxy.ProxyObject);
 exports.View = View;

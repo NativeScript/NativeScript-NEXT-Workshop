@@ -15,7 +15,7 @@ function onTextPropertyChanged(data) {
     }
     bar.android.setQuery(data.newValue, false);
 }
-common.textProperty.metadata.onSetNativeValue = onTextPropertyChanged;
+common.SearchBar.textProperty.metadata.onSetNativeValue = onTextPropertyChanged;
 require("utils/module-merge").merge(common, exports);
 var SearchBar = (function (_super) {
     __extends(SearchBar, _super);
@@ -31,7 +31,7 @@ var SearchBar = (function (_super) {
             },
             onQueryTextChange: function (newText) {
                 if (this.owner) {
-                    this.owner._onPropertyChangedFromNative(common.textProperty, newText);
+                    this.owner._onPropertyChangedFromNative(common.SearchBar.textProperty, newText);
                     if (newText === EMPTY && this[SEARCHTEXT] !== newText) {
                         this.owner._emit(common.knownEvents.clear);
                     }

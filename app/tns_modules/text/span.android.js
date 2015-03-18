@@ -6,41 +6,49 @@ var __extends = this.__extends || function (d, b) {
 };
 var spanCommon = require("text/span-common");
 var enums = require("ui/enums");
+var utils = require("utils/utils");
 require("utils/module-merge").merge(spanCommon, exports);
 var Span = (function (_super) {
     __extends(Span, _super);
     function Span() {
         _super.apply(this, arguments);
     }
-    Span.prototype.updateSpanModifiers = function () {
-        _super.prototype.updateSpanModifiers.call(this);
-        if (this.fontFamily) {
-            this.spanModifiers.push(new android.text.style.TypefaceSpan(this.fontFamily));
+    Span.prototype.updateSpanModifiers = function (parent) {
+        _super.prototype.updateSpanModifiers.call(this, parent);
+        var realFontFamily = this.fontFamily || (parent ? parent.fontFamily : undefined);
+        if (realFontFamily) {
+            this.spanModifiers.push(new android.text.style.TypefaceSpan(realFontFamily));
         }
-        if (this.fontSize) {
-            this.spanModifiers.push(new android.text.style.AbsoluteSizeSpan(this.fontSize * android.util.TypedValue.COMPLEX_UNIT_PT));
+        var realFontSize = this.fontSize || (parent ? parent.fontSize : undefined);
+        if (realFontSize) {
+            this.spanModifiers.push(new android.text.style.AbsoluteSizeSpan(realFontSize * utils.layout.getDisplayDensity()));
         }
-        if (this.foregroundColor) {
-            this.spanModifiers.push(new android.text.style.ForegroundColorSpan(this.foregroundColor.android));
+        var realForegroundColor = this.foregroundColor || (parent ? parent.foregroundColor : undefined);
+        if (realForegroundColor) {
+            this.spanModifiers.push(new android.text.style.ForegroundColorSpan(realForegroundColor.android));
         }
-        if (this.backgroundColor) {
-            this.spanModifiers.push(new android.text.style.BackgroundColorSpan(this.backgroundColor.android));
+        var realBackgroundColor = this.backgroundColor || (parent ? parent.backgroundColor : undefined);
+        if (realBackgroundColor) {
+            this.spanModifiers.push(new android.text.style.BackgroundColorSpan(realBackgroundColor.android));
         }
-        if (this.fontAttributes) {
-            if ((this.fontAttributes & enums.FontAttributes.Bold) && (this.fontAttributes & enums.FontAttributes.Italic)) {
+        var realFontAttributes = this.fontAttributes || (parent ? parent.fontAttributes : undefined);
+        if (realFontAttributes) {
+            if ((realFontAttributes & enums.FontAttributes.Bold) && (realFontAttributes & enums.FontAttributes.Italic)) {
                 this.spanModifiers.push(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD_ITALIC));
             }
-            else if (this.fontAttributes & enums.FontAttributes.Bold) {
+            else if (realFontAttributes & enums.FontAttributes.Bold) {
                 this.spanModifiers.push(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD));
             }
-            else if (this.fontAttributes & enums.FontAttributes.Italic) {
+            else if (realFontAttributes & enums.FontAttributes.Italic) {
                 this.spanModifiers.push(new android.text.style.StyleSpan(android.graphics.Typeface.ITALIC));
             }
         }
-        if (this.underline) {
+        var realUnderline = this.underline || (parent ? parent.underline : undefined);
+        if (realUnderline) {
             this.spanModifiers.push(new android.text.style.UnderlineSpan());
         }
-        if (this.strikethrough) {
+        var realStrikethrough = this.strikethrough || (parent ? parent.strikethrough : undefined);
+        if (realStrikethrough) {
             this.spanModifiers.push(new android.text.style.StrikethroughSpan());
         }
     };

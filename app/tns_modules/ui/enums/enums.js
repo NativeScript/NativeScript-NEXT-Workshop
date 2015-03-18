@@ -1,3 +1,19 @@
+var KeyboardType;
+(function (KeyboardType) {
+    KeyboardType.datetime = "datetime";
+    KeyboardType.phone = "phone";
+    KeyboardType.number = "number";
+    KeyboardType.url = "url";
+    KeyboardType.email = "email";
+})(KeyboardType = exports.KeyboardType || (exports.KeyboardType = {}));
+var ReturnKeyType;
+(function (ReturnKeyType) {
+    ReturnKeyType.done = "done";
+    ReturnKeyType.next = "next";
+    ReturnKeyType.go = "go";
+    ReturnKeyType.search = "search";
+    ReturnKeyType.send = "send";
+})(ReturnKeyType = exports.ReturnKeyType || (exports.ReturnKeyType = {}));
 var TextAlignment;
 (function (TextAlignment) {
     TextAlignment.left = "left";
@@ -41,3 +57,25 @@ var FontAttributes;
     FontAttributes.Bold = 1;
     FontAttributes.Italic = 1 << 1;
 })(FontAttributes = exports.FontAttributes || (exports.FontAttributes = {}));
+var DeviceType;
+(function (DeviceType) {
+    DeviceType.Phone = "Phone";
+    DeviceType.Tablet = "Tablet";
+})(DeviceType = exports.DeviceType || (exports.DeviceType = {}));
+var UpdateTextTrigger;
+(function (UpdateTextTrigger) {
+    UpdateTextTrigger.focusLost = "focusLost";
+    UpdateTextTrigger.textChanged = "textChanged";
+})(UpdateTextTrigger = exports.UpdateTextTrigger || (exports.UpdateTextTrigger = {}));
+var Accuracy;
+(function (Accuracy) {
+    Accuracy.any = 300;
+    Accuracy.high = 3;
+})(Accuracy = exports.Accuracy || (exports.Accuracy = {}));
+var Dock;
+(function (Dock) {
+    Dock.left = "left";
+    Dock.top = "top";
+    Dock.right = "right";
+    Dock.bottom = "bottom";
+})(Dock = exports.Dock || (exports.Dock = {}));

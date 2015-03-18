@@ -5,54 +5,86 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var common = require("ui/tab-view/tab-view-common");
-var geometry = require("utils/geometry");
 var utilsModule = require("utils/utils");
 var trace = require("trace");
+var utils = require("utils/utils");
+var view = require("ui/core/view");
 require("utils/module-merge").merge(common, exports);
-var OWNER = "_owner";
-var UITabBarControllerClass = UITabBarController.extend({
-    viewDidAppear: function (animated) {
+var UITabBarControllerImpl = (function (_super) {
+    __extends(UITabBarControllerImpl, _super);
+    function UITabBarControllerImpl() {
+        _super.apply(this, arguments);
+    }
+    UITabBarControllerImpl.new = function () {
+        return _super.new.call(this);
+    };
+    UITabBarControllerImpl.prototype.initWithOwner = function (owner) {
+        this._owner = owner;
+        return this;
+    };
+    UITabBarControllerImpl.prototype.viewDidAppear = function (animated) {
         trace.write("TabView.UITabBarControllerClass.viewDidAppear();", trace.categories.Debug);
-        this.super.viewDidAppear(animated);
-        this[OWNER].onLoaded();
-    },
-    viewDidLayoutSubviews: function () {
+        _super.prototype.viewDidAppear.call(this, animated);
+        this._owner.onLoaded();
+    };
+    UITabBarControllerImpl.prototype.viewDidLayoutSubviews = function () {
         trace.write("TabView.UITabBarControllerClass.viewDidLayoutSubviews();", trace.categories.Debug);
-        if (this[OWNER].isLoaded) {
-            this[OWNER]._updateLayout();
+        _super.prototype.viewDidLayoutSubviews.call(this);
+        if (this._owner.isLoaded) {
+            this._owner._updateLayout();
         }
+    };
+    return UITabBarControllerImpl;
+})(UITabBarController);
+var UITabBarControllerDelegateImpl = (function (_super) {
+    __extends(UITabBarControllerDelegateImpl, _super);
+    function UITabBarControllerDelegateImpl() {
+        _super.apply(this, arguments);
     }
-});
-var UITabBarControllerDelegateClass = NSObject.extend({
-    tabBarControllerDidSelectViewController: function (tabBarController, viewController) {
+    UITabBarControllerDelegateImpl.new = function () {
+        return _super.new.call(this);
+    };
+    UITabBarControllerDelegateImpl.prototype.initWithOwner = function (owner) {
+        this._owner = owner;
+        return this;
+    };
+    UITabBarControllerDelegateImpl.prototype.tabBarControllerDidSelectViewController = function (tabBarController, viewController) {
         trace.write("TabView.UITabBarControllerDelegateClass.tabBarControllerDidSelectViewController(" + tabBarController + ", " + viewController + ");", trace.categories.Debug);
-        this[OWNER]._onViewControllerShown(viewController);
+        this._owner._onViewControllerShown(viewController);
+    };
+    UITabBarControllerDelegateImpl.ObjCProtocols = [UITabBarControllerDelegate];
+    return UITabBarControllerDelegateImpl;
+})(NSObject);
+var UINavigationControllerDelegateImpl = (function (_super) {
+    __extends(UINavigationControllerDelegateImpl, _super);
+    function UINavigationControllerDelegateImpl() {
+        _super.apply(this, arguments);
     }
-}, {
-    name: "UITabBarControllerDelegate",
-    protocols: [UITabBarControllerDelegate]
-});
-var UINavigationControllerDelegateClass = NSObject.extend({
-    navigationControllerDidShowViewControllerAnimated: function (navigationController, viewController, animated) {
+    UINavigationControllerDelegateImpl.new = function () {
+        return _super.new.call(this);
+    };
+    UINavigationControllerDelegateImpl.prototype.initWithOwner = function (owner) {
+        this._owner = owner;
+        return this;
+    };
+    UINavigationControllerDelegateImpl.prototype.navigationControllerDidShowViewControllerAnimated = function (navigationController, viewController, animated) {
         trace.write("TabView.UINavigationControllerDelegateClass.navigationControllerDidShowViewControllerAnimated(" + navigationController + ", " + viewController + ", " + animated + ");", trace.categories.Debug);
         navigationController.navigationBar.topItem.rightBarButtonItem = null;
-        this[OWNER]._onViewControllerShown(viewController);
-    }
-}, {
-    name: "UINavigationControllerDelegate",
-    protocols: [UINavigationControllerDelegate]
-});
+        this._owner._onViewControllerShown(viewController);
+    };
+    UINavigationControllerDelegateImpl.ObjCProtocols = [UINavigationControllerDelegate];
+    return UINavigationControllerDelegateImpl;
+})(NSObject);
 var TabView = (function (_super) {
     __extends(TabView, _super);
     function TabView() {
         _super.call(this);
-        this._ios = UITabBarControllerClass.new();
-        this._ios[OWNER] = this;
-        this._tabBarControllerDelegate = UITabBarControllerDelegateClass.new();
-        this._tabBarControllerDelegate[OWNER] = this;
+        this._tabBarHeight = 0;
+        this._navBarHeight = 0;
+        this._ios = UITabBarControllerImpl.new().initWithOwner(this);
+        this._tabBarControllerDelegate = UITabBarControllerDelegateImpl.new().initWithOwner(this);
         this._ios.delegate = this._tabBarControllerDelegate;
-        this._moreNavigationControllerDelegate = UINavigationControllerDelegateClass.new();
-        this._moreNavigationControllerDelegate[OWNER] = this;
+        this._moreNavigationControllerDelegate = UINavigationControllerDelegateImpl.new().initWithOwner(this);
     }
     Object.defineProperty(TabView.prototype, "ios", {
         get: function () {
@@ -124,22 +156,39 @@ var TabView = (function (_super) {
             return;
         }
         this._ios.selectedIndex = data.newValue;
-        this._invalidateMeasure();
+        this.requestLayout();
     };
-    TabView.prototype._measureOverride = function (availableSize) {
-        if (this._selectedView) {
-            var moreNavigationBarHeight = utilsModule.ios.getActualHeight(this._ios.moreNavigationController.navigationBar);
-            var tabBarHeight = utilsModule.ios.getActualHeight(this._ios.tabBar);
-            var originalSize = new geometry.Size(availableSize.width, availableSize.height - (moreNavigationBarHeight + tabBarHeight));
-            return this._selectedView.measure(originalSize);
+    TabView.prototype.onMeasure = function (widthMeasureSpec, heightMeasureSpec) {
+        var nativeView = this._nativeView;
+        if (nativeView) {
+            var width = utils.layout.getMeasureSpecSize(widthMeasureSpec);
+            var widthMode = utils.layout.getMeasureSpecMode(widthMeasureSpec);
+            var height = utils.layout.getMeasureSpecSize(heightMeasureSpec);
+            var heightMode = utils.layout.getMeasureSpecMode(heightMeasureSpec);
+            this._tabBarHeight = utilsModule.ios.getActualHeight(this._ios.tabBar);
+            this._navBarHeight = utilsModule.ios.getActualHeight(this._ios.moreNavigationController.navigationBar);
+            var density = utils.layout.getDisplayDensity();
+            var measureWidth = 0;
+            var measureHeight = 0;
+            var child = this._selectedView;
+            if (child) {
+                var childHeightMeasureSpec = utils.layout.makeMeasureSpec(height - (this._navBarHeight + this._tabBarHeight), heightMode);
+                var childSize = view.View.measureChild(this, child, widthMeasureSpec, childHeightMeasureSpec);
+                measureHeight = childSize.measuredHeight;
+                measureWidth = childSize.measuredWidth;
+            }
+            measureWidth = Math.max(measureWidth, this.minWidth * density);
+            measureHeight = Math.max(measureHeight, this.minHeight * density);
+            var widthAndState = view.View.resolveSizeAndState(measureWidth, width, widthMode, 0);
+            var heightAndState = view.View.resolveSizeAndState(measureHeight, height, heightMode, 0);
+            this.setMeasuredDimension(widthAndState, heightAndState);
         }
-        return geometry.Size.zero;
     };
-    TabView.prototype._arrangeOverride = function (finalSize) {
-        if (this._selectedView) {
-            var moreNavigationBarHeight = utilsModule.ios.getActualHeight(this._ios.moreNavigationController.navigationBar);
-            var tabBarHeight = utilsModule.ios.getActualHeight(this._ios.tabBar);
-            this._selectedView.arrange(new geometry.Rect(0, moreNavigationBarHeight, finalSize.width, finalSize.height - (moreNavigationBarHeight + tabBarHeight)));
+    TabView.prototype.onLayout = function (left, top, right, bottom) {
+        _super.prototype.onLayout.call(this, left, top, right, bottom);
+        var child = this._selectedView;
+        if (child) {
+            view.View.layoutChild(this, child, 0, this._navBarHeight, right, (bottom - this._navBarHeight - this._tabBarHeight));
         }
     };
     return TabView;

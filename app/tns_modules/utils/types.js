@@ -33,3 +33,18 @@ function getClass(object) {
     return (results && results.length > 1) ? results[1] : "";
 }
 exports.getClass = getClass;
+function getBaseClasses(object) {
+    var baseProto = object.__proto__;
+    var result = [];
+    result.push(getClass(object));
+    while (baseProto !== Object.prototype) {
+        var baseProtoString = baseProto.toString();
+        if (result.indexOf(baseProtoString) === -1) {
+            result.push(baseProtoString);
+        }
+        baseProto = baseProto.__proto__;
+    }
+    result.push("Object");
+    return result;
+}
+exports.getBaseClasses = getBaseClasses;

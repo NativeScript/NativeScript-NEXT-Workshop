@@ -15,7 +15,7 @@ var Observable = (function () {
         configurable: true
     });
     Observable.prototype.on = function (eventNames, callback, thisArg) {
-        this.addEventListener(eventNames, callback);
+        this.addEventListener(eventNames, callback, thisArg);
     };
     Observable.prototype.off = function (eventNames, callback) {
         this.removeEventListener(eventNames, callback);
@@ -131,6 +131,9 @@ var Observable = (function () {
             }
         }
         return -1;
+    };
+    Observable.prototype.toString = function () {
+        return this.typeName;
     };
     return Observable;
 })();

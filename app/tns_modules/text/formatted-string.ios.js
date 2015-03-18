@@ -21,7 +21,7 @@ var FormattedString = (function (_super) {
             var span = this.spans.getItem(i);
             spanText = span.text || "";
             spanLength = spanText.length;
-            span.updateSpanModifiers();
+            span.updateSpanModifiers(this);
             var attrDict = NSMutableDictionary.alloc().init();
             var p;
             for (p = 0; p < span.spanModifiers.length; p++) {

@@ -26,16 +26,13 @@ function getPropertyByNameAndType(name, ownerType) {
     var key = generatePropertyKey(name, ownerType);
     return propertyFromKey[key];
 }
-var PropertyMetadataOptions;
-(function (PropertyMetadataOptions) {
-    PropertyMetadataOptions.None = 0;
-    PropertyMetadataOptions.AffectsMeasure = 1;
-    PropertyMetadataOptions.AffectsArrange = 1 << 1;
-    PropertyMetadataOptions.AffectsParentMeasure = 1 << 2;
-    PropertyMetadataOptions.AffectsParentArrange = 1 << 3;
-    PropertyMetadataOptions.Inheritable = 1 << 4;
-    PropertyMetadataOptions.AffectsStyle = 1 << 5;
-})(PropertyMetadataOptions = exports.PropertyMetadataOptions || (exports.PropertyMetadataOptions = {}));
+var PropertyMetadataSettings;
+(function (PropertyMetadataSettings) {
+    PropertyMetadataSettings.None = 0;
+    PropertyMetadataSettings.AffectsLayout = 1;
+    PropertyMetadataSettings.AffectsStyle = 1 << 1;
+    PropertyMetadataSettings.Inheritable = 1 << 2;
+})(PropertyMetadataSettings = exports.PropertyMetadataSettings || (exports.PropertyMetadataSettings = {}));
 var ValueSource;
 (function (ValueSource) {
     ValueSource.Default = 0;
@@ -49,7 +46,7 @@ var PropertyMetadata = (function () {
         this._defaultValue = defaultValue;
         this._options = options;
         if (types.isUndefined(this._options)) {
-            this._options = PropertyMetadataOptions.None;
+            this._options = PropertyMetadataSettings.None;
         }
         this._onChanged = onChanged;
         this._onValidateValue = onValidateValue;
@@ -93,44 +90,23 @@ var PropertyMetadata = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(PropertyMetadata.prototype, "affectsMeasure", {
+    Object.defineProperty(PropertyMetadata.prototype, "affectsLayout", {
         get: function () {
-            return (this._options & PropertyMetadataOptions.AffectsMeasure) === PropertyMetadataOptions.AffectsMeasure;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(PropertyMetadata.prototype, "affectsArrange", {
-        get: function () {
-            return (this._options & PropertyMetadataOptions.AffectsArrange) === PropertyMetadataOptions.AffectsArrange;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(PropertyMetadata.prototype, "affectsParentMeasure", {
-        get: function () {
-            return (this._options & PropertyMetadataOptions.AffectsParentMeasure) === PropertyMetadataOptions.AffectsParentMeasure;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(PropertyMetadata.prototype, "affectsParentArrange", {
-        get: function () {
-            return (this._options & PropertyMetadataOptions.AffectsParentArrange) === PropertyMetadataOptions.AffectsParentArrange;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(PropertyMetadata.prototype, "inheritable", {
-        get: function () {
-            return (this._options & PropertyMetadataOptions.Inheritable) === PropertyMetadataOptions.Inheritable;
+            return (this._options & PropertyMetadataSettings.AffectsLayout) === PropertyMetadataSettings.AffectsLayout;
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(PropertyMetadata.prototype, "affectsStyle", {
         get: function () {
-            return (this._options & PropertyMetadataOptions.AffectsStyle) === PropertyMetadataOptions.AffectsStyle;
+            return (this._options & PropertyMetadataSettings.AffectsStyle) === PropertyMetadataSettings.AffectsStyle;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PropertyMetadata.prototype, "inheritable", {
+        get: function () {
+            return (this._options & PropertyMetadataSettings.Inheritable) === PropertyMetadataSettings.Inheritable;
         },
         enumerable: true,
         configurable: true
@@ -152,7 +128,7 @@ var Property = (function () {
         this._ownerType = ownerType;
         this._metadata = metadata;
         if (!metadata.options) {
-            metadata.options = PropertyMetadataOptions.None;
+            metadata.options = PropertyMetadataSettings.None;
         }
         this._id = propertyIdCounter++;
     }

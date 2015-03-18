@@ -7,8 +7,9 @@ var __extends = this.__extends || function (d, b) {
 var dependencyObservable = require("ui/core/dependency-observable");
 var proxy = require("ui/core/proxy");
 var textBase = require("ui/text-base");
-exports.hintProperty = new dependencyObservable.Property("hint", "TextField", new proxy.PropertyMetadata("", dependencyObservable.PropertyMetadataOptions.None));
-exports.secureProperty = new dependencyObservable.Property("secure", "TextField", new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataOptions.None));
+var editableTextBase = require("ui/editable-text-base");
+exports.hintProperty = new dependencyObservable.Property("hint", "TextField", new proxy.PropertyMetadata(""));
+exports.secureProperty = new dependencyObservable.Property("secure", "TextField", new proxy.PropertyMetadata(false));
 require("utils/module-merge").merge(textBase, exports);
 var TextField = (function (_super) {
     __extends(TextField, _super);
@@ -36,5 +37,5 @@ var TextField = (function (_super) {
         configurable: true
     });
     return TextField;
-})(textBase.TextBase);
+})(editableTextBase.EditableTextBase);
 exports.TextField = TextField;

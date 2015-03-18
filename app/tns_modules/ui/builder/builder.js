@@ -77,27 +77,27 @@ function parseInternal(value, exports) {
                     if (parent) {
                         if (componentModule.component instanceof view.View) {
                             if (complexProperty) {
-                                addToComplexProperty(parent.component, complexProperty, componentModule);
+                                addToComplexProperty(parent, complexProperty, componentModule);
                             }
                             else if (parent.component._addChildFromBuilder) {
                                 parent.component._addChildFromBuilder(args.elementName, componentModule.component);
                             }
                         }
                         else if (complexProperty) {
-                            addToComplexProperty(parent.component, complexProperty, componentModule);
+                            addToComplexProperty(parent, complexProperty, componentModule);
                         }
                     }
                     else if (parents.length === 0) {
                         rootComponentModule = componentModule;
                     }
+                    parents.push(componentModule);
                 }
-                parents.push(componentModule);
             }
         }
         else if (args.eventType === xml.ParserEventType.EndElement) {
             if (isComplexProperty(args.elementName)) {
                 if (complexProperty) {
-                    if (parent.component._addArrayFromBuilder) {
+                    if (parent && parent.component._addArrayFromBuilder) {
                         parent.component._addArrayFromBuilder(complexProperty.name, complexProperty.items);
                         complexProperty.items = [];
                     }
@@ -109,8 +109,9 @@ function parseInternal(value, exports) {
             }
         }
     }, function (e) {
+        throw new Error("XML parse error: " + e.message);
     }, true);
-    xmlParser.parse(value);
+    xmlParser.parse(value.replace('xmlns="http://www.nativescript.org/tns.xsd"', "").replace("xmlns='http://www.nativescript.org/tns.xsd'", ""));
     return rootComponentModule;
 }
 function load(fileName, exports) {
@@ -129,7 +130,11 @@ function loadInternal(fileName, exports) {
         fileAccess.readText(fileName, function (result) {
             componentModule = parseInternal(result, exports);
         }, function (e) {
+            throw new Error("Error loading file " + fileName + " :" + e.message);
         });
+    }
+    if (componentModule && componentModule.component) {
+        componentModule.component.exports = exports;
     }
     return componentModule;
 }
@@ -148,13 +153,14 @@ function isKnownCollection(name, exports) {
     return KNOWNCOLLECTIONS in exports && exports[KNOWNCOLLECTIONS] && name in exports[KNOWNCOLLECTIONS];
 }
 function addToComplexProperty(parent, complexProperty, elementModule) {
-    if (isKnownCollection(complexProperty.name, elementModule.exports)) {
+    var parentComponent = parent.component;
+    if (isKnownCollection(complexProperty.name, parent.exports)) {
         complexProperty.items.push(elementModule.component);
     }
-    else if (parent._addChildFromBuilder) {
-        parent._addChildFromBuilder("", elementModule.component);
+    else if (parentComponent._addChildFromBuilder) {
+        parentComponent._addChildFromBuilder("", elementModule.component);
     }
     else {
-        parent[complexProperty.name] = elementModule.component;
+        parentComponent[complexProperty.name] = elementModule.component;
     }
 }

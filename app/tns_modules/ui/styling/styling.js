@@ -1,6 +1,6 @@
 var styleModule = require("ui/styling/style");
 var stylePropertyModule = require("ui/styling/style-property");
-var stylersModule = require("ui/styling/stylers");
+var stylersCommonModule = require("ui/styling/stylers-common");
 var visualStateConstatnsModule = require("ui/styling/visual-state-constants");
 var convertersModule = require("ui/styling/converters");
 exports.Property = stylePropertyModule.Property;
@@ -22,7 +22,6 @@ var converters;
     converters.colorConverter = convertersModule.colorConverter;
     converters.fontSizeConverter = convertersModule.fontSizeConverter;
     converters.textAlignConverter = convertersModule.textAlignConverter;
-    converters.thicknessConverter = convertersModule.thicknessConverter;
     converters.numberConverter = convertersModule.numberConverter;
     converters.visibilityConverter = convertersModule.visibilityConverter;
 })(converters = exports.converters || (exports.converters = {}));
@@ -36,9 +35,6 @@ var visualStates;
 ;
 var stylers;
 (function (stylers) {
-    stylers.Styler = stylersModule.Styler;
-    stylers.StylePropertyChangedHandler = stylersModule.Styler;
-    stylers.getStyler = stylersModule.getStyler;
-    stylers.registerStyler = stylersModule.registerStyler;
+    stylers.StylePropertyChangedHandler = stylersCommonModule.StylePropertyChangedHandler;
+    stylers.registerHandler = styleModule.registerHandler;
 })(stylers = exports.stylers || (exports.stylers = {}));
-;

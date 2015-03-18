@@ -10,14 +10,12 @@ var types = require("utils/types");
 var trace = require("trace");
 var builder = require("ui/builder");
 var fs = require("file-system");
-var fileSystemAccess = require("file-system/file-system-access");
+var utils = require("utils/utils");
 var frameStack = [];
 function buildEntryFromArgs(arg) {
     var entry;
     if (arg instanceof pages.Page) {
-        entry = {
-            page: arg
-        };
+        throw new Error("Navigating to a Page instance is no longer supported. Please navigate by using either a module name or a page factory function.");
     }
     else if (types.isString(arg)) {
         entry = {
@@ -36,39 +34,44 @@ function buildEntryFromArgs(arg) {
 }
 function resolvePageFromEntry(entry) {
     var page;
-    if (entry.page || entry.create) {
-        page = entry.page || entry.create();
+    if (entry.create) {
+        page = entry.create();
+        if (!(page && page instanceof pages.Page)) {
+            throw new Error("Failed to create Page with entry.create() function.");
+        }
     }
     else if (entry.moduleName) {
         var currentAppPath = fs.knownFolders.currentApp().path;
         var moduleNamePath = fs.path.join(currentAppPath, entry.moduleName);
-        var moduleExports = require(moduleNamePath);
-        if (entry.resolvedPage) {
-            page = entry.resolvedPage;
+        var moduleExports;
+        if (fs.File.exists(moduleNamePath + ".js")) {
+            trace.write("Loading JS file: " + moduleNamePath + ".js", trace.categories.Navigation);
+            moduleExports = require(moduleNamePath);
         }
-        else if (moduleExports.createPage) {
+        if (moduleExports && moduleExports.createPage) {
+            trace.write("Calling createPage()", trace.categories.Navigation);
             page = moduleExports.createPage();
         }
         else {
-            page = pageFromBuilder(moduleNamePath, moduleExports);
+            page = pageFromBuilder(moduleNamePath, entry.moduleName, moduleExports);
+        }
+        if (!(page && page instanceof pages.Page)) {
+            throw new Error("Failed to load Page from entry.moduleName: " + entry.moduleName);
         }
     }
     return page;
 }
-function pageFromBuilder(moduleName, moduleExports) {
+function pageFromBuilder(moduleNamePath, moduleName, moduleExports) {
     var page;
     var element;
-    var fileName = moduleName + ".xml";
+    var fileName = moduleNamePath + ".xml";
     if (fs.File.exists(fileName)) {
+        trace.write("Loading XML file: " + fileName, trace.categories.Navigation);
         element = builder.load(fileName, moduleExports);
         if (element instanceof pages.Page) {
             page = element;
             var cssFileName = moduleName + ".css";
-            if (fs.File.exists(cssFileName)) {
-                new fileSystemAccess.FileSystemAccess().readText(cssFileName, function (r) {
-                    page.css = r;
-                });
-            }
+            page.addCssFile(cssFileName);
         }
     }
     return page;
@@ -80,19 +83,13 @@ var knownEvents;
         android.optionSelected = "optionSelected";
     })(android = knownEvents.android || (knownEvents.android = {}));
 })(knownEvents = exports.knownEvents || (exports.knownEvents = {}));
-var NavigationContext = (function () {
-    function NavigationContext() {
-        this.isBackNavigation = false;
-    }
-    return NavigationContext;
-})();
 var Frame = (function (_super) {
     __extends(Frame, _super);
     function Frame() {
         _super.call(this);
         this._isInFrameStack = false;
         this._backStack = new Array();
-        this._navigationStack = new Array();
+        this._navigationQueue = new Array();
     }
     Frame.prototype.canGoBack = function () {
         return this._backStack.length > 0;
@@ -102,19 +99,13 @@ var Frame = (function (_super) {
         if (!this.canGoBack()) {
             return;
         }
-        var entry = this._backStack.pop();
-        var newPage = entry.resolvedPage;
-        if (!newPage) {
-            throw new Error("Failed to resolve Page instance to navigate to. Processing entry: " + entry);
-        }
+        var backstackEntry = this._backStack.pop();
         var navigationContext = {
-            entry: entry,
-            oldPage: this._currentPage,
-            newPage: newPage,
+            entry: backstackEntry,
             isBackNavigation: true
         };
-        this._navigationStack.push(navigationContext);
-        if (this._navigationStack.length === 1) {
+        this._navigationQueue.push(navigationContext);
+        if (this._navigationQueue.length === 1) {
             this._processNavigationContext(navigationContext);
         }
         else {
@@ -124,36 +115,36 @@ var Frame = (function (_super) {
     Frame.prototype.navigate = function (param) {
         trace.write(this._getTraceId() + ".navigate();", trace.categories.Navigation);
         var entry = buildEntryFromArgs(param);
-        entry.resolvedPage = resolvePageFromEntry(entry);
-        if (!entry.resolvedPage) {
-            throw new Error("Failed to resolve Page instance to navigate to. Processing entry: " + entry);
-        }
+        var page = resolvePageFromEntry(entry);
         this._pushInFrameStack();
-        var navigationContext = {
+        var backstackEntry = {
             entry: entry,
-            oldPage: this._currentPage,
-            newPage: entry.resolvedPage,
+            resolvedPage: page,
+        };
+        var navigationContext = {
+            entry: backstackEntry,
             isBackNavigation: false
         };
-        this._navigationStack.push(navigationContext);
-        if (this._navigationStack.length === 1) {
+        this._navigationQueue.push(navigationContext);
+        if (this._navigationQueue.length === 1) {
             this._processNavigationContext(navigationContext);
         }
         else {
             trace.write(this._getTraceId() + ".navigation scheduled;", trace.categories.Navigation);
         }
     };
-    Frame.prototype._processNavigationStack = function (page) {
-        if (this._navigationStack.length === 0) {
+    Frame.prototype._processNavigationQueue = function (page) {
+        if (this._navigationQueue.length === 0) {
             return;
         }
-        var currentNavigationPage = this._navigationStack[0].newPage;
+        var entry = this._navigationQueue[0].entry;
+        var currentNavigationPage = entry.resolvedPage;
         if (page !== currentNavigationPage) {
             throw new Error("Corrupted navigation stack.");
         }
-        this._navigationStack.shift();
-        if (this._navigationStack.length > 0) {
-            var navigationContext = this._navigationStack[0];
+        this._navigationQueue.shift();
+        if (this._navigationQueue.length > 0) {
+            var navigationContext = this._navigationQueue[0];
             this._processNavigationContext(navigationContext);
         }
     };
@@ -166,32 +157,33 @@ var Frame = (function (_super) {
         }
     };
     Frame.prototype.performNavigation = function (navigationContext) {
-        this._onNavigatingTo(navigationContext);
-        if (this._currentPage) {
+        var navContext = navigationContext.entry;
+        this._onNavigatingTo(navContext);
+        if (this.currentPage) {
             this._backStack.push(this._currentEntry);
         }
-        this._navigateCore(navigationContext);
-        this._onNavigatedTo(navigationContext);
+        this._navigateCore(navContext);
+        this._onNavigatedTo(navContext, false);
     };
     Frame.prototype.performGoBack = function (navigationContext) {
-        this._onNavigatingTo(navigationContext);
-        this._goBackCore(navigationContext.entry);
-        this._onNavigatedTo(navigationContext);
+        var navContext = navigationContext.entry;
+        this._onNavigatingTo(navContext);
+        this._goBackCore(navContext);
+        this._onNavigatedTo(navContext, true);
     };
-    Frame.prototype._goBackCore = function (entry) {
+    Frame.prototype._goBackCore = function (backstackEntry) {
     };
-    Frame.prototype._navigateCore = function (context) {
+    Frame.prototype._navigateCore = function (backstackEntry) {
     };
-    Frame.prototype._onNavigatingTo = function (context) {
-        if (this._currentPage) {
-            this._currentPage.onNavigatingFrom();
+    Frame.prototype._onNavigatingTo = function (backstackEntry) {
+        if (this.currentPage) {
+            this.currentPage.onNavigatingFrom();
         }
-        context.newPage.frame = this;
-        context.newPage.onNavigatingTo(context.entry.context);
+        backstackEntry.resolvedPage.onNavigatingTo(backstackEntry.entry.context);
     };
-    Frame.prototype._onNavigatedTo = function (context) {
-        if (this._currentPage) {
-            this._currentPage.onNavigatedFrom();
+    Frame.prototype._onNavigatedTo = function (backstackEntry, isBack) {
+        if (this.currentPage) {
+            this.currentPage.onNavigatedFrom(isBack);
         }
     };
     Object.defineProperty(Frame.prototype, "animated", {
@@ -213,7 +205,10 @@ var Frame = (function (_super) {
     });
     Object.defineProperty(Frame.prototype, "currentPage", {
         get: function () {
-            return this._currentPage;
+            if (this._currentEntry) {
+                return this._currentEntry.resolvedPage;
+            }
+            return null;
         },
         enumerable: true,
         configurable: true
@@ -245,7 +240,7 @@ var Frame = (function (_super) {
     };
     Object.defineProperty(Frame.prototype, "_childrenCount", {
         get: function () {
-            if (this._currentPage) {
+            if (this.currentPage) {
                 return 1;
             }
             return 0;
@@ -254,8 +249,8 @@ var Frame = (function (_super) {
         configurable: true
     });
     Frame.prototype._eachChildView = function (callback) {
-        if (this._currentPage) {
-            callback(this._currentPage);
+        if (this.currentPage) {
+            callback(this.currentPage);
         }
     };
     Frame.prototype._getIsAnimatedNavigation = function (entry) {
@@ -270,9 +265,35 @@ var Frame = (function (_super) {
     Frame.prototype._getTraceId = function () {
         return "Frame<" + this._domId + ">";
     };
+    Object.defineProperty(Frame.prototype, "navigationBarHeight", {
+        get: function () {
+            return 0;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Frame.prototype.onMeasure = function (widthMeasureSpec, heightMeasureSpec) {
+        var width = utils.layout.getMeasureSpecSize(widthMeasureSpec);
+        var widthMode = utils.layout.getMeasureSpecMode(widthMeasureSpec);
+        var height = utils.layout.getMeasureSpecSize(heightMeasureSpec);
+        var heightMode = utils.layout.getMeasureSpecMode(heightMeasureSpec);
+        var result = view.View.measureChild(this, this.currentPage, widthMeasureSpec, utils.layout.makeMeasureSpec(height - this.navigationBarHeight, heightMode));
+        var widthAndState = view.View.resolveSizeAndState(result.measuredWidth, width, widthMode, 0);
+        var heightAndState = view.View.resolveSizeAndState(result.measuredHeight, height, heightMode, 0);
+        this.setMeasuredDimension(widthAndState, heightAndState);
+    };
+    Frame.prototype.onLayout = function (left, top, right, bottom) {
+        view.View.layoutChild(this, this.currentPage, 0, this.navigationBarHeight, right - left, bottom - top);
+    };
+    Frame.prototype._addViewToNativeVisualTree = function (child) {
+        return true;
+    };
+    Frame.prototype._removeViewFromNativeVisualTree = function (child) {
+        child._isAddedToNativeVisualTree = false;
+    };
     Frame.defaultAnimatedNavigation = true;
     return Frame;
-})(view.View);
+})(view.CustomLayoutView);
 exports.Frame = Frame;
 var _topmost = function () {
     if (frameStack.length > 0) {

@@ -37,8 +37,8 @@ function onSourcePropertyChanged(data) {
         image.android.setImageBitmap(data.newValue ? data.newValue.android : null);
     }
 }
-imageCommon.sourceProperty.metadata.onSetNativeValue = onSourcePropertyChanged;
-imageCommon.stretchProperty.metadata.onSetNativeValue = onStretchPropertyChanged;
+imageCommon.Image.sourceProperty.metadata.onSetNativeValue = onSourcePropertyChanged;
+imageCommon.Image.stretchProperty.metadata.onSetNativeValue = onStretchPropertyChanged;
 var Image = (function (_super) {
     __extends(Image, _super);
     function Image() {
@@ -53,9 +53,6 @@ var Image = (function (_super) {
     });
     Image.prototype._createUI = function () {
         this._android = new android.widget.ImageView(this._context);
-    };
-    Image.prototype.measure = function (availableSize, options) {
-        return _super.prototype.measure.call(this, availableSize, true);
     };
     return Image;
 })(imageCommon.Image);

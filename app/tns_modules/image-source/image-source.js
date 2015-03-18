@@ -1,5 +1,7 @@
 var native = require("image-source/image-source-native");
-var utils = require("utils/utils");
+var platform = require("platform");
+var types = require("utils/types");
+var fs = require("file-system");
 var http = require("http");
 (function (ImageFormat) {
     ImageFormat[ImageFormat["PNG"] = 0] = "PNG";
@@ -16,7 +18,11 @@ var ImageSource = (function () {
         return nativeInstance != null;
     };
     ImageSource.prototype.loadFromFile = function (path) {
-        var nativeInstance = native.fromFile(path);
+        var fileName = types.isString(path) ? path.trim() : "";
+        if (fileName.indexOf("~/") === 0) {
+            fileName = fs.path.join(fs.knownFolders.currentApp().path, fileName.replace("~/", ""));
+        }
+        var nativeInstance = native.fromFile(fileName);
         this.setNativeInstance(nativeInstance);
         return (nativeInstance != null);
     };
@@ -31,6 +37,9 @@ var ImageSource = (function () {
     };
     ImageSource.prototype.saveToFile = function (path, format, quality) {
         return native.saveToFile(this.getNativeInstance(), path, format, quality);
+    };
+    ImageSource.prototype.toBase64String = function (format, quality) {
+        return native.toBase64String(this.getNativeInstance(), format, quality);
     };
     Object.defineProperty(ImageSource.prototype, "height", {
         get: function () {
@@ -59,10 +68,10 @@ var ImageSource = (function () {
         configurable: true
     });
     ImageSource.prototype.setNativeInstance = function (instance) {
-        if (utils.targetPlatform() === utils.platform.android) {
+        if (platform.device.os === platform.platformNames.android) {
             this.android = instance;
         }
-        else if (utils.targetPlatform() === utils.platform.ios) {
+        else if (platform.device.os === platform.platformNames.ios) {
             this.ios = instance;
         }
     };

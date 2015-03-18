@@ -21,13 +21,15 @@ var FormattedString = (function (_super) {
             var span = this.spans.getItem(i);
             spanText = span.text || "";
             spanLength = spanText.length;
-            ssb.insert(spanStart, spanText);
-            span.updateSpanModifiers();
-            var p;
-            for (p = 0; p < span.spanModifiers.length; p++) {
-                ssb.setSpan(span.spanModifiers[p], spanStart, spanStart + spanLength, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (spanLength !== 0) {
+                ssb.insert(spanStart, spanText);
+                span.updateSpanModifiers(this);
+                var p;
+                for (p = 0; p < span.spanModifiers.length; p++) {
+                    ssb.setSpan(span.spanModifiers[p], spanStart, spanStart + spanLength, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                spanStart += spanLength;
             }
-            spanStart += spanLength;
         }
         this._formattedText = ssb;
     };

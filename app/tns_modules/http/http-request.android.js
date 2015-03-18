@@ -1,81 +1,97 @@
 var imageSource = require("image-source");
 var types = require("utils/types");
-function request(options) {
-    return new Promise(function (resolve, reject) {
-        try {
-            var request = new com.koushikdutta.async.http.AsyncHttpRequest(java.net.URI.create(options.url), options.method);
-            if (options.headers) {
-                for (var key in options.headers) {
-                    request.addHeader(key, options.headers[key]);
-                }
-            }
-            if (types.isNumber(options.timeout)) {
-                request.setTimeout(options.timeout);
-            }
-            if (types.isString(options.content)) {
-                var stringBody = com.koushikdutta.async.http.body.StringBody.extend({
-                    getContentType: function () {
-                        return null;
-                    }
-                });
-                request.setBody(new stringBody(options.content));
-            }
-            else if (types.isDefined(options.content)) {
-                request.setBody(new com.koushikdutta.async.http.body.StreamBody(new java.io.ByteArrayInputStream(options.content), options.content.length));
-            }
-            var callback = new com.koushikdutta.async.http.callback.HttpConnectCallback({
-                onConnectCompleted: function (error, response) {
-                    if (error) {
-                        reject(new Error(error.toString()));
+var platform = require("platform");
+var requestIdCounter = 0;
+var pendingRequests = {};
+var completeCallback = new com.tns.Async.CompleteCallback({
+    onComplete: function (result, context) {
+        onRequestComplete(context, result);
+    }
+});
+function onRequestComplete(requestId, result) {
+    var callbacks = pendingRequests[requestId];
+    delete pendingRequests[requestId];
+    if (result.error) {
+        callbacks.rejectCallback(new Error(result.error.toString()));
+        return;
+    }
+    var headers = {};
+    if (result.headers) {
+        var jHeaders = result.headers;
+        var length = jHeaders.size();
+        var i;
+        var pair;
+        for (i = 0; i < length; i++) {
+            pair = jHeaders.get(i);
+            headers[pair.key] = pair.value;
+        }
+    }
+    callbacks.resolveCallback({
+        content: {
+            raw: result.raw,
+            toString: function () {
+                return result.responseAsString;
+            },
+            toJSON: function () {
+                return JSON.parse(result.responseAsString);
+            },
+            toImage: function () {
+                return new Promise(function (resolveImage, rejectImage) {
+                    if (result.responseAsImage != null) {
+                        resolveImage(imageSource.fromNativeSource(result.responseAsImage));
                     }
                     else {
-                        var headers = {};
-                        var rawHeaders = response.getHeaders().headers;
-                        for (var i = 0, l = rawHeaders.length(); i < l; i++) {
-                            var key = rawHeaders.getFieldName(i);
-                            headers[key] = rawHeaders.getValue(i);
-                        }
-                        var outputStream = new java.io.ByteArrayOutputStream();
-                        var dataCallback = new com.koushikdutta.async.callback.DataCallback({
-                            onDataAvailable: function (emitter, byteBufferList) {
-                                var bb = byteBufferList.getAll();
-                                outputStream.write(bb.array(), bb.arrayOffset() + bb.position(), bb.remaining());
-                            }
-                        });
-                        response.setDataCallback(dataCallback);
-                        var endCallback = new com.koushikdutta.async.callback.CompletedCallback({
-                            onCompleted: function (error) {
-                                resolve({
-                                    content: {
-                                        raw: outputStream,
-                                        toString: function () {
-                                            return outputStream.toString();
-                                        },
-                                        toJSON: function () {
-                                            return JSON.parse(outputStream.toString());
-                                        },
-                                        toImage: function () {
-                                            return new Promise(function (resolveImage, rejectImage) {
-                                                try {
-                                                    var stream = new java.io.ByteArrayInputStream(outputStream.toByteArray());
-                                                    resolveImage(imageSource.fromNativeSource(android.graphics.BitmapFactory.decodeStream(stream)));
-                                                }
-                                                catch (e) {
-                                                    rejectImage(e);
-                                                }
-                                            });
-                                        }
-                                    },
-                                    statusCode: rawHeaders.getResponseCode(),
-                                    headers: headers
-                                });
-                            }
-                        });
-                        response.setEndCallback(endCallback);
+                        rejectImage(new Error("Response content may not be converted to an Image"));
                     }
-                }
-            });
-            com.koushikdutta.async.http.AsyncHttpClient.getDefaultInstance().execute(request, callback);
+                });
+            }
+        },
+        statusCode: result.statusCode,
+        headers: headers
+    });
+}
+function buildJavaOptions(options) {
+    if (!types.isString(options.url)) {
+        throw new Error("Http request must provide a valid url.");
+    }
+    var javaOptions = new com.tns.Async.Http.RequestOptions();
+    javaOptions.url = options.url;
+    if (types.isString(options.method)) {
+        javaOptions.method = options.method;
+    }
+    if (options.content) {
+        javaOptions.content = options.content;
+    }
+    if (types.isNumber(options.timeout)) {
+        javaOptions.timeout = options.timeout;
+    }
+    if (options.headers) {
+        var arrayList = new java.util.ArrayList();
+        var pair = com.tns.Async.Http.KeyValuePair;
+        for (var key in options.headers) {
+            arrayList.add(new pair(key, options.headers[key]));
+        }
+        javaOptions.headers = arrayList;
+    }
+    var screen = platform.screen.mainScreen;
+    javaOptions.screenWidth = screen.widthPixels;
+    javaOptions.screenHeight = screen.heightPixels;
+    return javaOptions;
+}
+function request(options) {
+    if (!types.isDefined(options)) {
+        return;
+    }
+    return new Promise(function (resolve, reject) {
+        try {
+            var javaOptions = buildJavaOptions(options);
+            var callbacks = {
+                resolveCallback: resolve,
+                rejectCallback: reject
+            };
+            pendingRequests[requestIdCounter] = callbacks;
+            com.tns.Async.Http.MakeRequest(javaOptions, completeCallback, new java.lang.Integer(requestIdCounter));
+            requestIdCounter++;
         }
         catch (ex) {
             reject(ex);

@@ -11,7 +11,7 @@ var Color = (function () {
                     this._name = arg;
                 }
                 else {
-                    this._hex = arg;
+                    this._hex = this._normalizeHex(arg);
                 }
                 this._argb = this._argbFromString(this._hex);
             }
@@ -134,6 +134,12 @@ var Color = (function () {
     };
     Color.prototype._buildArgb = function () {
         this._argb = (this._a << 24) | (this._r << 16) | (this._g << 8) | this._b;
+    };
+    Color.prototype._normalizeHex = function (hexStr) {
+        if (hexStr.charAt(0) === AMP && hexStr.length === 4) {
+            hexStr = hexStr.charAt(0) + hexStr.charAt(1) + hexStr.charAt(1) + hexStr.charAt(2) + hexStr.charAt(2) + hexStr.charAt(3) + hexStr.charAt(3);
+        }
+        return hexStr;
     };
     return Color;
 })();

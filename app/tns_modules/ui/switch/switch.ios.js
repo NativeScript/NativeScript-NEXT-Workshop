@@ -5,31 +5,38 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var common = require("ui/switch/switch-common");
-var OWNER = "_owner";
 function onCheckedPropertyChanged(data) {
     var swtch = data.object;
     swtch.ios.on = data.newValue;
 }
-common.checkedProperty.metadata.onSetNativeValue = onCheckedPropertyChanged;
+common.Switch.checkedProperty.metadata.onSetNativeValue = onCheckedPropertyChanged;
 require("utils/module-merge").merge(common, exports);
-var HandlerClass = NSObject.extend({
-    valueChanged: function (sender) {
-        var weakRef = this[OWNER];
-        if (weakRef) {
-            var owner = weakRef.get();
-            if (owner) {
-                owner._onPropertyChangedFromNative(common.checkedProperty, sender.on);
-            }
-        }
+var SwitchChangeHandlerImpl = (function (_super) {
+    __extends(SwitchChangeHandlerImpl, _super);
+    function SwitchChangeHandlerImpl() {
+        _super.apply(this, arguments);
     }
-}, { exposedMethods: { "valueChanged": "v@" } });
+    SwitchChangeHandlerImpl.new = function () {
+        return _super.new.call(this);
+    };
+    SwitchChangeHandlerImpl.prototype.initWithOwner = function (owner) {
+        this._owner = owner;
+        return this;
+    };
+    SwitchChangeHandlerImpl.prototype.valueChanged = function (sender) {
+        this._owner._onPropertyChangedFromNative(common.Switch.checkedProperty, sender.on);
+    };
+    SwitchChangeHandlerImpl.ObjCExposedMethods = {
+        'valueChanged': { returns: interop.types.void, params: [UISwitch] }
+    };
+    return SwitchChangeHandlerImpl;
+})(NSObject);
 var Switch = (function (_super) {
     __extends(Switch, _super);
     function Switch() {
         _super.call(this);
         this._ios = new UISwitch();
-        this._handler = HandlerClass.alloc();
-        this._handler[OWNER] = new WeakRef(this);
+        this._handler = SwitchChangeHandlerImpl.new().initWithOwner(this);
         this._ios.addTargetActionForControlEvents(this._handler, "valueChanged", UIControlEvents.UIControlEventValueChanged);
     }
     Object.defineProperty(Switch.prototype, "ios", {

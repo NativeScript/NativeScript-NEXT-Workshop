@@ -6,7 +6,7 @@ var __extends = this.__extends || function (d, b) {
 };
 var common = require("ui/text-field/text-field-common");
 var textBase = require("ui/text-base");
-var OWNER = "_owner";
+var enums = require("ui/enums");
 function onHintPropertyChanged(data) {
     var textField = data.object;
     textField.ios.placeholder = data.newValue;
@@ -18,26 +18,47 @@ function onSecurePropertyChanged(data) {
 }
 common.secureProperty.metadata.onSetNativeValue = onSecurePropertyChanged;
 require("utils/module-merge").merge(common, exports);
-var UITextFieldDelegateClass = NSObject.extend({
-    textFieldDidEndEditing: function (field) {
-        var weakRef = this[OWNER];
-        if (weakRef) {
-            var owner = weakRef.get();
-            if (owner) {
-                owner._onPropertyChangedFromNative(textBase.textProperty, field.text);
-            }
-        }
+var UITextFieldDelegateImpl = (function (_super) {
+    __extends(UITextFieldDelegateImpl, _super);
+    function UITextFieldDelegateImpl() {
+        _super.apply(this, arguments);
     }
-}, {
-    protocols: [UITextFieldDelegate]
-});
+    UITextFieldDelegateImpl.new = function () {
+        return _super.new.call(this);
+    };
+    UITextFieldDelegateImpl.prototype.initWithOwner = function (owner) {
+        this._owner = owner;
+        return this;
+    };
+    UITextFieldDelegateImpl.prototype.textFieldShouldBeginEditing = function (textField) {
+        return this._owner.editable;
+    };
+    UITextFieldDelegateImpl.prototype.textFieldDidEndEditing = function (textField) {
+        if (this._owner.updateTextTrigger === enums.UpdateTextTrigger.focusLost) {
+            this._owner._onPropertyChangedFromNative(textBase.TextBase.textProperty, textField.text);
+        }
+        this._owner.dismissSoftInput();
+    };
+    UITextFieldDelegateImpl.prototype.textFieldShouldReturn = function (textField) {
+        this._owner.dismissSoftInput();
+        return true;
+    };
+    UITextFieldDelegateImpl.prototype.textFieldShouldChangeCharactersInRangeReplacementString = function (textField, range, replacementString) {
+        if (this._owner.updateTextTrigger === enums.UpdateTextTrigger.textChanged) {
+            var newText = NSString.alloc().initWithString(textField.text).stringByReplacingCharactersInRangeWithString(range, replacementString);
+            this._owner._onPropertyChangedFromNative(textBase.TextBase.textProperty, newText);
+        }
+        return true;
+    };
+    UITextFieldDelegateImpl.ObjCProtocols = [UITextFieldDelegate];
+    return UITextFieldDelegateImpl;
+})(NSObject);
 var TextField = (function (_super) {
     __extends(TextField, _super);
     function TextField() {
         _super.call(this);
         this._ios = new UITextField();
-        this._delegate = UITextFieldDelegateClass.alloc();
-        this._delegate[OWNER] = new WeakRef(this);
+        this._delegate = UITextFieldDelegateImpl.new().initWithOwner(this);
         this._ios.delegate = this._delegate;
     }
     Object.defineProperty(TextField.prototype, "ios", {

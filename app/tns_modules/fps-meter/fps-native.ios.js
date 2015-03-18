@@ -1,17 +1,33 @@
-var FrameHandlerClass = NSObject.extend({
-    handleFrame: function (sender) {
-        this["_owner"].handleFrame(sender);
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var FrameHandlerImpl = (function (_super) {
+    __extends(FrameHandlerImpl, _super);
+    function FrameHandlerImpl() {
+        _super.apply(this, arguments);
     }
-}, {
-    exposedMethods: {
-        "handleFrame": "v@"
-    }
-});
+    FrameHandlerImpl.new = function () {
+        return _super.new.call(this);
+    };
+    FrameHandlerImpl.prototype.initWithOwner = function (owner) {
+        this._owner = owner;
+        return this;
+    };
+    FrameHandlerImpl.prototype.handleFrame = function (sender) {
+        this._owner._handleFrame(sender);
+    };
+    FrameHandlerImpl.ObjCExposedMethods = {
+        "handleFrame": { returns: interop.types.void, params: [CADisplayLink] }
+    };
+    return FrameHandlerImpl;
+})(NSObject);
 var FPSCallback = (function () {
     function FPSCallback(onFrame) {
         this.onFrame = onFrame;
-        this.impl = FrameHandlerClass.alloc();
-        this.impl["_owner"] = this;
+        this.impl = FrameHandlerImpl.new().initWithOwner(this);
         this.displayLink = CADisplayLink.displayLinkWithTargetSelector(this.impl, "handleFrame");
         this.displayLink.paused = true;
         this.displayLink.addToRunLoopForMode(NSRunLoop.currentRunLoop(), NSDefaultRunLoopMode);
@@ -30,7 +46,7 @@ var FPSCallback = (function () {
         this.displayLink.paused = true;
         this.running = false;
     };
-    FPSCallback.prototype.handleFrame = function (sender) {
+    FPSCallback.prototype._handleFrame = function (sender) {
         if (!this.running) {
             return;
         }

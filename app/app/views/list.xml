@@ -1,9 +1,9 @@
 <Page navigatedTo="load">
-	<GridPanel>
+	<GridLayout>
 		<ListView items="{{ memes }}">
 			<ListView.itemTemplate>
 				<Image source="{{ url }}" />
 			</ListView.itemTemplate>
 		</ListView>
-	</GridPanel>
+	</GridLayout>
 </Page>

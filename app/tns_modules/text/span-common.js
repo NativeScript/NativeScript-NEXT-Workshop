@@ -4,7 +4,10 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+var colorModule = require("color");
 var bindable = require("ui/core/bindable");
+var types = require("utils/types");
+var enums = require("ui/enums");
 var Span = (function (_super) {
     __extends(Span, _super);
     function Span() {
@@ -28,8 +31,15 @@ var Span = (function (_super) {
             return this._fontSize;
         },
         set: function (value) {
-            if (this._fontSize !== value) {
-                this._fontSize = value;
+            var fSize;
+            if (types.isString(value)) {
+                fSize = parseInt(value);
+            }
+            else {
+                fSize = value;
+            }
+            if (this._fontSize !== fSize) {
+                this._fontSize = fSize;
                 this.updateAndNotify();
             }
         },
@@ -41,8 +51,15 @@ var Span = (function (_super) {
             return this._foregroundColor;
         },
         set: function (value) {
-            if (this._foregroundColor !== value) {
-                this._foregroundColor = value;
+            var foreColor;
+            if (types.isString(value) && value.indexOf("#") === 0) {
+                foreColor = new colorModule.Color(value);
+            }
+            else {
+                foreColor = value;
+            }
+            if (this._foregroundColor !== foreColor) {
+                this._foregroundColor = foreColor;
                 this.updateAndNotify();
             }
         },
@@ -67,8 +84,15 @@ var Span = (function (_super) {
             return this._underline;
         },
         set: function (value) {
-            if (this._underline !== value) {
-                this._underline = value;
+            var underlineIntValue;
+            if (types.isString(value)) {
+                underlineIntValue = parseInt(value);
+            }
+            else {
+                underlineIntValue = value;
+            }
+            if (this._underline !== underlineIntValue) {
+                this._underline = underlineIntValue;
                 this.updateAndNotify();
             }
         },
@@ -80,8 +104,15 @@ var Span = (function (_super) {
             return this._strikethrough;
         },
         set: function (value) {
-            if (this._strikethrough !== value) {
-                this._strikethrough = value;
+            var strikethroughIntValue;
+            if (types.isString(value)) {
+                strikethroughIntValue = parseInt(value);
+            }
+            else {
+                strikethroughIntValue = value;
+            }
+            if (this._strikethrough !== strikethroughIntValue) {
+                this._strikethrough = strikethroughIntValue;
                 this.updateAndNotify();
             }
         },
@@ -124,7 +155,20 @@ var Span = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Span.prototype.updateSpanModifiers = function () {
+    Object.defineProperty(Span.prototype, "parentFormattedString", {
+        get: function () {
+            return this._parentFormattedString;
+        },
+        set: function (value) {
+            if (this._parentFormattedString !== value) {
+                this._parentFormattedString = value;
+                this.updateAndNotify();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Span.prototype.updateSpanModifiers = function (parent) {
         if (this._isInEditMode) {
             throw new Error("Cannot update span modifiers during update!");
         }
@@ -135,13 +179,45 @@ var Span = (function (_super) {
     };
     Span.prototype.updateAndNotify = function () {
         if (!this._isInEditMode) {
-            this.updateSpanModifiers();
+            this.updateSpanModifiers(this.parentFormattedString);
             this.notify(this._createPropertyChangeData(".", this));
         }
     };
     Span.prototype.endEdit = function () {
         this._isInEditMode = false;
         this.updateAndNotify();
+    };
+    Span.prototype.applyXmlAttribute = function (attribute, value) {
+        if (attribute === "fontAttributes") {
+            if (value.indexOf(",")) {
+                var fontAttr = value.split(",");
+                var fontAttrValue;
+                var j;
+                for (j = 0; j < fontAttr.length; j++) {
+                    fontAttrValue = Span.getFontAttributeFromString(fontAttr[j]);
+                    this.fontAttributes |= fontAttrValue;
+                }
+            }
+            else {
+                this.fontAttributes |= value;
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    Span.getFontAttributeFromString = function (fontAttr) {
+        var fontAttrTrimmedAndLowerCase = fontAttr.trim().toLowerCase();
+        if (fontAttrTrimmedAndLowerCase === "bold") {
+            return enums.FontAttributes.Bold;
+        }
+        else if (fontAttrTrimmedAndLowerCase === "italic") {
+            return enums.FontAttributes.Italic;
+        }
+        else {
+            return enums.FontAttributes.Normal;
+        }
     };
     return Span;
 })(bindable.Bindable);

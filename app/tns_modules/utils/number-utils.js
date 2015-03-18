@@ -11,6 +11,10 @@ function greaterThan(value1, value2) {
     return (value1 > value2) && !areClose(value1, value2);
 }
 exports.greaterThan = greaterThan;
+function lessThan(value1, value2) {
+    return (value1 < value2) && !areClose(value1, value2);
+}
+exports.lessThan = lessThan;
 function isZero(value) {
     return (Math.abs(value) < epsilon);
 }
@@ -23,8 +27,8 @@ function notNegative(value) {
     return value >= 0;
 }
 exports.notNegative = notNegative;
-function isFiniteNumberOrNaN(value) {
+function isFiniteNumber(value) {
     var num = value;
-    return isFinite(num) || isNaN(num);
+    return isFinite(num);
 }
-exports.isFiniteNumberOrNaN = isFiniteNumberOrNaN;
+exports.isFiniteNumber = isFiniteNumber;

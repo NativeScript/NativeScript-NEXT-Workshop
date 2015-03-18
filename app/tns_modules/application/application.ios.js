@@ -1,31 +1,39 @@
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
 var appModule = require("application/application-common");
 var frame = require("ui/frame");
-var geometry = require("utils/geometry");
 var utils = require("utils/utils");
 var types = require("utils/types");
 require("utils/module-merge").merge(appModule, exports);
 exports.mainModule;
-var RootWindow = (function () {
-    function RootWindow() {
-        var WindowClass = UIWindow.extend({
-            layoutSubviews: function () {
-                this.rootWindow.layoutSubviews();
-            }
-        });
-        this._uiWindow = new WindowClass(UIScreen.mainScreen().bounds);
-        this._uiWindow.autoresizesSubviews = false;
-        this._uiWindow.autoresizingMask = UIViewAutoresizing.UIViewAutoresizingNone;
-        this._uiWindow.rootWindow = this;
+var Window = (function (_super) {
+    __extends(Window, _super);
+    function Window() {
+        _super.apply(this, arguments);
     }
-    Object.defineProperty(RootWindow.prototype, "uiWindow", {
+    Window.prototype.initWithFrame = function (frame) {
+        var window = _super.prototype.initWithFrame.call(this, frame);
+        if (window) {
+            window.autoresizingMask = UIViewAutoresizing.UIViewAutoresizingNone;
+        }
+        return window;
+    };
+    Object.defineProperty(Window.prototype, "content", {
         get: function () {
-            return this._uiWindow;
+            return this._content;
+        },
+        set: function (value) {
+            this._content = value;
         },
         enumerable: true,
         configurable: true
     });
-    RootWindow.prototype.layoutSubviews = function () {
-        if (!this._frame) {
+    Window.prototype.layoutSubviews = function () {
+        if (!this._content) {
             return;
         }
         var statusFrame = UIApplication.sharedApplication().statusBarFrame;
@@ -50,83 +58,91 @@ var RootWindow = (function () {
             height = size.width;
         }
         var origin = deviceFrame.origin;
-        var bounds = new geometry.Rect(origin.x, origin.y + statusBarHeight, width, height - statusBarHeight);
-        this._frame.measure(bounds.size);
-        this._frame.arrange(bounds);
-        this._frame._updateLayout();
+        var left = origin.x;
+        var top = origin.y + statusBarHeight;
+        var widthSpec = utils.layout.makeMeasureSpec(width, utils.layout.EXACTLY);
+        var heightSpec = utils.layout.makeMeasureSpec(height - statusBarHeight, utils.layout.EXACTLY);
+        this._content.measure(widthSpec, heightSpec);
+        this._content.layout(left, top, width, height);
     };
-    return RootWindow;
-})();
-var iOSApplication = (function () {
-    function iOSApplication() {
+    return Window;
+})(UIWindow);
+var TNSAppDelegate = (function (_super) {
+    __extends(TNSAppDelegate, _super);
+    function TNSAppDelegate() {
+        _super.apply(this, arguments);
+    }
+    TNSAppDelegate.prototype.applicationDidFinishLaunchingWithOptions = function (application, launchOptions) {
+        this.window = Window.alloc().initWithFrame(UIScreen.mainScreen().bounds);
+        this.window.backgroundColor = UIColor.whiteColor();
+        if (exports.onLaunch) {
+            exports.onLaunch();
+        }
+        var topFrame = frame.topmost();
+        if (!topFrame) {
+            if (exports.mainModule) {
+                topFrame = new frame.Frame();
+                topFrame.navigate(exports.mainModule);
+            }
+            else {
+                return;
+            }
+        }
+        this.window.content = topFrame;
+        this.window.rootViewController = topFrame.ios.controller;
+        var app = exports.ios;
+        app.rootController = this.window.rootViewController;
+        this.window.makeKeyAndVisible();
+        return true;
+    };
+    TNSAppDelegate.prototype.applicationDidBecomeActive = function (application) {
+        if (exports.onResume) {
+            exports.onResume();
+        }
+    };
+    TNSAppDelegate.prototype.applicationWillResignActive = function (application) {
+    };
+    TNSAppDelegate.prototype.applicationDidEnterBackground = function (application) {
+        if (exports.onSuspend) {
+            exports.onSuspend();
+        }
+    };
+    TNSAppDelegate.prototype.applicationWillEnterForeground = function (application) {
+    };
+    TNSAppDelegate.prototype.applicationWillTerminate = function (application) {
+        if (exports.onExit) {
+            exports.onExit();
+        }
+    };
+    TNSAppDelegate.prototype.applicationDidReceiveMemoryWarning = function (application) {
+        if (exports.onLowMemory) {
+            exports.onLowMemory();
+        }
+    };
+    TNSAppDelegate.prototype.applicationOpenURLSourceApplicationAnnotation = function (application, url, sourceApplication, annotation) {
+        var dictionary = new NSMutableDictionary();
+        dictionary.setObjectForKey(url, "TLKApplicationOpenURL");
+        dictionary.setObjectForKey(application, "TLKApplication");
+        NSNotificationCenter.defaultCenter().postNotificationNameObjectUserInfo("com.telerik.TLKApplicationOpenURL", null, dictionary);
+        return true;
+    };
+    TNSAppDelegate.ObjCProtocols = [UIApplicationDelegate];
+    return TNSAppDelegate;
+})(UIResponder);
+var IOSApplication = (function () {
+    function IOSApplication() {
         this.nativeApp = UIApplication.sharedApplication();
     }
-    iOSApplication.prototype.init = function () {
-        UIResponder.extend({
-            applicationDidFinishLaunchingWithOptions: function () {
-                var rootWindow = new RootWindow();
-                var window = rootWindow.uiWindow;
-                this.window = window;
-                this.window.backgroundColor = UIColor.whiteColor();
-                if (exports.onLaunch) {
-                    exports.onLaunch();
-                }
-                var topFrame = frame.topmost();
-                if (!topFrame) {
-                    if (exports.mainModule) {
-                        topFrame = new frame.Frame();
-                        topFrame.navigate(exports.mainModule);
-                    }
-                    else {
-                        return;
-                    }
-                }
-                rootWindow._frame = topFrame;
-                this.window.rootViewController = topFrame.ios.controller;
-                this.window.makeKeyAndVisible();
-                return true;
-            },
-            applicationDidBecomeActive: function (application) {
-                if (exports.onResume) {
-                    exports.onResume();
-                }
-            },
-            applicationWillResignActive: function (application) {
-            },
-            applicationDidEnterBackground: function (application) {
-                if (exports.onSuspend) {
-                    exports.onSuspend();
-                }
-            },
-            applicationWillEnterForeground: function (application) {
-            },
-            applicationWillTerminate: function (application) {
-                if (exports.onExit) {
-                    exports.onExit();
-                }
-            },
-            applicationDidReceiveMemoryWarning: function (application) {
-                if (exports.onLowMemory) {
-                    exports.onLowMemory();
-                }
-            },
-            applicationOpenURLSourceApplicationAnnotation: function (application, url, annotation) {
-                var dictionary = new NSMutableDictionary();
-                dictionary.setObjectForKey(url, "TLKApplicationOpenURL");
-                dictionary.setObjectForKey(application, "TLKApplication");
-                NSNotificationCenter.defaultCenter().postNotificationNameObjectUserInfo("com.telerik.TLKApplicationOpenURL", null, dictionary);
-            }
-        }, {
-            name: "TNSAppDelegate",
-            protocols: [UIApplicationDelegate]
-        });
+    IOSApplication.prototype.init = function () {
+        this._tnsAppdelegate = new TNSAppDelegate();
     };
-    return iOSApplication;
+    return IOSApplication;
 })();
-var app = new iOSApplication();
+var app = new IOSApplication();
 exports.ios = app;
 app.init();
 exports.start = function () {
+    appModule.loadCss();
     try {
         UIApplicationMain(0, null, null, "TNSAppDelegate");
     }

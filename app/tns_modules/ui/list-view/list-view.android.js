@@ -5,6 +5,8 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var common = require("ui/list-view/list-view-common");
+var layout = require("ui/layouts/layout");
+var stackLayout = require("ui/layouts/stack-layout");
 var ITEMLOADING = common.knownEvents.itemLoading;
 var LOADMOREITEMS = common.knownEvents.loadMoreItems;
 var ITEMTAP = common.knownEvents.itemTap;
@@ -18,52 +20,12 @@ var ListView = (function (_super) {
     }
     ListView.prototype._createUI = function () {
         this._android = new android.widget.ListView(this._context);
+        if (!this._androidViewId) {
+            this._androidViewId = android.view.View.generateViewId();
+        }
+        this._android.setId(this._androidViewId);
+        this.android.setAdapter(new ListViewAdapter(this));
         var that = new WeakRef(this);
-        var adapter = new android.widget.BaseAdapter.extend({
-            getCount: function () {
-                var owner = this.owner;
-                return owner && owner.items ? owner.items.length : 0;
-            },
-            getItem: function (i) {
-                var owner = this.owner;
-                if (owner && owner.items && i < owner.items.length) {
-                    return owner.items.getItem ? owner.items.getItem(i) : owner.items[i];
-                }
-                return null;
-            },
-            getItemId: function (i) {
-                return long(i);
-            },
-            hasStableIds: function () {
-                return true;
-            },
-            getView: function (index, convertView, parent) {
-                var owner = this.owner;
-                if (!owner) {
-                    return null;
-                }
-                var view = owner._getRealizedView(convertView, index);
-                var args = { eventName: ITEMLOADING, object: owner, index: index, view: view };
-                owner.notify(args);
-                if (!args.view) {
-                    args.view = this._getDefaultItemContent(index);
-                }
-                if (args.view) {
-                    if (!args.view.parent) {
-                        owner._addView(args.view);
-                    }
-                    convertView = args.view.android;
-                    owner._realizedItems[convertView.hashCode()] = args.view;
-                    args.view[REALIZED_INDEX] = index;
-                    owner._prepareItem(args.view, index);
-                }
-                return convertView;
-            },
-            get owner() {
-                return that.get();
-            }
-        })();
-        this.android.setAdapter(adapter);
         this.android.setOnScrollListener(new android.widget.AbsListView.OnScrollListener({
             onScrollStateChanged: function (view, scrollState) {
                 var owner = this.owner;
@@ -71,11 +33,11 @@ var ListView = (function (_super) {
                     return;
                 }
                 if (scrollState === android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                    owner._setValue(common.isScrollingProperty, false);
+                    owner._setValue(common.ListView.isScrollingProperty, false);
                     owner._notifyScrollIdle();
                 }
                 else {
-                    owner._setValue(common.isScrollingProperty, true);
+                    owner._setValue(common.ListView.isScrollingProperty, true);
                 }
             },
             onScroll: function (view, firstVisibleItem, visibleItemCount, totalItemCount) {
@@ -123,7 +85,7 @@ var ListView = (function (_super) {
         for (i = 0; i < length; i++) {
             key = keys[i];
             view = this._realizedItems[key];
-            this._removeView(view);
+            view.parent._removeView(view);
             delete this._realizedItems[key];
         }
     };
@@ -153,3 +115,56 @@ var ListView = (function (_super) {
     return ListView;
 })(common.ListView);
 exports.ListView = ListView;
+var ListViewAdapter = (function (_super) {
+    __extends(ListViewAdapter, _super);
+    function ListViewAdapter(listView) {
+        _super.call(this);
+        this._listView = listView;
+        return global.__native(this);
+    }
+    ListViewAdapter.prototype.getCount = function () {
+        return this._listView && this._listView.items ? this._listView.items.length : 0;
+    };
+    ListViewAdapter.prototype.getItem = function (i) {
+        if (this._listView && this._listView.items && i < this._listView.items.length) {
+            return this._listView.items.getItem ? this._listView.items.getItem(i) : this._listView.items[i];
+        }
+        return null;
+    };
+    ListViewAdapter.prototype.getItemId = function (i) {
+        return long(i);
+    };
+    ListViewAdapter.prototype.hasStableIds = function () {
+        return true;
+    };
+    ListViewAdapter.prototype.getView = function (index, convertView, parent) {
+        if (!this._listView) {
+            return null;
+        }
+        var view = this._listView._getRealizedView(convertView, index);
+        var args = { eventName: ITEMLOADING, object: this._listView, index: index, view: view };
+        this._listView.notify(args);
+        if (!args.view) {
+            args.view = this._listView._getDefaultItemContent(index);
+        }
+        if (args.view) {
+            if (!args.view.parent) {
+                if (args.view instanceof layout.Layout) {
+                    this._listView._addView(args.view);
+                    convertView = args.view.android;
+                }
+                else {
+                    var sp = new stackLayout.StackLayout();
+                    sp.addChild(args.view);
+                    this._listView._addView(sp);
+                    convertView = sp.android;
+                }
+            }
+            this._listView._realizedItems[convertView.hashCode()] = args.view;
+            args.view[REALIZED_INDEX] = index;
+            this._listView._prepareItem(args.view, index);
+        }
+        return convertView;
+    };
+    return ListViewAdapter;
+})(android.widget.BaseAdapter);

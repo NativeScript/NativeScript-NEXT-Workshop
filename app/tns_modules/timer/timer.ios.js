@@ -1,15 +1,33 @@
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
 var timeoutCallbacks = {};
-var TimerTargetClass = NSObject.extend({
-    tick: function (timer) {
-        this["_callback"].call();
+var TimerTargetImpl = (function (_super) {
+    __extends(TimerTargetImpl, _super);
+    function TimerTargetImpl() {
+        _super.apply(this, arguments);
     }
-}, {
-    exposedMethods: { "tick": "v@" }
-});
+    TimerTargetImpl.new = function () {
+        return _super.new.call(this);
+    };
+    TimerTargetImpl.prototype.initWithCallback = function (callback) {
+        this._callback = callback;
+        return this;
+    };
+    TimerTargetImpl.prototype.tick = function (timer) {
+        this._callback();
+    };
+    TimerTargetImpl.ObjCExposedMethods = {
+        "tick": { returns: interop.types.void, params: [NSTimer] }
+    };
+    return TimerTargetImpl;
+})(NSObject);
 function createTimerAndGetId(callback, milliseconds, shouldRepeat) {
     var id = new Date().getUTCMilliseconds();
-    var timerTarget = TimerTargetClass.alloc();
-    timerTarget["_callback"] = callback;
+    var timerTarget = TimerTargetImpl.new().initWithCallback(callback);
     var timer = NSTimer.scheduledTimerWithTimeIntervalTargetSelectorUserInfoRepeats(milliseconds / 1000, timerTarget, "tick", null, shouldRepeat);
     if (!timeoutCallbacks[id]) {
         timeoutCallbacks[id] = timer;

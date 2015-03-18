@@ -6,11 +6,11 @@ var __extends = this.__extends || function (d, b) {
 };
 var observable = require("data/observable");
 var dependencyObservable = require("ui/core/dependency-observable");
-var weakEventListener = require("ui/core/weakEventListener");
+var weakEventListener = require("ui/core/weak-event-listener");
 var types = require("utils/types");
 var trace = require("trace");
 var polymerExpressions = require("js-libs/polymer-expressions");
-exports.bindingContextProperty = new dependencyObservable.Property("bindingContext", "Bindable", new dependencyObservable.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataOptions.Inheritable));
+var bindingContextProperty = new dependencyObservable.Property("bindingContext", "Bindable", new dependencyObservable.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataSettings.Inheritable));
 var Bindable = (function (_super) {
     __extends(Bindable, _super);
     function Bindable() {
@@ -19,10 +19,10 @@ var Bindable = (function (_super) {
     }
     Object.defineProperty(Bindable.prototype, "bindingContext", {
         get: function () {
-            return this._getValue(exports.bindingContextProperty);
+            return this._getValue(Bindable.bindingContextProperty);
         },
         set: function (value) {
-            this._setValue(exports.bindingContextProperty, value);
+            this._setValue(Bindable.bindingContextProperty, value);
         },
         enumerable: true,
         configurable: true
@@ -60,17 +60,20 @@ var Bindable = (function (_super) {
         this._updateTwoWayBinding(data.propertyName, data.value);
     };
     Bindable.prototype._onPropertyChanged = function (property, oldValue, newValue) {
+        trace.write("Bindable._onPropertyChanged(" + this + ") " + property.name, trace.categories.Binding);
         _super.prototype._onPropertyChanged.call(this, property, oldValue, newValue);
-        if (property === exports.bindingContextProperty) {
+        if (property === Bindable.bindingContextProperty) {
             this._onBindingContextChanged(oldValue, newValue);
         }
         var binding = this._bindings[property.name];
         if (binding) {
             var shouldRemoveBinding = !binding.updating && !binding.options.twoWay;
             if (shouldRemoveBinding) {
+                trace.write("_onPropertyChanged(" + this + ") removing binding for property: " + property.name, trace.categories.Binding);
                 this.unbind(property.name);
             }
             else {
+                trace.write("_updateTwoWayBinding(" + this + "): " + property.name, trace.categories.Binding);
                 this._updateTwoWayBinding(property.name, newValue);
             }
         }
@@ -79,15 +82,20 @@ var Bindable = (function (_super) {
         var binding;
         for (var p in this._bindings) {
             binding = this._bindings[p];
+            if (binding.options.targetProperty === Bindable.bindingContextProperty.name && binding.updating) {
+                continue;
+            }
             if (binding.source && binding.source.get() !== oldValue) {
                 continue;
             }
+            trace.write("Binding target: " + binding.target.get() + " targetProperty: " + binding.options.targetProperty + " to the changed context: " + newValue, trace.categories.Binding);
             binding.unbind();
             if (newValue) {
                 binding.bind(newValue);
             }
         }
     };
+    Bindable.bindingContextProperty = bindingContextProperty;
     return Bindable;
 })(dependencyObservable.DependencyObservable);
 exports.Bindable = Bindable;
@@ -102,6 +110,15 @@ var Binding = (function () {
         if (!obj) {
             throw new Error("Expected valid object reference as a source in the Binding.bind method.");
         }
+        if (typeof (obj) === "number") {
+            obj = new Number(obj);
+        }
+        if (typeof (obj) === "boolean") {
+            obj = new Boolean(obj);
+        }
+        if (typeof (obj) === "string") {
+            obj = new String(obj);
+        }
         this.source = new WeakRef(obj);
         this.updateTarget(this.getSourceProperty());
         if (!this.sourceOptions) {
@@ -110,8 +127,8 @@ var Binding = (function () {
         var sourceOptionsInstance = this.sourceOptions.instance.get();
         if (sourceOptionsInstance instanceof observable.Observable) {
             this.weakEventListenerOptions = {
-                target: this.target,
-                source: this.sourceOptions.instance,
+                targetWeakRef: this.target,
+                sourceWeakRef: this.sourceOptions.instance,
                 eventName: observable.knownEvents.propertyChange,
                 handler: this.onSourcePropertyChanged,
                 handlerContext: this,

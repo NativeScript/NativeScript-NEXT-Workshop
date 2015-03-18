@@ -7,44 +7,34 @@ var __extends = this.__extends || function (d, b) {
 var pageCommon = require("ui/page/page-common");
 var trace = require("trace");
 module.exports.knownEvents = pageCommon.knownEvents;
-var body = {
-    get owner() {
-        return this._owner;
-    },
-    viewWillAppear: function (animated) {
-        this.super.viewWillAppear(animated);
-        trace.write(this.owner + " viewWillAppear", trace.categories.ViewHierarchy);
-    },
-    viewWillDisappear: function (animated) {
-        this.super.viewWillDisappear(animated);
-    },
-    viewDidAppear: function (animated) {
-        this.super.viewDidAppear(animated);
-        trace.write(this.owner + " viewDidAppear", trace.categories.ViewHierarchy);
-        this.owner.onLoaded();
-    },
-    viewDidDisappear: function (animated) {
-        this.super.viewDidDisappear(animated);
-        this.owner.onUnloaded();
-    },
-    viewDidLoad: function () {
+var UIViewControllerImpl = (function (_super) {
+    __extends(UIViewControllerImpl, _super);
+    function UIViewControllerImpl() {
+        _super.apply(this, arguments);
+    }
+    UIViewControllerImpl.new = function () {
+        return _super.new.call(this);
+    };
+    UIViewControllerImpl.prototype.initWithOwner = function (owner) {
+        this._owner = owner;
+        this.automaticallyAdjustsScrollViewInsets = false;
+        return this;
+    };
+    UIViewControllerImpl.prototype.viewDidLoad = function () {
         this.view.autoresizesSubviews = false;
         this.view.autoresizingMask = UIViewAutoresizing.UIViewAutoresizingNone;
-    },
-    viewDidLayoutSubviews: function () {
-        trace.write(this.owner + " viewDidLayoutSubviews, isLoaded = " + this.owner.isLoaded, trace.categories.ViewHierarchy);
-        this.owner.arrangeView();
-    }
-};
-var viewControllerExtended = UIViewController.extend(body);
+    };
+    UIViewControllerImpl.prototype.viewDidLayoutSubviews = function () {
+        trace.write(this._owner + " viewDidLayoutSubviews, isLoaded = " + this._owner.isLoaded, trace.categories.ViewHierarchy);
+        this._owner._updateLayout();
+    };
+    return UIViewControllerImpl;
+})(UIViewController);
 var Page = (function (_super) {
     __extends(Page, _super);
     function Page(options) {
         _super.call(this, options);
-        this._ios = viewControllerExtended.new();
-        this._ios.automaticallyAdjustsScrollViewInsets = false;
-        this._ios["_owner"] = this;
-        (this._layoutInfo).isLayoutSuspended = false;
+        this._ios = UIViewControllerImpl.new().initWithOwner(this);
     }
     Page.prototype._onContentChanged = function (oldView, newView) {
         _super.prototype._onContentChanged.call(this, oldView, newView);
@@ -73,11 +63,6 @@ var Page = (function (_super) {
                 view.ios.removeFromParentViewController();
                 view.ios.view.removeFromSuperview();
             }
-        }
-    };
-    Page.prototype.arrangeView = function () {
-        if (this.isLoaded) {
-            this._updateLayout();
         }
     };
     Object.defineProperty(Page.prototype, "ios", {

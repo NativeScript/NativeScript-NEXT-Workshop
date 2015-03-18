@@ -1,9 +1,13 @@
 var timer = require("timer");
-var types = require("location/location-types");
 var locationManagerModule = require("location/location-manager");
 var merger = require("utils/module-merge");
-merger.merge(types, exports);
 merger.merge(locationManagerModule, exports);
+var Location = (function () {
+    function Location() {
+    }
+    return Location;
+})();
+exports.Location = Location;
 exports.getLocation = function (options) {
     var timerId;
     var locationManager = new locationManagerModule.LocationManager();
@@ -29,6 +33,9 @@ exports.getLocation = function (options) {
         });
     }
     return new Promise(function (resolve, reject) {
+        if (!locationManagerModule.LocationManager.isEnabled()) {
+            return reject(new Error("Location service is disabled"));
+        }
         locationManager.startLocationMonitoring(function (location) {
             if (options && ("number" === typeof options.maximumAge)) {
                 if (location.timestamp.valueOf() + options.maximumAge > new Date().valueOf()) {

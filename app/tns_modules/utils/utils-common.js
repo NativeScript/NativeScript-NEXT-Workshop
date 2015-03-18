@@ -1,19 +1,4 @@
 var types = require("utils/types");
-var platform;
-(function (platform) {
-    platform.android = "android";
-    platform.ios = "ios";
-})(platform = exports.platform || (exports.platform = {}));
-function targetPlatform() {
-    if (global.NSObject) {
-        return platform.ios;
-    }
-    if (global.android) {
-        return platform.android;
-    }
-    return "";
-}
-exports.targetPlatform = targetPlatform;
 function copyFrom(source, target) {
     if (types.isDefined(source) && types.isDefined(target)) {
         var i;
@@ -30,3 +15,32 @@ function copyFrom(source, target) {
     }
 }
 exports.copyFrom = copyFrom;
+var layout;
+(function (layout) {
+    var MODE_SHIFT = 30;
+    var MODE_MASK = 0x3 << MODE_SHIFT;
+    layout.UNSPECIFIED = 0 << MODE_SHIFT;
+    layout.EXACTLY = 1 << MODE_SHIFT;
+    layout.AT_MOST = 2 << MODE_SHIFT;
+    layout.MEASURED_STATE_TOO_SMALL = 0x01000000;
+    layout.MEASURED_STATE_MASK = 0xff000000;
+    function getMode(mode) {
+        switch (mode) {
+            case layout.EXACTLY:
+                return "Exact";
+            case layout.AT_MOST:
+                return "AtMost";
+            default:
+                return "Unspecified";
+        }
+    }
+    layout.getMode = getMode;
+    function getMeasureSpecMode(spec) {
+        return (spec & MODE_MASK);
+    }
+    layout.getMeasureSpecMode = getMeasureSpecMode;
+    function getMeasureSpecSize(spec) {
+        return (spec & ~MODE_MASK);
+    }
+    layout.getMeasureSpecSize = getMeasureSpecSize;
+})(layout = exports.layout || (exports.layout = {}));

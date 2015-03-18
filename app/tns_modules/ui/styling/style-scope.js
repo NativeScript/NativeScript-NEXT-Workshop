@@ -1,7 +1,9 @@
+var trace = require("trace");
 var visualState = require("ui/styling/visual-state");
 var cssSelector = require("ui/styling/css-selector");
 var cssParser = require("js-libs/reworkcss");
 var VisualState = visualState.VisualState;
+var application = require("application");
 var StyleScope = (function () {
     function StyleScope() {
         this._statesByKey = {};
@@ -13,16 +15,47 @@ var StyleScope = (function () {
         },
         set: function (value) {
             this._css = value;
+            this._cssSelectors = undefined;
             this._reset();
         },
         enumerable: true,
         configurable: true
     });
-    StyleScope.prototype.assureSelectors = function () {
-        if (!this._cssSelectors && this._css) {
-            var syntaxTree = cssParser.parse(this._css, undefined);
-            this._createSelectors(syntaxTree);
+    StyleScope.prototype.addCss = function (cssString) {
+        if (this._css === undefined) {
+            this._css = cssString;
         }
+        else {
+            this._css += cssString;
+        }
+        this._reset();
+        if (this._cssSelectors) {
+            var addedCssTree = cssParser.parse(cssString, undefined);
+            var addedSelectors = StyleScope.createSelectorsFromSyntaxTree(addedCssTree);
+            this._cssSelectors = this._joinCssSelectorsArrays([this._cssSelectors, addedSelectors]);
+        }
+    };
+    StyleScope.prototype.ensureSelectors = function () {
+        if (!this._cssSelectors && (this._css || application.cssSelectorsCache)) {
+            var applicationCssSelectors = application.cssSelectorsCache ? application.cssSelectorsCache : null;
+            var pageCssSyntaxTree = this._css ? cssParser.parse(this._css, undefined) : null;
+            var pageCssSelectors;
+            if (pageCssSyntaxTree) {
+                pageCssSelectors = StyleScope.createSelectorsFromSyntaxTree(pageCssSyntaxTree);
+            }
+            this._cssSelectors = this._joinCssSelectorsArrays([applicationCssSelectors, pageCssSelectors]);
+        }
+    };
+    StyleScope.prototype._joinCssSelectorsArrays = function (arrays) {
+        var mergedResult = [];
+        var i;
+        for (i = 0; i < arrays.length; i++) {
+            if (arrays[i]) {
+                mergedResult.push.apply(mergedResult, arrays[i]);
+            }
+        }
+        mergedResult.sort(function (a, b) { return a.specificity - b.specificity; });
+        return mergedResult;
     };
     StyleScope.prototype.applySelectors = function (view) {
         if (!this._cssSelectors) {
@@ -36,7 +69,7 @@ var StyleScope = (function () {
                     matchedStateSelectors.push(selector);
                 }
                 else {
-                    selector.apply(view, this);
+                    selector.apply(view);
                 }
             }
         }
@@ -71,8 +104,8 @@ var StyleScope = (function () {
             });
         }
     };
-    StyleScope.prototype._createSelectors = function (ast) {
-        this._cssSelectors = [];
+    StyleScope.createSelectorsFromSyntaxTree = function (ast) {
+        var result = [];
         var rules = ast.stylesheet.rules;
         var rule;
         var filteredDeclarations;
@@ -85,17 +118,29 @@ var StyleScope = (function () {
                     return val.type === "declaration";
                 });
                 for (j = 0; j < rule.selectors.length; j++) {
-                    this._cssSelectors.push(cssSelector.createSelector(rule.selectors[j], filteredDeclarations));
+                    result.push(cssSelector.createSelector(rule.selectors[j], filteredDeclarations));
                 }
             }
         }
-        this._cssSelectors.sort(function (a, b) { return a.specificity - b.specificity; });
+        return result;
     };
     StyleScope.prototype._reset = function () {
-        this._cssSelectors = undefined;
         this._statesByKey = {};
         this._viewIdToKey = {};
     };
     return StyleScope;
 })();
 exports.StyleScope = StyleScope;
+function applyInlineSyle(view, style) {
+    try {
+        var syntaxTree = cssParser.parse("local { " + style + " }", undefined);
+        var filteredDeclarations = syntaxTree.stylesheet.rules[0].declarations.filter(function (val, i, arr) {
+            return val.type === "declaration";
+        });
+        cssSelector.applyInlineSyle(view, filteredDeclarations);
+    }
+    catch (ex) {
+        trace.write("Applying local style failed: " + ex, trace.categories.Style);
+    }
+}
+exports.applyInlineSyle = applyInlineSyle;

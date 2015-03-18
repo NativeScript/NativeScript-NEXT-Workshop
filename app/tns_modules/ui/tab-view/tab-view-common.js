@@ -8,6 +8,8 @@ var view = require("ui/core/view");
 var dependencyObservable = require("ui/core/dependency-observable");
 var proxy = require("ui/core/proxy");
 var types = require("utils/types");
+var trace = require("trace");
+exports.traceCategory = "TabView";
 var TAB_VIEW = "TabView";
 var ITEMS = "items";
 var SELECTED_INDEX = "selectedIndex";
@@ -15,15 +17,15 @@ var knownCollections;
 (function (knownCollections) {
     knownCollections.items = "items";
 })(knownCollections = exports.knownCollections || (exports.knownCollections = {}));
-exports.itemsProperty = new dependencyObservable.Property(ITEMS, TAB_VIEW, new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataOptions.AffectsMeasure));
-exports.itemsProperty.metadata.onSetNativeValue = function (data) {
-    var tabView = data.object;
-    tabView._onItemsPropertyChangedSetNativeValue(data);
-};
-exports.selectedIndexProperty = new dependencyObservable.Property(SELECTED_INDEX, TAB_VIEW, new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataOptions.AffectsMeasure));
-exports.selectedIndexProperty.metadata.onSetNativeValue = function (data) {
+var itemsProperty = new dependencyObservable.Property(ITEMS, TAB_VIEW, new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataSettings.AffectsLayout));
+var selectedIndexProperty = new dependencyObservable.Property(SELECTED_INDEX, TAB_VIEW, new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataSettings.AffectsLayout));
+selectedIndexProperty.metadata.onSetNativeValue = function (data) {
     var tabView = data.object;
     tabView._onSelectedIndexPropertyChangedSetNativeValue(data);
+};
+itemsProperty.metadata.onSetNativeValue = function (data) {
+    var tabView = data.object;
+    tabView._onItemsPropertyChangedSetNativeValue(data);
 };
 var TabView = (function (_super) {
     __extends(TabView, _super);
@@ -37,15 +39,16 @@ var TabView = (function (_super) {
     };
     Object.defineProperty(TabView.prototype, "items", {
         get: function () {
-            return this._getValue(exports.itemsProperty);
+            return this._getValue(TabView.itemsProperty);
         },
         set: function (value) {
-            this._setValue(exports.itemsProperty, value);
+            this._setValue(TabView.itemsProperty, value);
         },
         enumerable: true,
         configurable: true
     });
     TabView.prototype._onItemsPropertyChangedSetNativeValue = function (data) {
+        trace.write("TabView.__onItemsPropertyChangedSetNativeValue(" + data.oldValue + " -> " + data.newValue + ");", exports.traceCategory);
         if (data.oldValue) {
             this._removeTabs(data.oldValue);
         }
@@ -55,6 +58,7 @@ var TabView = (function (_super) {
         this._updateSelectedIndexOnItemsPropertyChanged(data.newValue);
     };
     TabView.prototype._updateSelectedIndexOnItemsPropertyChanged = function (newItems) {
+        trace.write("TabView._updateSelectedIndexOnItemsPropertyChanged(" + newItems + ");", exports.traceCategory);
         var newItemsCount = 0;
         if (newItems) {
             newItemsCount = newItems.length;
@@ -84,10 +88,10 @@ var TabView = (function (_super) {
     };
     Object.defineProperty(TabView.prototype, "selectedIndex", {
         get: function () {
-            return this._getValue(exports.selectedIndexProperty);
+            return this._getValue(TabView.selectedIndexProperty);
         },
         set: function (value) {
-            this._setValue(exports.selectedIndexProperty, value);
+            this._setValue(TabView.selectedIndexProperty, value);
         },
         enumerable: true,
         configurable: true
@@ -97,9 +101,11 @@ var TabView = (function (_super) {
         if (types.isUndefined(index)) {
             return;
         }
-        if (index < 0 || index >= this.items.length) {
-            this.selectedIndex = undefined;
-            throw new Error("SelectedIndex should be between [0, items.length)");
+        if (types.isDefined(this.items)) {
+            if (index < 0 || index >= this.items.length) {
+                this.selectedIndex = undefined;
+                throw new Error("SelectedIndex should be between [0, items.length)");
+            }
         }
     };
     Object.defineProperty(TabView.prototype, "_selectedView", {
@@ -149,6 +155,8 @@ var TabView = (function (_super) {
             }
         }
     };
+    TabView.itemsProperty = itemsProperty;
+    TabView.selectedIndexProperty = selectedIndexProperty;
     return TabView;
 })(view.View);
 exports.TabView = TabView;

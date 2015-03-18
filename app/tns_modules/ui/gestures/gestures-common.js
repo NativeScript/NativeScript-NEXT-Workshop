@@ -81,5 +81,6 @@ function fromString(type) {
     else if (t === "longpress") {
         return definition.GestureTypes.LongPress;
     }
+    return undefined;
 }
 exports.fromString = fromString;

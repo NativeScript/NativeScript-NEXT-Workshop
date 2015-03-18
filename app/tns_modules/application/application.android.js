@@ -1,4 +1,5 @@
 var appModule = require("application/application-common");
+var dts = require("application");
 var frame = require("ui/frame");
 var types = require("utils/types");
 require("utils/module-merge").merge(appModule, exports);
@@ -125,4 +126,5 @@ global.__onUncaughtError = function (error) {
     exports.onUncaughtError(nsError);
 };
 exports.start = function () {
+    dts.loadCss();
 };

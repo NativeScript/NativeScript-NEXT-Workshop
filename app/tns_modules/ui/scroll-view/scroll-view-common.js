@@ -4,4 +4,4 @@ var enums = require("ui/enums");
 function isValidOrientation(value) {
     return value === enums.Orientation.vertical || value === enums.Orientation.horizontal;
 }
-exports.orientationProperty = new dependencyObservable.Property("orientation", "ScrollView", new proxy.PropertyMetadata(enums.Orientation.vertical, dependencyObservable.PropertyMetadataOptions.AffectsMeasure, undefined, isValidOrientation));
+exports.orientationProperty = new dependencyObservable.Property("orientation", "ScrollView", new proxy.PropertyMetadata(enums.Orientation.vertical, dependencyObservable.PropertyMetadataSettings.AffectsLayout, undefined, isValidOrientation));

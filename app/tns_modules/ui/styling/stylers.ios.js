@@ -1,20 +1,9 @@
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
 var style = require("ui/styling/style");
 var stylersCommon = require("ui/styling/stylers-common");
 var enums = require("ui/enums");
 require("utils/module-merge").merge(stylersCommon, exports);
-var DefaultStyler = (function (_super) {
-    __extends(DefaultStyler, _super);
+var DefaultStyler = (function () {
     function DefaultStyler() {
-        _super.call(this);
-        this.setHandler(style.backgroundColorProperty, new stylersCommon.StylePropertyChangedHandler(DefaultStyler.setBackgroundProperty, DefaultStyler.resetBackgroundProperty, DefaultStyler.getNativeBackgroundValue));
-        this.setHandler(style.visibilityProperty, new stylersCommon.StylePropertyChangedHandler(DefaultStyler.setVisibilityProperty, DefaultStyler.resetVisibilityProperty));
-        this.setHandler(style.opacityProperty, new stylersCommon.StylePropertyChangedHandler(DefaultStyler.setOpacityProperty, DefaultStyler.resetOpacityProperty));
     }
     DefaultStyler.setBackgroundProperty = function (view, newValue) {
         var nativeView = view._nativeView;
@@ -59,16 +48,16 @@ var DefaultStyler = (function (_super) {
             return nativeView.alpha = 1.0;
         }
     };
+    DefaultStyler.registerHandlers = function () {
+        style.registerHandler(style.backgroundColorProperty, new stylersCommon.StylePropertyChangedHandler(DefaultStyler.setBackgroundProperty, DefaultStyler.resetBackgroundProperty, DefaultStyler.getNativeBackgroundValue));
+        style.registerHandler(style.visibilityProperty, new stylersCommon.StylePropertyChangedHandler(DefaultStyler.setVisibilityProperty, DefaultStyler.resetVisibilityProperty));
+        style.registerHandler(style.opacityProperty, new stylersCommon.StylePropertyChangedHandler(DefaultStyler.setOpacityProperty, DefaultStyler.resetOpacityProperty));
+    };
     return DefaultStyler;
-})(stylersCommon.Styler);
+})();
 exports.DefaultStyler = DefaultStyler;
-var ButtonStyler = (function (_super) {
-    __extends(ButtonStyler, _super);
+var ButtonStyler = (function () {
     function ButtonStyler() {
-        _super.call(this);
-        this.setHandler(style.colorProperty, new stylersCommon.StylePropertyChangedHandler(ButtonStyler.setColorProperty, ButtonStyler.resetColorProperty, ButtonStyler.getNativeColorValue));
-        this.setHandler(style.fontSizeProperty, new stylersCommon.StylePropertyChangedHandler(ButtonStyler.setFontSizeProperty, ButtonStyler.resetFontSizeProperty, ButtonStyler.getNativeFontSizeValue));
-        this.setHandler(style.textAlignmentProperty, new stylersCommon.StylePropertyChangedHandler(ButtonStyler.setTextAlignmentProperty, ButtonStyler.resetTextAlignmentProperty, ButtonStyler.getNativeTextAlignmentValue));
     }
     ButtonStyler.setColorProperty = function (view, newValue) {
         var btn = view._nativeView;
@@ -136,16 +125,16 @@ var ButtonStyler = (function (_super) {
             return ios.titleLabel.textAlignment;
         }
     };
+    ButtonStyler.registerHandlers = function () {
+        style.registerHandler(style.colorProperty, new stylersCommon.StylePropertyChangedHandler(ButtonStyler.setColorProperty, ButtonStyler.resetColorProperty, ButtonStyler.getNativeColorValue), "Button");
+        style.registerHandler(style.fontSizeProperty, new stylersCommon.StylePropertyChangedHandler(ButtonStyler.setFontSizeProperty, ButtonStyler.resetFontSizeProperty, ButtonStyler.getNativeFontSizeValue), "Button");
+        style.registerHandler(style.textAlignmentProperty, new stylersCommon.StylePropertyChangedHandler(ButtonStyler.setTextAlignmentProperty, ButtonStyler.resetTextAlignmentProperty, ButtonStyler.getNativeTextAlignmentValue), "Button");
+    };
     return ButtonStyler;
-})(DefaultStyler);
+})();
 exports.ButtonStyler = ButtonStyler;
-var LabelStyler = (function (_super) {
-    __extends(LabelStyler, _super);
+var LabelStyler = (function () {
     function LabelStyler() {
-        _super.call(this);
-        this.setHandler(style.colorProperty, new stylersCommon.StylePropertyChangedHandler(LabelStyler.setColorProperty, LabelStyler.resetColorProperty, LabelStyler.getNativeColorValue));
-        this.setHandler(style.fontSizeProperty, new stylersCommon.StylePropertyChangedHandler(LabelStyler.setFontSizeProperty, LabelStyler.resetFontSizeProperty, LabelStyler.getNativeFontSizeValue));
-        this.setHandler(style.textAlignmentProperty, new stylersCommon.StylePropertyChangedHandler(LabelStyler.setTextAlignmentProperty, LabelStyler.resetTextAlignmentProperty, LabelStyler.getNativeTextAlignmentValue));
     }
     LabelStyler.setColorProperty = function (view, newValue) {
         var label = view._nativeView;
@@ -213,16 +202,16 @@ var LabelStyler = (function (_super) {
             return ios.textAlignment;
         }
     };
+    LabelStyler.registerHandlers = function () {
+        style.registerHandler(style.colorProperty, new stylersCommon.StylePropertyChangedHandler(LabelStyler.setColorProperty, LabelStyler.resetColorProperty, LabelStyler.getNativeColorValue), "Label");
+        style.registerHandler(style.fontSizeProperty, new stylersCommon.StylePropertyChangedHandler(LabelStyler.setFontSizeProperty, LabelStyler.resetFontSizeProperty, LabelStyler.getNativeFontSizeValue), "Label");
+        style.registerHandler(style.textAlignmentProperty, new stylersCommon.StylePropertyChangedHandler(LabelStyler.setTextAlignmentProperty, LabelStyler.resetTextAlignmentProperty, LabelStyler.getNativeTextAlignmentValue), "Label");
+    };
     return LabelStyler;
-})(DefaultStyler);
+})();
 exports.LabelStyler = LabelStyler;
-var TextFieldStyler = (function (_super) {
-    __extends(TextFieldStyler, _super);
+var TextFieldStyler = (function () {
     function TextFieldStyler() {
-        _super.call(this);
-        this.setHandler(style.colorProperty, new stylersCommon.StylePropertyChangedHandler(TextFieldStyler.setColorProperty, TextFieldStyler.resetColorProperty, TextFieldStyler.getNativeColorValue));
-        this.setHandler(style.fontSizeProperty, new stylersCommon.StylePropertyChangedHandler(TextFieldStyler.setFontSizeProperty, TextFieldStyler.resetFontSizeProperty, TextFieldStyler.getNativeFontSizeValue));
-        this.setHandler(style.textAlignmentProperty, new stylersCommon.StylePropertyChangedHandler(TextFieldStyler.setTextAlignmentProperty, TextFieldStyler.resetTextAlignmentProperty, TextFieldStyler.getNativeTextAlignmentValue));
     }
     TextFieldStyler.setColorProperty = function (view, newValue) {
         var textField = view._nativeView;
@@ -290,16 +279,16 @@ var TextFieldStyler = (function (_super) {
             return ios.textAlignment;
         }
     };
+    TextFieldStyler.registerHandlers = function () {
+        style.registerHandler(style.colorProperty, new stylersCommon.StylePropertyChangedHandler(TextFieldStyler.setColorProperty, TextFieldStyler.resetColorProperty, TextFieldStyler.getNativeColorValue), "TextField");
+        style.registerHandler(style.fontSizeProperty, new stylersCommon.StylePropertyChangedHandler(TextFieldStyler.setFontSizeProperty, TextFieldStyler.resetFontSizeProperty, TextFieldStyler.getNativeFontSizeValue), "TextField");
+        style.registerHandler(style.textAlignmentProperty, new stylersCommon.StylePropertyChangedHandler(TextFieldStyler.setTextAlignmentProperty, TextFieldStyler.resetTextAlignmentProperty, TextFieldStyler.getNativeTextAlignmentValue), "TextField");
+    };
     return TextFieldStyler;
-})(DefaultStyler);
+})();
 exports.TextFieldStyler = TextFieldStyler;
-var TextViewStyler = (function (_super) {
-    __extends(TextViewStyler, _super);
+var TextViewStyler = (function () {
     function TextViewStyler() {
-        _super.call(this);
-        this.setHandler(style.colorProperty, new stylersCommon.StylePropertyChangedHandler(TextViewStyler.setColorProperty, TextViewStyler.resetColorProperty, TextViewStyler.getNativeColorValue));
-        this.setHandler(style.fontSizeProperty, new stylersCommon.StylePropertyChangedHandler(TextViewStyler.setFontSizeProperty, TextViewStyler.resetFontSizeProperty, TextViewStyler.getNativeFontSizeValue));
-        this.setHandler(style.textAlignmentProperty, new stylersCommon.StylePropertyChangedHandler(TextViewStyler.setTextAlignmentProperty, TextViewStyler.resetTextAlignmentProperty, TextViewStyler.getNativeTextAlignmentValue));
     }
     TextViewStyler.setColorProperty = function (view, newValue) {
         var textView = view._nativeView;
@@ -367,14 +356,20 @@ var TextViewStyler = (function (_super) {
             return ios.textAlignment;
         }
     };
+    TextViewStyler.registerHandlers = function () {
+        style.registerHandler(style.colorProperty, new stylersCommon.StylePropertyChangedHandler(TextViewStyler.setColorProperty, TextViewStyler.resetColorProperty, TextViewStyler.getNativeColorValue), "TextView");
+        style.registerHandler(style.fontSizeProperty, new stylersCommon.StylePropertyChangedHandler(TextViewStyler.setFontSizeProperty, TextViewStyler.resetFontSizeProperty, TextViewStyler.getNativeFontSizeValue), "TextView");
+        style.registerHandler(style.textAlignmentProperty, new stylersCommon.StylePropertyChangedHandler(TextViewStyler.setTextAlignmentProperty, TextViewStyler.resetTextAlignmentProperty, TextViewStyler.getNativeTextAlignmentValue), "TextView");
+    };
     return TextViewStyler;
-})(DefaultStyler);
+})();
 exports.TextViewStyler = TextViewStyler;
 function _registerDefaultStylers() {
-    stylersCommon.registerStyler("Frame", new stylersCommon.EmptyStyler());
-    stylersCommon.registerStyler("Button", new ButtonStyler());
-    stylersCommon.registerStyler("Label", new LabelStyler());
-    stylersCommon.registerStyler("TextField", new TextFieldStyler());
-    stylersCommon.registerStyler("TextView", new TextViewStyler());
+    style.registerNoStylingClass("Frame");
+    DefaultStyler.registerHandlers();
+    ButtonStyler.registerHandlers();
+    LabelStyler.registerHandlers();
+    TextFieldStyler.registerHandlers();
+    TextViewStyler.registerHandlers();
 }
 exports._registerDefaultStylers = _registerDefaultStylers;
