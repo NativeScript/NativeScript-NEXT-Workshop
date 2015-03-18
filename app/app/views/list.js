@@ -22,3 +22,7 @@ exports.load = function(args) {
 		controller.navigationBarHidden = false;
 	}
 };
+
+exports.create = function() {
+	frameModule.topmost().navigate("app/views/create");
+};

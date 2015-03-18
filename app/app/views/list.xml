@@ -1,6 +1,10 @@
-<Page navigatedTo="load">
-	<GridLayout>
-		<ListView items="{{ memes }}">
+<Page loaded="load">
+	<GridLayout rows="auto, *">
+
+		<!-- TODO: I'd much rather have this be a + icon in the NavBar -->
+		<Button row="0" text="Create a MEME" tap="create" />
+
+		<ListView items="{{ memes }}" row="1">
 			<ListView.itemTemplate>
 				<StackLayout>
 					<Image url="{{ url }}" />
