@@ -1,15 +1,27 @@
 <Page loaded="load">
-	<GridLayout rows="auto, *">
+	<TabView>
+		<TabView.items>
+			<TabViewItem title="Template">
+				<TabViewItem.view>
+					<GridLayout rows="auto, *">
+						<!-- TODO: Move this to the NavBar -->
+						<Button row="0" text="Create a MEME" tap="create" />
 
-		<!-- TODO: I'd much rather have this be a + icon in the NavBar -->
-		<Button row="0" text="Create a MEME" tap="create" />
-
-		<ListView items="{{ memes }}" row="1">
-			<ListView.itemTemplate>
-				<StackLayout>
-					<Image url="{{ url }}" />
-				</StackLayout>
-			</ListView.itemTemplate>
-		</ListView>
-	</GridLayout>
+						<ListView items="{{ memes }}" row="1">
+							<ListView.itemTemplate>
+								<StackLayout>
+									<Image url="{{ url }}" />
+								</StackLayout>
+							</ListView.itemTemplate>
+						</ListView>
+					</GridLayout>
+				</TabViewItem.view>
+			</TabViewItem>
+			<TabViewItem title="Recent">
+				<TabViewItem.view>
+					<Label text="TODO: Implement" />
+				</TabViewItem.view>
+			</TabViewItem>
+		</TabView.items>
+	</TabView>
 </Page>
