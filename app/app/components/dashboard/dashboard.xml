@@ -5,7 +5,7 @@
 				<TabEntry.view>
 					<GridLayout rows="auto, *">
 						<!-- TODO: Move this to the NavBar -->
-						<Button row="0" text="Create a MEME" tap="create" />
+						<Button row="0" text="Create a template" tap="create" />
 
 						<ListView items="{{ templates }}" row="1" itemTap="templateSelected">
 							<ListView.itemTemplate>

@@ -1,0 +1,12 @@
+Image {
+	height: 200;
+}
+TextField {
+	margin: 10;
+}
+Button {
+	background-color: green;
+	padding: 10;
+	margin: 10;
+	color: white;
+}
