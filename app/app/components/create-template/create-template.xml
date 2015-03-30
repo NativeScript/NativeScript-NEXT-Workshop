@@ -1,8 +1,12 @@
 <Page loaded="loaded" navigatedTo="navigatedTo">
 	<StackLayout>
 		<Image source="{{ imageSource }}" />
-		<TextField hint="Top text" />
-		<TextField hint="Bottom text" />
+		<TextField hint="Top text" text="{{ topText }}" />
+		<TextField hint="Bottom text" text="{{ bottomText }}" />
+
+		<!-- TODO: Move to nav bar -->
+		<Button text="Save" tap="save" />
+
 		<Button text="Share" />
 	</StackLayout>
 </Page>
