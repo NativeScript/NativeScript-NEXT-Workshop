@@ -1,23 +1,22 @@
 var applicationModule = require("application");
 var frameModule = require("ui/frame");
-var imageSource = require("image-source");
 var observableModule = require("data/observable");
 var observableArray = require("data/observable-array");
+var templates = require( "../components/templates/templates");
 
 var data = new observableModule.Observable();
-var templates = new observableArray.ObservableArray([]);
 
-for (var i = 0; i <= 11; i++) {
-	var source = imageSource.fromFile("~/app/images/templates/" + i + ".png");
-	templates.push({ source: source });
+function getTemplates() {
+	var templatesArray = new observableArray.ObservableArray([]);
+	templates.list().forEach(function(template) {
+		templatesArray.push(template);
+	});
+	return templatesArray;
 }
-
-// Why doesn't this work...?
-// templates.push({ url: "https://bs3.cdn.telerik.com/v1/MRAN03IikvuJWlLT/fd21bda0-d706-11e4-90e9-d96e92f3b4c7" });
-data.set("templates", templates);
 
 exports.load = function(args) {
 	var page = args.object;
+	data.set("templates", getTemplates());
 	page.bindingContext = data;
 
 	// Make sure we're on iOS before configuring the navigation bar
