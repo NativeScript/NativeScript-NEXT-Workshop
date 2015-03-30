@@ -1,5 +1,8 @@
 <Page loaded="loaded" navigatedTo="navigatedTo">
 	<StackLayout>
 		<Image source="{{ imageSource }}" />
+		<TextField hint="Top text" />
+		<TextField hint="Bottom text" />
+		<Button text="Share" />
 	</StackLayout>
 </Page>
