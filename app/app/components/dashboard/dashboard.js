@@ -2,7 +2,7 @@ var applicationModule = require("application");
 var frameModule = require("ui/frame");
 var observableModule = require("data/observable");
 var observableArray = require("data/observable-array");
-var templates = require( "../components/templates/templates");
+var templates = require( "../templates/templates");
 
 var data = new observableModule.Observable();
 var templatesArray = new observableArray.ObservableArray([]);
@@ -28,13 +28,13 @@ exports.load = function(args) {
 };
 
 exports.create = function() {
-	frameModule.topmost().navigate("app/views/create");
+	frameModule.topmost().navigate("app/components/create-template/createTemplate");
 };
 
 exports.templateSelected = function(args) {
 	var index = args.index;
 	frameModule.topmost().navigate({
-		moduleName: "app/views/create",
+		moduleName: "app/components/create-template/createTemplate",
 		context: index
 	});
 };

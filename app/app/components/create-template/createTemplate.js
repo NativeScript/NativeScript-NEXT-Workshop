@@ -1,6 +1,6 @@
 var camera = require("camera");
 var observableModule = require("data/observable");
-var templates = require("../components/templates/templates");
+var templates = require("../templates/templates");
 
 var data = new observableModule.Observable();
 
