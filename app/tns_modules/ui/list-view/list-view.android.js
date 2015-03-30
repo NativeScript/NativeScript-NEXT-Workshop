@@ -7,23 +7,11 @@ var __extends = this.__extends || function (d, b) {
 var common = require("ui/list-view/list-view-common");
 var layout = require("ui/layouts/layout");
 var stackLayout = require("ui/layouts/stack-layout");
-var color = require("color");
 var ITEMLOADING = common.knownEvents.itemLoading;
 var LOADMOREITEMS = common.knownEvents.loadMoreItems;
 var ITEMTAP = common.knownEvents.itemTap;
 var REALIZED_INDEX = "realizedIndex";
 require("utils/module-merge").merge(common, exports);
-function onSeparatorColorPropertyChanged(data) {
-    var bar = data.object;
-    if (!bar.android) {
-        return;
-    }
-    if (data.newValue instanceof color.Color) {
-        bar.android.setDivider(new android.graphics.drawable.ColorDrawable(data.newValue.android));
-        bar.android.setDividerHeight(1);
-    }
-}
-common.ListView.separatorColorProperty.metadata.onSetNativeValue = onSeparatorColorPropertyChanged;
 var ListView = (function (_super) {
     __extends(ListView, _super);
     function ListView() {

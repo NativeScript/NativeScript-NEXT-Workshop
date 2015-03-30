@@ -6,7 +6,6 @@ var absoluteLayoutDef = require("ui/layouts/absolute-layout");
 var types = require("utils/types");
 var fs = require("file-system");
 var gestures = require("ui/gestures");
-var bindingBuilder = require("ui/builder/binding-builder");
 var KNOWNEVENTS = "knownEvents";
 var UI_PATH = "ui/";
 var MODULES = {
@@ -21,14 +20,14 @@ var MODULES = {
     "SearchBar": "ui/search-bar",
     "SlideOut": "ui/slide-out",
     "TabView": "ui/tab-view",
-    "TabViewItem": "ui/tab-view",
+    "TabEntry": "ui/tab-view",
     "TextField": "ui/text-field",
     "TextView": "ui/text-view",
     "FormattedString": "text/formatted-string",
     "Span": "text/span",
     "WebView": "ui/web-view",
     "SegmentedBar": "ui/segmented-bar",
-    "SegmentedBarItem": "ui/segmented-bar",
+    "SegmentedBarEntry": "ui/segmented-bar",
     "TimePicker": "ui/time-picker",
     "DatePicker": "ui/date-picker",
     "ListPicker": "ui/list-picker",
@@ -59,16 +58,19 @@ function getComponentModule(elementName, namespace, attributes, exports) {
             var attrValue = attributes[attr];
             if (isBinding(attrValue) && instance.bind) {
                 if (isKnownEvent(attr, instanceModule)) {
-                    attachEventBinding(instance, attr, attrValue);
+                    var propertyChangeHandler = function (args) {
+                        if (args.propertyName === "bindingContext") {
+                            var handler = instance.bindingContext && instance.bindingContext[getPropertyNameFromBinding(attrValue)];
+                            if (types.isFunction(handler)) {
+                                instance.on(attr, handler, instance.bindingContext);
+                            }
+                            instance.off(observable.knownEvents.propertyChange, propertyChangeHandler);
+                        }
+                    };
+                    instance.on(observable.knownEvents.propertyChange, propertyChangeHandler);
                 }
                 else {
-                    var bindOptions = bindingBuilder.getBindingOptions(attr, getBindingExpressionFromAttribute(attrValue));
-                    instance.bind({
-                        sourceProperty: bindOptions[bindingBuilder.bindingConstants.sourceProperty],
-                        targetProperty: bindOptions[bindingBuilder.bindingConstants.targetProperty],
-                        expression: bindOptions[bindingBuilder.bindingConstants.expression],
-                        twoWay: bindOptions[bindingBuilder.bindingConstants.twoWay]
-                    }, bindOptions[bindingBuilder.bindingConstants.source]);
+                    instance.bind(getBinding(instance, attr, attrValue));
                 }
             }
             else if (isKnownEvent(attr, instanceModule)) {
@@ -95,7 +97,7 @@ function getComponentModule(elementName, namespace, attributes, exports) {
             else if (attr === ROW_SPAN) {
                 gridLayoutModule.GridLayout.setRowSpan(instance, !isNaN(+attrValue) && +attrValue);
             }
-            else if (attr === LEFT) {
+            if (attr === LEFT) {
                 absoluteLayoutDef.AbsoluteLayout.setLeft(instance, !isNaN(+attrValue) && +attrValue);
             }
             else if (attr === TOP) {
@@ -128,25 +130,16 @@ function getComponentModule(elementName, namespace, attributes, exports) {
     return componentModule;
 }
 exports.getComponentModule = getComponentModule;
-function attachEventBinding(instance, eventName, value) {
-    var propertyChangeHandler = function (args) {
-        if (args.propertyName === "bindingContext") {
-            var handler = instance.bindingContext && instance.bindingContext[getBindingExpressionFromAttribute(value)];
-            if (types.isFunction(handler)) {
-                instance.on(eventName, handler, instance.bindingContext);
-            }
-            instance.off(observable.knownEvents.propertyChange, propertyChangeHandler);
-        }
-    };
-    instance.on(observable.knownEvents.propertyChange, propertyChangeHandler);
-}
 function isGesture(name, instance) {
     return gestures.fromString(name.toLowerCase()) !== undefined;
 }
 function isKnownEvent(name, exports) {
     return (KNOWNEVENTS in exports && name in exports[KNOWNEVENTS]) || (KNOWNEVENTS in view && name in view[KNOWNEVENTS]);
 }
-function getBindingExpressionFromAttribute(value) {
+function getBinding(instance, name, value) {
+    return { targetProperty: name, sourceProperty: getPropertyNameFromBinding(value), twoWay: true };
+}
+function getPropertyNameFromBinding(value) {
     return value.replace("{{", "").replace("}}", "").trim();
 }
 function isBinding(value) {

@@ -32,8 +32,8 @@ var TimePicker = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    TimePicker.hourProperty = new dependencyObservable.Property("hour", "TimePicker", new proxy.PropertyMetadata(undefined));
-    TimePicker.minuteProperty = new dependencyObservable.Property("minute", "TimePicker", new proxy.PropertyMetadata(undefined));
+    TimePicker.hourProperty = new dependencyObservable.Property("hour", "TimePicker", new proxy.PropertyMetadata(0));
+    TimePicker.minuteProperty = new dependencyObservable.Property("minute", "TimePicker", new proxy.PropertyMetadata(0));
     return TimePicker;
 })(view.View);
 exports.TimePicker = TimePicker;

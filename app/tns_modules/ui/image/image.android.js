@@ -28,7 +28,7 @@ function onStretchPropertyChanged(data) {
             break;
     }
 }
-function onImageSourcePropertyChanged(data) {
+function onSourcePropertyChanged(data) {
     var image = data.object;
     if (!image.android) {
         return;
@@ -37,7 +37,7 @@ function onImageSourcePropertyChanged(data) {
         image.android.setImageBitmap(data.newValue ? data.newValue.android : null);
     }
 }
-imageCommon.Image.imageSourceProperty.metadata.onSetNativeValue = onImageSourcePropertyChanged;
+imageCommon.Image.sourceProperty.metadata.onSetNativeValue = onSourcePropertyChanged;
 imageCommon.Image.stretchProperty.metadata.onSetNativeValue = onStretchPropertyChanged;
 var Image = (function (_super) {
     __extends(Image, _super);

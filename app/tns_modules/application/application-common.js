@@ -1,5 +1,6 @@
 require("globals");
 var definition = require("application");
+var cssParser = require("js-libs/reworkcss");
 var fs = require("file-system");
 var fileSystemAccess = require("file-system/file-system-access");
 var styleScope = require("ui/styling/style-scope");
@@ -20,7 +21,8 @@ function loadCss() {
             new fileSystemAccess.FileSystemAccess().readText(cssFileName, function (r) {
                 applicationCss = r;
             });
-            definition.cssSelectorsCache = styleScope.StyleScope.createSelectorsFromCss(applicationCss, cssFileName);
+            var applicationCssSyntaxTree = cssParser.parse(applicationCss, undefined);
+            definition.cssSelectorsCache = styleScope.StyleScope.createSelectorsFromSyntaxTree(applicationCssSyntaxTree);
         }
     }
 }

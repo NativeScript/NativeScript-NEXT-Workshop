@@ -7,7 +7,6 @@ var __extends = this.__extends || function (d, b) {
 var common = require("ui/list-view/list-view-common");
 var utils = require("utils/utils");
 var view = require("ui/core/view");
-var color = require("color");
 var CELLIDENTIFIER = "cell";
 var ITEMLOADING = common.knownEvents.itemLoading;
 var LOADMOREITEMS = common.knownEvents.loadMoreItems;
@@ -103,16 +102,6 @@ var UITableViewDelegateImpl = (function (_super) {
     UITableViewDelegateImpl.ObjCProtocols = [UITableViewDelegate];
     return UITableViewDelegateImpl;
 })(NSObject);
-function onSeparatorColorPropertyChanged(data) {
-    var bar = data.object;
-    if (!bar.ios) {
-        return;
-    }
-    if (data.newValue instanceof color.Color) {
-        bar.ios.separatorColor = data.newValue.ios;
-    }
-}
-common.ListView.separatorColorProperty.metadata.onSetNativeValue = onSeparatorColorPropertyChanged;
 var ListView = (function (_super) {
     __extends(ListView, _super);
     function ListView() {

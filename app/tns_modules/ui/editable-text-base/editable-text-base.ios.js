@@ -39,64 +39,28 @@ var EditableTextBase = (function (_super) {
         this.ios.keyboardType = newKeyboardType;
     };
     EditableTextBase.prototype._onReturnKeyTypePropertyChanged = function (data) {
-        var newValue;
+        var newReturnKeyType;
         switch (data.newValue) {
             case enums.ReturnKeyType.done:
-                newValue = UIReturnKeyType.UIReturnKeyDone;
+                newReturnKeyType = UIReturnKeyType.UIReturnKeyDone;
                 break;
             case enums.ReturnKeyType.go:
-                newValue = UIReturnKeyType.UIReturnKeyGo;
+                newReturnKeyType = UIReturnKeyType.UIReturnKeyGo;
                 break;
             case enums.ReturnKeyType.next:
-                newValue = UIReturnKeyType.UIReturnKeyNext;
+                newReturnKeyType = UIReturnKeyType.UIReturnKeyNext;
                 break;
             case enums.ReturnKeyType.search:
-                newValue = UIReturnKeyType.UIReturnKeySearch;
+                newReturnKeyType = UIReturnKeyType.UIReturnKeySearch;
                 break;
             case enums.ReturnKeyType.send:
-                newValue = UIReturnKeyType.UIReturnKeySend;
+                newReturnKeyType = UIReturnKeyType.UIReturnKeySend;
                 break;
             default:
-                newValue = UIReturnKeyType.UIReturnKeyDefault;
+                newReturnKeyType = UIReturnKeyType.UIReturnKeyDefault;
                 break;
         }
-        this.ios.returnKeyType = newValue;
-    };
-    EditableTextBase.prototype._onAutocapitalizationTypePropertyChanged = function (data) {
-        var newValue;
-        switch (data.newValue) {
-            case enums.AutocapitalizationType.none:
-                newValue = UITextAutocapitalizationType.UITextAutocapitalizationTypeNone;
-                break;
-            case enums.AutocapitalizationType.words:
-                newValue = UITextAutocapitalizationType.UITextAutocapitalizationTypeWords;
-                break;
-            case enums.AutocapitalizationType.sentences:
-                newValue = UITextAutocapitalizationType.UITextAutocapitalizationTypeSentences;
-                break;
-            case enums.AutocapitalizationType.allCharacters:
-                newValue = UITextAutocapitalizationType.UITextAutocapitalizationTypeAllCharacters;
-                break;
-            default:
-                newValue = UITextAutocapitalizationType.UITextAutocapitalizationTypeSentences;
-                break;
-        }
-        this.ios.autocapitalizationType = newValue;
-    };
-    EditableTextBase.prototype._onAutocorrectPropertyChanged = function (data) {
-        var newValue;
-        switch (data.newValue) {
-            case true:
-                newValue = UITextAutocorrectionType.UITextAutocorrectionTypeYes;
-                break;
-            case false:
-                newValue = UITextAutocorrectionType.UITextAutocorrectionTypeNo;
-                break;
-            default:
-                newValue = UITextAutocorrectionType.UITextAutocorrectionTypeDefault;
-                break;
-        }
-        this.ios.autocorrectionType = newValue;
+        this.ios.returnKeyType = newReturnKeyType;
     };
     return EditableTextBase;
 })(common.EditableTextBase);

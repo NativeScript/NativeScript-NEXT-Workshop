@@ -7,8 +7,6 @@ var __extends = this.__extends || function (d, b) {
 var view = require("ui/core/view");
 var proxy = require("ui/core/proxy");
 var dependencyObservable = require("ui/core/dependency-observable");
-var color = require("color");
-var types = require("utils/types");
 var knownCollections;
 (function (knownCollections) {
     knownCollections.items = "items";
@@ -20,22 +18,7 @@ var SegmentedBar = (function (_super) {
     }
     SegmentedBar.prototype._addArrayFromBuilder = function (name, value) {
         if (name === "items") {
-            this._setValue(SegmentedBar.itemsProperty, value);
-        }
-    };
-    SegmentedBar.prototype._adjustSelectedIndex = function (items) {
-        if (this.items) {
-            if (this.items.length > 0) {
-                if (types.isUndefined(this.selectedIndex) || (this.selectedIndex > this.items.length - 1)) {
-                    this._setValue(SegmentedBar.selectedIndexProperty, 0);
-                }
-            }
-            else {
-                this._setValue(SegmentedBar.selectedIndexProperty, undefined);
-            }
-        }
-        else {
-            this._setValue(SegmentedBar.selectedIndexProperty, undefined);
+            this.items = value;
         }
     };
     Object.defineProperty(SegmentedBar.prototype, "selectedIndex", {
@@ -58,18 +41,7 @@ var SegmentedBar = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(SegmentedBar.prototype, "selectedBackgroundColor", {
-        get: function () {
-            return this._getValue(SegmentedBar.selectedBackgroundColorProperty);
-        },
-        set: function (value) {
-            this._setValue(SegmentedBar.selectedBackgroundColorProperty, value instanceof color.Color ? value : new color.Color(value));
-        },
-        enumerable: true,
-        configurable: true
-    });
-    SegmentedBar.selectedBackgroundColorProperty = new dependencyObservable.Property("selectedBackgroundColor", "SegmentedBar", new proxy.PropertyMetadata(undefined));
-    SegmentedBar.selectedIndexProperty = new dependencyObservable.Property("selectedIndex", "SegmentedBar", new proxy.PropertyMetadata(undefined));
+    SegmentedBar.selectedIndexProperty = new dependencyObservable.Property("selectedIndex", "SegmentedBar", new proxy.PropertyMetadata(0));
     SegmentedBar.itemsProperty = new dependencyObservable.Property("items", "SegmentedBar", new proxy.PropertyMetadata(undefined));
     return SegmentedBar;
 })(view.View);

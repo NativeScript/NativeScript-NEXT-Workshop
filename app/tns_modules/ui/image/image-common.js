@@ -11,38 +11,36 @@ var imageSource = require("image-source");
 var trace = require("trace");
 var enums = require("ui/enums");
 var utils = require("utils/utils");
-var types = require("utils/types");
-var SRC = "src";
-var IMAGE_SOURCE = "imageSource";
+var SOURCE = "source";
+var URL = "url";
 var IMAGE = "Image";
 var ISLOADING = "isLoading";
 var STRETCH = "stretch";
-function isValidSrc(src) {
-    return types.isString(src);
+function isValidUrl(url) {
+    var value = url ? url.trim() : "";
+    return value !== "" && (value.indexOf("~/") === 0 || value.indexOf("http://") === 0 || value.indexOf("https://") === 0);
 }
-function onSrcPropertyChanged(data) {
+function onUrlPropertyChanged(data) {
     var image = data.object;
     var value = data.newValue;
-    if (isValidSrc(value)) {
-        value = value.trim();
-        image.imageSource = null;
+    if (isValidUrl(value)) {
+        image.source = null;
         image["_url"] = value;
-        image._setValue(Image.isLoadingProperty, true);
-        if (imageSource.isFileOrResourcePath(value)) {
-            image.imageSource = imageSource.fromFileOrResource(value);
-            image._setValue(Image.isLoadingProperty, false);
+        if (value !== "") {
+            image._setValue(Image.isLoadingProperty, true);
+            if (value.trim().indexOf("~/") === 0) {
+                image.source = imageSource.fromFile(value.trim());
+                image._setValue(Image.isLoadingProperty, false);
+            }
+            else {
+                imageSource.fromUrl(value).then(function (r) {
+                    if (image["_url"] === value) {
+                        image.source = r;
+                        image._setValue(Image.isLoadingProperty, false);
+                    }
+                });
+            }
         }
-        else {
-            imageSource.fromUrl(value).then(function (r) {
-                if (image["_url"] === value) {
-                    image.imageSource = r;
-                    image._setValue(Image.isLoadingProperty, false);
-                }
-            });
-        }
-    }
-    else if (value instanceof imageSource.ImageSource) {
-        image.imageSource = value;
     }
 }
 var Image = (function (_super) {
@@ -50,22 +48,22 @@ var Image = (function (_super) {
     function Image(options) {
         _super.call(this, options);
     }
-    Object.defineProperty(Image.prototype, "imageSource", {
+    Object.defineProperty(Image.prototype, "source", {
         get: function () {
-            return this._getValue(Image.imageSourceProperty);
+            return this._getValue(Image.sourceProperty);
         },
         set: function (value) {
-            this._setValue(Image.imageSourceProperty, value);
+            this._setValue(Image.sourceProperty, value);
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Image.prototype, "src", {
+    Object.defineProperty(Image.prototype, "url", {
         get: function () {
-            return this._getValue(Image.srcProperty);
+            return this._getValue(Image.urlProperty);
         },
         set: function (value) {
-            this._setValue(Image.srcProperty, value);
+            this._setValue(Image.urlProperty, value);
         },
         enumerable: true,
         configurable: true
@@ -93,8 +91,8 @@ var Image = (function (_super) {
         var height = utils.layout.getMeasureSpecSize(heightMeasureSpec);
         var heightMode = utils.layout.getMeasureSpecMode(heightMeasureSpec);
         trace.write(this + " :onMeasure: " + utils.layout.getMode(widthMode) + " " + width + ", " + utils.layout.getMode(heightMode) + " " + height, trace.categories.Layout);
-        var nativeWidth = this.imageSource ? this.imageSource.width : 0;
-        var nativeHeight = this.imageSource ? this.imageSource.height : 0;
+        var nativeWidth = this.source ? this.source.width : 0;
+        var nativeHeight = this.source ? this.source.height : 0;
         var measureWidth = Math.max(nativeWidth, this.minWidth);
         var measureHeight = Math.max(nativeHeight, this.minHeight);
         var finiteWidth = widthMode !== utils.layout.UNSPECIFIED;
@@ -138,8 +136,8 @@ var Image = (function (_super) {
         }
         return { width: scaleW, height: scaleH };
     };
-    Image.srcProperty = new dependencyObservable.Property(SRC, IMAGE, new proxy.PropertyMetadata("", dependencyObservable.PropertyMetadataSettings.None, onSrcPropertyChanged));
-    Image.imageSourceProperty = new dependencyObservable.Property(IMAGE_SOURCE, IMAGE, new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataSettings.None));
+    Image.urlProperty = new dependencyObservable.Property(URL, IMAGE, new proxy.PropertyMetadata("", dependencyObservable.PropertyMetadataSettings.None, onUrlPropertyChanged));
+    Image.sourceProperty = new dependencyObservable.Property(SOURCE, IMAGE, new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataSettings.None));
     Image.isLoadingProperty = new dependencyObservable.Property(ISLOADING, IMAGE, new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataSettings.None));
     Image.stretchProperty = new dependencyObservable.Property(STRETCH, IMAGE, new proxy.PropertyMetadata(enums.Stretch.aspectFit, dependencyObservable.PropertyMetadataSettings.AffectsLayout));
     return Image;

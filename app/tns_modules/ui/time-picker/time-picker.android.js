@@ -35,22 +35,17 @@ var TimePicker = (function (_super) {
     TimePicker.prototype._createUI = function () {
         this._android = new android.widget.TimePicker(this._context);
         var that = new WeakRef(this);
-        this._listener = new android.widget.TimePicker.OnTimeChangedListener({
+        this._android.setOnTimeChangedListener(new android.widget.TimePicker.OnTimeChangedListener({
             get owner() {
                 return that.get();
             },
-            onTimeChanged: function (picker, hour, minute) {
+            onTimeChanged: function (picker, hourOfDay, minute) {
                 if (this.owner) {
-                    if (hour !== this.owner.hour) {
-                        this.owner._onPropertyChangedFromNative(common.TimePicker.hourProperty, hour);
-                    }
-                    if (minute !== this.owner.minute) {
-                        this.owner._onPropertyChangedFromNative(common.TimePicker.minuteProperty, minute);
-                    }
+                    this.owner._onPropertyChangedFromNative(common.TimePicker.hourProperty, hourOfDay);
+                    this.owner._onPropertyChangedFromNative(common.TimePicker.minuteProperty, minute);
                 }
             }
-        });
-        this._android.setOnTimeChangedListener(this._listener);
+        }));
     };
     return TimePicker;
 })(common.TimePicker);

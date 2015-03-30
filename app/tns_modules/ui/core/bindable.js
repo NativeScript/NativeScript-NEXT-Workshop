@@ -150,68 +150,30 @@ var Binding = (function () {
     };
     Binding.prototype.updateTwoWay = function (value) {
         if (this.options.twoWay) {
-            if (this._isExpression(this.options.expression)) {
-                var changedModel = {};
-                changedModel[this.options.sourceProperty] = value;
-                var expressionValue = this._getExpressionValue(this.options.expression, true, changedModel);
-                if (expressionValue instanceof Error) {
-                    trace.write(expressionValue.message, trace.categories.Binding, trace.messageType.error);
-                }
-                else {
-                    this.updateSource(expressionValue);
-                }
-            }
-            else {
-                this.updateSource(value);
-            }
+            this.updateSource(value);
         }
     };
     Binding.prototype._isExpression = function (expression) {
-        if (expression) {
-            var result = expression.indexOf(" ") !== -1;
-            return result;
-        }
-        else {
-            return false;
-        }
+        return expression.indexOf(" ") !== -1;
     };
-    Binding.prototype._getExpressionValue = function (expression, isBackConvert, changedModel) {
-        try {
-            var exp = polymerExpressions.PolymerExpressions.getExpression(expression);
-            if (exp) {
-                var context = this.source && this.source.get && this.source.get() || global;
-                return exp.getValue(context, isBackConvert, changedModel);
-            }
-            return new Error(expression + " is not a valid expression.");
+    Binding.prototype._getExpressionValue = function (expression) {
+        var exp = polymerExpressions.PolymerExpressions.getExpression(expression);
+        if (exp) {
+            return exp.getValue(this.source && this.source.get && this.source.get() || global);
         }
-        catch (e) {
-            var errorMessage = "Run-time error occured in file: " + e.sourceURL + " at line: " + e.line + " and column: " + e.column;
-            return new Error(errorMessage);
-        }
+        return undefined;
     };
     Binding.prototype.onSourcePropertyChanged = function (data) {
-        if (this._isExpression(this.options.expression)) {
-            var expressionValue = this._getExpressionValue(this.options.expression, false, undefined);
-            if (expressionValue instanceof Error) {
-                trace.write(expressionValue.message, trace.categories.Binding, trace.messageType.error);
-            }
-            else {
-                this.updateTarget(expressionValue);
-            }
+        if (this._isExpression(this.options.sourceProperty)) {
+            this.updateTarget(this._getExpressionValue(this.options.sourceProperty));
         }
         else if (data.propertyName === this.options.sourceProperty) {
             this.updateTarget(data.value);
         }
     };
     Binding.prototype.getSourceProperty = function () {
-        if (this._isExpression(this.options.expression)) {
-            var expressionValue = this._getExpressionValue(this.options.expression, false, undefined);
-            if (expressionValue instanceof Error) {
-                trace.write(expressionValue.message, trace.categories.Binding, trace.messageType.error);
-            }
-            else {
-                return expressionValue;
-            }
+        if (this._isExpression(this.options.sourceProperty)) {
+            return this._getExpressionValue(this.options.sourceProperty);
         }
         if (!this.sourceOptions) {
             this.sourceOptions = this.resolveOptions(this.source, this.options.sourceProperty);

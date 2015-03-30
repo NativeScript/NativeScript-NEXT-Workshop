@@ -25,15 +25,15 @@ function onStretchPropertyChanged(data) {
             break;
     }
 }
-function onImageSourcePropertyChanged(data) {
+function onSourcePropertyChanged(data) {
     var image = data.object;
     image.ios.image = data.newValue ? data.newValue.ios : null;
     if (isNaN(image.width) || isNaN(image.height)) {
         image.requestLayout();
     }
 }
-imageCommon.Image.imageSourceProperty.metadata.onSetNativeValue = onImageSourcePropertyChanged;
 imageCommon.Image.stretchProperty.metadata.onSetNativeValue = onStretchPropertyChanged;
+imageCommon.Image.sourceProperty.metadata.onSetNativeValue = onSourcePropertyChanged;
 var Image = (function (_super) {
     __extends(Image, _super);
     function Image(options) {

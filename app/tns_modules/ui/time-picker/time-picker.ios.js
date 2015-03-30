@@ -8,18 +8,14 @@ var common = require("ui/time-picker/time-picker-common");
 function onHourPropertyChanged(data) {
     var picker = data.object;
     if (picker.ios) {
-        var comps = NSCalendar.currentCalendar().componentsFromDate(NSCalendarUnit.NSCalendarUnitHour | NSCalendarUnit.NSCalendarUnitMinute, picker.ios.date);
-        comps.hour = data.newValue;
-        picker.ios.setDateAnimated(NSCalendar.currentCalendar().dateFromComponents(comps), false);
+        setHourAndMinute(picker.ios, data.newValue, picker.minute);
     }
 }
 common.TimePicker.hourProperty.metadata.onSetNativeValue = onHourPropertyChanged;
 function onMinutePropertyChanged(data) {
     var picker = data.object;
     if (picker.ios) {
-        var comps = NSCalendar.currentCalendar().componentsFromDate(NSCalendarUnit.NSCalendarUnitHour | NSCalendarUnit.NSCalendarUnitMinute, picker.ios.date);
-        comps.minute = data.newValue;
-        picker.ios.setDateAnimated(NSCalendar.currentCalendar().dateFromComponents(comps), false);
+        setHourAndMinute(picker.ios, picker.hour, data.newValue);
     }
 }
 common.TimePicker.minuteProperty.metadata.onSetNativeValue = onMinutePropertyChanged;
@@ -56,16 +52,20 @@ var UITimePickerChangeHandlerImpl = (function (_super) {
         return this;
     };
     UITimePickerChangeHandlerImpl.prototype.valueChanged = function (sender) {
-        var comps = NSCalendar.currentCalendar().componentsFromDate(NSCalendarUnit.NSCalendarUnitHour | NSCalendarUnit.NSCalendarUnitMinute, sender.date);
-        if (comps.hour !== this._owner.hour) {
-            this._owner._onPropertyChangedFromNative(common.TimePicker.hourProperty, comps.hour);
-        }
-        if (comps.minute !== this._owner.minute) {
-            this._owner._onPropertyChangedFromNative(common.TimePicker.minuteProperty, comps.minute);
-        }
+        var calendar = NSCalendar.currentCalendar();
+        var comp = calendar.componentsFromDate(NSCalendarUnit.NSHourCalendarUnit | NSCalendarUnit.NSMinuteCalendarUnit, sender.date);
+        this._owner._onPropertyChangedFromNative(common.TimePicker.hourProperty, comp.hour);
+        this._owner._onPropertyChangedFromNative(common.TimePicker.minuteProperty, comp.minute);
     };
     UITimePickerChangeHandlerImpl.ObjCExposedMethods = {
         'valueChanged': { returns: interop.types.void, params: [UIDatePicker] }
     };
     return UITimePickerChangeHandlerImpl;
 })(NSObject);
+function setHourAndMinute(picker, hour, minute) {
+    var calendar = NSCalendar.currentCalendar();
+    var comps = new NSDateComponents();
+    comps.hour = hour;
+    comps.minute = minute;
+    picker.setDateAnimated(calendar.dateFromComponents(comps), false);
+}

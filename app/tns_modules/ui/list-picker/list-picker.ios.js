@@ -6,6 +6,20 @@ var __extends = this.__extends || function (d, b) {
 };
 var common = require("ui/list-picker/list-picker-common");
 var types = require("utils/types");
+function onSelectedIndexPropertyChanged(data) {
+    var picker = data.object;
+    if (picker.ios && types.isNumber(data.newValue)) {
+        picker.ios.selectRowInComponentAnimated(data.newValue, 0, false);
+    }
+}
+common.ListPicker.selectedIndexProperty.metadata.onSetNativeValue = onSelectedIndexPropertyChanged;
+function onItemsPropertyChanged(data) {
+    var picker = data.object;
+    if (picker.ios) {
+        picker.ios.reloadAllComponents();
+    }
+}
+common.ListPicker.itemsProperty.metadata.onSetNativeValue = onItemsPropertyChanged;
 require("utils/module-merge").merge(common, exports);
 var ListPicker = (function (_super) {
     __extends(ListPicker, _super);
@@ -25,18 +39,6 @@ var ListPicker = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    ListPicker.prototype._onSelectedIndexPropertyChanged = function (data) {
-        _super.prototype._onSelectedIndexPropertyChanged.call(this, data);
-        if (this.ios && types.isNumber(data.newValue)) {
-            this.ios.selectRowInComponentAnimated(data.newValue, 0, false);
-        }
-    };
-    ListPicker.prototype._onItemsPropertyChanged = function (data) {
-        if (this.ios) {
-            this.ios.reloadAllComponents();
-        }
-        this._updateSelectedIndexOnItemsPropertyChanged(data.newValue);
-    };
     return ListPicker;
 })(common.ListPicker);
 exports.ListPicker = ListPicker;

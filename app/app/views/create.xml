@@ -1,6 +1,6 @@
 <Page>
 	<StackLayout>
 		<Button text="Take a picture" tap="takePicture" />
-		<Image source="{{ imageSource }} " />
+		<Image source="{{ imageSource }}" />
 	</StackLayout>
 </Page>

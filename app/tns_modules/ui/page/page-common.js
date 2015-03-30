@@ -9,6 +9,7 @@ var view = require("ui/core/view");
 var styleScope = require("ui/styling/style-scope");
 var fs = require("file-system");
 var fileSystemAccess = require("file-system/file-system-access");
+var trace = require("trace");
 var knownEvents;
 (function (knownEvents) {
     knownEvents.navigatedTo = "navigatedTo";
@@ -54,10 +55,7 @@ var Page = (function (_super) {
         }
     };
     Page.prototype.addCss = function (cssString) {
-        this._addCssInternal(cssString, undefined);
-    };
-    Page.prototype._addCssInternal = function (cssString, cssFileName) {
-        this._styleScope.addCss(cssString, cssFileName);
+        this._styleScope.addCss(cssString);
         this._refreshCss();
     };
     Page.prototype.addCssFile = function (cssFileName) {
@@ -67,7 +65,7 @@ var Page = (function (_super) {
             new fileSystemAccess.FileSystemAccess().readText(realCssFileName, function (r) {
                 cssString = r;
             });
-            this._addCssInternal(cssString, cssFileName);
+            this.addCss(cssString);
         }
     };
     Object.defineProperty(Page.prototype, "frame", {
@@ -100,15 +98,20 @@ var Page = (function (_super) {
         if (this._cssApplied) {
             return;
         }
-        this._styleScope.ensureSelectors();
-        var scope = this._styleScope;
-        var checkSelectors = function (view) {
-            scope.applySelectors(view);
-            return true;
-        };
-        checkSelectors(this);
-        view.eachDescendant(this, checkSelectors);
-        this._cssApplied = true;
+        try {
+            this._styleScope.ensureSelectors();
+            var scope = this._styleScope;
+            var checkSelectors = function (view) {
+                scope.applySelectors(view);
+                return true;
+            };
+            checkSelectors(this);
+            view.eachDescendant(this, checkSelectors);
+            this._cssApplied = true;
+        }
+        catch (e) {
+            trace.write("Css styling failed: " + e, trace.categories.Style);
+        }
     };
     Page.prototype._resetCssValues = function () {
         var resetCssValuesFunc = function (view) {
