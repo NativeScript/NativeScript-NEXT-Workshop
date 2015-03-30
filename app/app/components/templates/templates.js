@@ -9,5 +9,8 @@ for (var i = 0; i <= 11; i++) {
 module.exports = {
 	list: function() {
 		return templates;
+	},
+	getByIndex: function(index) {
+		return templates[index];
 	}
 }

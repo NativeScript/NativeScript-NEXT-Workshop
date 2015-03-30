@@ -1,6 +1,5 @@
-<Page>
+<Page loaded="loaded" navigatedTo="navigatedTo">
 	<StackLayout>
-		<Button text="Take a picture" tap="takePicture" />
 		<Image source="{{ imageSource }}" />
 	</StackLayout>
 </Page>

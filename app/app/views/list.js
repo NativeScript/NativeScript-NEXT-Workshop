@@ -34,3 +34,11 @@ exports.load = function(args) {
 exports.create = function() {
 	frameModule.topmost().navigate("app/views/create");
 };
+
+exports.templateSelected = function(args) {
+	var index = args.index;
+	frameModule.topmost().navigate({
+		moduleName: "app/views/create",
+		context: index
+	});
+};

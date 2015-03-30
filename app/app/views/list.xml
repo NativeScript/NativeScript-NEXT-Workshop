@@ -7,7 +7,7 @@
 						<!-- TODO: Move this to the NavBar -->
 						<Button row="0" text="Create a MEME" tap="create" />
 
-						<ListView items="{{ templates }}" row="1">
+						<ListView items="{{ templates }}" row="1" itemTap="templateSelected">
 							<ListView.itemTemplate>
 								<StackLayout>
 									<Image source="{{ source }}" />

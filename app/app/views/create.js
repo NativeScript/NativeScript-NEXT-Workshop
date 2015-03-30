@@ -1,15 +1,17 @@
-var camera = require("camera");
 var observableModule = require("data/observable");
+var templates = require("../components/templates/templates");
+
 var data = new observableModule.Observable();
 
-exports.load = function(args) {
+exports.loaded = function(args) {
 	var page = args.object;
 	page.bindingContext = data;
 };
 
-exports.takePicture = function() {
-	camera.takePicture().then(function(result) {
-		// This doesn't work atm. See https://github.com/NativeScript/cross-platform-modules/issues/201
-		data.set("imageSource", result);
-	});
-};
+// TODO: When there is no index invoke the camera
+exports.navigatedTo = function(args) {
+	var page = args.object;
+	var index = page.navigationContext;
+	data.set("imageSource", templates.getByIndex(index).source);
+}
+
