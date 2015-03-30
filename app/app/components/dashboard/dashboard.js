@@ -28,13 +28,13 @@ exports.load = function(args) {
 };
 
 exports.create = function() {
-	frameModule.topmost().navigate("app/components/create-template/createTemplate");
+	frameModule.topmost().navigate("app/components/create-template/create-template");
 };
 
 exports.templateSelected = function(args) {
 	var index = args.index;
 	frameModule.topmost().navigate({
-		moduleName: "app/components/create-template/createTemplate",
+		moduleName: "app/components/create-template/create-template",
 		context: index
 	});
 };
