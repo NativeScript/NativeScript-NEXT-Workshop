@@ -1,3 +1,4 @@
+var camera = require("camera");
 var observableModule = require("data/observable");
 var templates = require("../components/templates/templates");
 
@@ -8,10 +9,18 @@ exports.loaded = function(args) {
 	page.bindingContext = data;
 };
 
-// TODO: When there is no index invoke the camera
+function invokeCamera() {
+	camera.takePicture().then(function() {
+		// TODO: Implement
+	});
+}
+
 exports.navigatedTo = function(args) {
 	var page = args.object;
 	var index = page.navigationContext;
-	data.set("imageSource", templates.getByIndex(index).source);
-}
-
+	if (typeof index == "number") {
+		data.set("imageSource", templates.getByIndex(index).source);
+	} else {
+		invokeCamera();
+	}
+};

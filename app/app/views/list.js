@@ -5,18 +5,14 @@ var observableArray = require("data/observable-array");
 var templates = require( "../components/templates/templates");
 
 var data = new observableModule.Observable();
-
-function getTemplates() {
-	var templatesArray = new observableArray.ObservableArray([]);
-	templates.list().forEach(function(template) {
-		templatesArray.push(template);
-	});
-	return templatesArray;
-}
+var templatesArray = new observableArray.ObservableArray([]);
+templates.list().forEach(function(template) {
+	templatesArray.push(template);
+});
 
 exports.load = function(args) {
 	var page = args.object;
-	data.set("templates", getTemplates());
+	data.set("templates", templatesArray);
 	page.bindingContext = data;
 
 	// Make sure we're on iOS before configuring the navigation bar
