@@ -1,15 +1,13 @@
 var imageSource = require("image-source");
-var templates = require("../templates/templates");
-
 var font = UIFont.boldSystemFontOfSize(30);
 
 module.exports = {
-	addText: function(templateIndex, topText, bottomText) {
+	addText: function(image, topText, bottomText) {
 		topText = topText || "";
 		bottomText = bottomText || "";
 
 		// Get the UIImage
-		var image = templates.getByIndex(templateIndex).source.ios;
+		image = image.ios;
 
 		UIGraphicsBeginImageContext(image.size);
 

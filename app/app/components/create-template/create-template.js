@@ -31,7 +31,7 @@ exports.navigatedTo = function(args) {
 
 exports.save = function() {
 	var image = imageManipulation.addText(
-		templateIndex,
+		templates.getByIndex(templateIndex).source,
 		data.get("topText"),
 		data.get("bottomText")
 	);
