@@ -37,3 +37,7 @@ exports.save = function() {
 	);
 	data.set("imageSource", image);
 };
+
+exports.share = function() {
+
+};
