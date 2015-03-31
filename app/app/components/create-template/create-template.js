@@ -30,9 +30,10 @@ exports.navigatedTo = function(args) {
 };
 
 exports.save = function() {
-	imageManipulation.addText(
+	var image = imageManipulation.addText(
 		templateIndex,
 		data.get("topText"),
 		data.get("bottomText")
 	);
-}
+	data.set("imageSource", image);
+};
