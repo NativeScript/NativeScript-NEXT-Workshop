@@ -1,7 +1,7 @@
 var imageSource = require("image-source");
 var templates = require("../templates/templates");
 
-var font = UIFont.boldSystemFontOfSize(12);
+var font = UIFont.boldSystemFontOfSize(30);
 
 module.exports = {
 	addText: function(templateIndex, topText, bottomText) {
@@ -12,13 +12,17 @@ module.exports = {
 		var image = templates.getByIndex(templateIndex).source.ios;
 
 		UIGraphicsBeginImageContext(image.size);
+
+		// Draw the original image in
 		image.drawInRect(
 			CGRectMake(0, 0, image.size.width, image.size.height)
 		);
 
-		var topRect = CGRectMake(0, 0, image.size.width, image.size.height);
-		var bottomRect = CGRectMake(100, 100, image.size.width, image.size.height);
+		// Create rectangles for each line of text
+		var topRect = CGRectMake(50, 50, image.size.width, image.size.height);
+		var bottomRect = CGRectMake(50, 200, image.size.width, image.size.height);
 
+		// Set the color of the text to white, although this doesn't appear to work.
 		UIColor.whiteColor().set();
 
 		var attrDict = NSMutableDictionary.alloc().init();
@@ -26,7 +30,7 @@ module.exports = {
 		topString.drawInRect( topRect );
 
 		var bottomString = NSMutableAttributedString.alloc().initWithStringAttributes(bottomText, attrDict);
-		bottomString.drawInRect( topRect );
+		bottomString.drawInRect( bottomRect );
 
 		var newImage = UIGraphicsGetImageFromCurrentImageContext();
 		UIGraphicsEndImageContext();
