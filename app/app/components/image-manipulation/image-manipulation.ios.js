@@ -5,8 +5,8 @@ var font = UIFont.boldSystemFontOfSize(30);
 
 module.exports = {
 	addText: function(templateIndex, topText, bottomText) {
-		topText = "One does not simply";
-		bottomText = "Write a mobile app";
+		topText = topText || "";
+		bottomText = bottomText || "";
 
 		// Get the UIImage
 		var image = templates.getByIndex(templateIndex).source.ios;
@@ -19,22 +19,25 @@ module.exports = {
 		);
 
 		// Create rectangles for each line of text
-		var topRect = CGRectMake(50, 50, image.size.width, image.size.height);
-		var bottomRect = CGRectMake(50, 200, image.size.width, image.size.height);
+		var topRect = CGRectMake(30, 30, image.size.width, image.size.height);
+		var bottomRect = CGRectMake(30, 200, image.size.width, image.size.height);
 
-		// Set the color of the text to white, although this doesn't appear to work.
+		// Set the color of the text to white
 		UIColor.whiteColor().set();
 
-		var attrDict = NSMutableDictionary.alloc().init();
-		var topString = NSMutableAttributedString.alloc().initWithStringAttributes(topText, attrDict);
-		topString.drawInRect( topRect );
+		// Draw the top text into the image
+		var topString = NSString.alloc().initWithString(topText);
+		topString.drawInRectWithFont(topRect, font);
 
-		var bottomString = NSMutableAttributedString.alloc().initWithStringAttributes(bottomText, attrDict);
-		bottomString.drawInRect( bottomRect );
+		// Draw the bottom text into the image
+		var bottomString = NSString.alloc().initWithString(bottomText);
+		bottomString.drawInRectWithFont(bottomRect, font);
 
+		// Get the newly created image
 		var newImage = UIGraphicsGetImageFromCurrentImageContext();
 		UIGraphicsEndImageContext();
 
+		// Return the image as an ImageSource
 		return imageSource.fromNativeSource(newImage);
 	}
 };
