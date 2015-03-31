@@ -1,6 +1,7 @@
 var camera = require("camera");
 var imageManipulation = require("../image-manipulation/image-manipulation");
 var observableModule = require("data/observable");
+var socialShare = require("../social-share/social-share");
 var templates = require("../templates/templates");
 
 var data = new observableModule.Observable();
@@ -39,5 +40,5 @@ exports.save = function() {
 };
 
 exports.share = function() {
-
+	socialShare.share(data.get("imageSource"));
 };
