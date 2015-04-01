@@ -28,13 +28,13 @@ exports.load = function(args) {
 };
 
 exports.create = function() {
-	frameModule.topmost().navigate("app/components/create-template/create-template");
+	frameModule.topmost().navigate("app/components/edit-meme/edit-meme");
 };
 
 exports.templateSelected = function(args) {
 	var index = args.index;
 	frameModule.topmost().navigate({
-		moduleName: "app/components/create-template/create-template",
+		moduleName: "app/components/edit-meme/edit-meme",
 		context: index
 	});
 };
