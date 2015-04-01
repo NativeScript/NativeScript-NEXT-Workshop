@@ -25,6 +25,9 @@ function invokeCamera() {
 exports.navigatedTo = function(args) {
 	var page = args.object;
 	var index = page.navigationContext;
+	data.set("topText", "");
+	data.set("bottomText", "");
+
 	if (typeof index == "number") {
 		templateIndex = index;
 		data.set("imageSource", templates.getByIndex(index).source);
