@@ -13,10 +13,13 @@ exports.loaded = function(args) {
 };
 
 function invokeCamera() {
+	// This just completely crashes. WHY???
+	/*
 	camera.takePicture().then(function() {
-		// TODO: Save the picture as a template and then set it as the
-		// page's imageSource.
+		data.set("imageSource", source);
+		// TODO: Save the picture as a template
 	});
+	*/
 }
 
 exports.navigatedTo = function(args) {
@@ -26,6 +29,7 @@ exports.navigatedTo = function(args) {
 		templateIndex = index;
 		data.set("imageSource", templates.getByIndex(index).source);
 	} else {
+		data.set("imageSource", null);
 		invokeCamera();
 	}
 };
