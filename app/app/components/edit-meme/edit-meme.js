@@ -30,6 +30,7 @@ exports.navigatedTo = function(args) {
 		templateIndex = index;
 		data.set("imageSource", templates.getByIndex(index).source);
 	} else {
+		templateIndex = null;
 		data.set("imageSource", null);
 		invokeCamera();
 	}
@@ -37,7 +38,8 @@ exports.navigatedTo = function(args) {
 
 exports.save = function() {
 	var image = imageManipulation.addText(
-		templates.getByIndex(templateIndex).source,
+		templateIndex ? templates.getByIndex(templateIndex).source :
+			data.get("imageSource"),
 		data.get("topText"),
 		data.get("bottomText")
 	);
