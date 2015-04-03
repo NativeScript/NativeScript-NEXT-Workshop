@@ -13,13 +13,11 @@ exports.loaded = function(args) {
 };
 
 function invokeCamera() {
-	// This just completely crashes. WHY???
-	/*
-	camera.takePicture().then(function() {
-		data.set("imageSource", source);
-		// TODO: Save the picture as a template
+	camera.takePicture().then(function(r) {
+		data.set("imageSource", r);
+	}, function(e) {
+		alert("An error occurred taking the photo");
 	});
-	*/
 }
 
 exports.navigatedTo = function(args) {
