@@ -1,0 +1,7 @@
+<Page 
+	loaded="load"
+	cssClass="splashPage">
+
+	<Image url="{{ imageSource }}" stretch="aspectFill" />
+	
+</Page>

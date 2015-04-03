@@ -6,9 +6,11 @@ var templates = require("../templates/templates");
 var data = new observableModule.Observable();
 var templateIndex;
 
+var _page;
+
 exports.loaded = function(args) {
-	var page = args.object;
-	page.bindingContext = data;
+	_page = args.object;
+	_page.bindingContext = data;
 };
 
 function invokeCamera() {
@@ -19,11 +21,10 @@ function invokeCamera() {
 }
 
 exports.navigatedTo = function(args) {
-	var page = args.object;
-	var index = page.navigationContext;
-	if (typeof index == "number") {
-		templateIndex = index;
-		data.set("imageSource", templates.getByIndex(index).source);
+	var selectedImageSource = _page.navigationContext;
+
+	if ( selectedImageSource ) {
+		data.set("imageSource", selectedImageSource);
 	} else {
 		invokeCamera();
 	}

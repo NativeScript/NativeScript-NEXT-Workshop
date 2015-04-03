@@ -1,3 +1,3 @@
 var application = require("application");
-application.mainModule = "app/components/dashboard/dashboard";
+application.mainModule = "app/components/splashscreen/splashscreen";
 application.start();

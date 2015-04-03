@@ -1,29 +1,36 @@
-<Page loaded="load">
-	<TabView>
-		<TabView.items>
-			<TabEntry title="Templates">
-				<TabEntry.view>
-					<GridLayout rows="auto, *">
-						<!-- TODO: Move this to the NavBar -->
-						<Button row="0" text="Create a template" tap="create" />
+<Page 
+	loaded="load"
+	cssClass="page">
 
-						<ListView items="{{ templates }}" row="1" itemTap="templateSelected">
-							<ListView.itemTemplate>
-								<StackLayout>
-									<Image source="{{ source }}" />
-								</StackLayout>
-							</ListView.itemTemplate>
-						</ListView>
-					</GridLayout>
-				</TabEntry.view>
-			</TabEntry>
-			<TabEntry title="Recent">
-				<TabEntry.view>
-					<StackLayout>
-						<Label text="TODO: Implement" />
-					</StackLayout>
-				</TabEntry.view>
-			</TabEntry>
-		</TabView.items>
-	</TabView>
+	<GridLayout rows="25, *" cssClass="mainContainer">
+		
+		<DockLayout row="0" stretchLastChild="true"  cssClass="dockHead">
+			<Label dock="left" text="Create Meme!" />
+   			<Button dock="right" text="+" tap="create" />
+		</DockLayout>	
+
+		<TabView row="1">
+			<TabView.items>
+				
+				<TabEntry title="Templates">
+					<TabEntry.view>
+						<ScrollView>
+							<WrapLayout id="memeContainer" itemHeight="200" horizontalAlignment="center">
+							</WrapLayout>
+						</ScrollView>
+					</TabEntry.view>
+				</TabEntry>
+
+				<TabEntry title="Recent">
+					<TabEntry.view>
+						<StackLayout>
+							<Label text="TODO: Implement" />
+						</StackLayout>
+					</TabEntry.view>
+				</TabEntry>
+				
+			</TabView.items>
+		</TabView>
+
+	</GridLayout>
 </Page>
