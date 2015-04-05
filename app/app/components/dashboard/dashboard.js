@@ -35,7 +35,9 @@ exports.load = function(args) {
 	}
 
 	//Get our parrent element such that we can add our items to it dynamically
-	var memeContainer = _page.getViewById("memeContainer");			
+	var memeContainer = _page.getViewById("memeContainer");
+    
+    clearOldMemes(memeContainer);
 
 	//TODO: get the template from BES
 	templates.list().forEach(function(template) {
@@ -55,6 +57,11 @@ exports.load = function(args) {
 exports.create = function() {
 	frameModule.topmost().navigate(global.baseViewDirectory + "edit-meme/edit-meme");
 };
+
+function clearOldMemes(container) {
+    var items = container._subViews;
+    items.splice(0, items.length);
+}
 
 function templateSelected(selectedImageSource) {
 	
