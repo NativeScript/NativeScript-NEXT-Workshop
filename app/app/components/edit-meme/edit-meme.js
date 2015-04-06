@@ -33,6 +33,7 @@ exports.navigatedTo = function(args) {
 
 	data.set("topText", "");
 	data.set("bottomText", "");
+	data.set("isBlackText", false);
 
 	if ( selectedImageSource ) {
 		data.set("imageSource", selectedImageSource);
@@ -47,7 +48,8 @@ exports.save = function() {
 	var image = imageManipulation.addText(
 		_origImageSource,
 		data.get("topText"),
-		data.get("bottomText")
+		data.get("bottomText"),
+		data.get("isBlackText")
 	);
 	data.set("imageSource", image);
 };
