@@ -9,6 +9,8 @@ var templates = require( "../templates/templates");
 
 var fs = require("file-system");
 var imageSource = require("image-source");
+var viewModule = require("ui/core/view");
+var wrapLayoutModule = require("ui/layouts/wrap-layout");
 
 var _page;
 
@@ -49,7 +51,6 @@ exports.create = function() {
 function populateMemeTemplates() {
 	//Get our parrent element such that we can add our items to it dynamically
 	var memeContainer = _page.getViewById("memeContainer");
-    
     clearOldMemes(memeContainer);
 
 	//TODO: get the template from BES
@@ -65,6 +66,8 @@ function populateMemeTemplates() {
 		//add to the element.
 		memeContainer.addChild(image);	
 	});
+	//Not sure if we need to call requestLayout
+	memeContainer.requestLayout();
 }
 
 function populateRecentMemes() {
@@ -72,7 +75,7 @@ function populateRecentMemes() {
 
 	//Get our parrent element such that we can add our items to it dynamically
 	var recentMemeContainer = _page.getViewById("recentMemeContainer");
-    clearOldMemes(recentMemeContainer);
+	clearOldMemes(recentMemeContainer);
 
 	var recentMemes = [];
 	var documents = fs.knownFolders.documents();
@@ -80,13 +83,11 @@ function populateRecentMemes() {
 
 	recentMemeFolder.getEntities()
 		.then(function (entities) {
-			console.log("****** in first then");
-		    entities.forEach(function (entity) {
+			entities.forEach(function (entity) {
 		    	var source = imageSource.fromFile(entity.path);	
 				recentMemes.push({ source: source });
 		    });
 		}).then(function () {
-			console.log("****** in second then");
 			recentMemes.forEach(function(meme) {			
 				console.log("****** Creating Images");
 
@@ -100,6 +101,8 @@ function populateRecentMemes() {
 				//add to the element.
 				recentMemeContainer.addChild(image);	
 			});
+		}).then(function () {
+			recentMemeContainer.requestLayout();
 		}).catch(function (error) {
 			console.log("***** ERROR:", error);
 		});
@@ -107,16 +110,26 @@ function populateRecentMemes() {
 
 function clearOldMemes(container) {
     /*
-    var items = container._subViews;
+	var items = container._subViews;
     //TNS wrap doesn't seem to like this...
     items.splice(0, items.length);
 	*/
+    
+    /*
+	viewModule.eachDescendant(container, function(view) {
+        if (view) {        	
+            container.removeChild(view);
+        }
+    });
+
+	*/
+
 	console.log("***** clearing child elements:", container.getChildrenCount());
-	if (container.getChildrenCount() > 0 ) {
-		for (var i = 0; i < container.getChildrenCount(); i++) {
-			container.removeChild(container.getChildAt(i)); 
-		}
+	for (var i = 0; i < container.getChildrenCount(); i++) {
+		var childItem = container.getChildAt(i);
+		container.removeChild(childItem); 
 	}
+	
 }
 
 function templateSelected(selectedImageSource) {
