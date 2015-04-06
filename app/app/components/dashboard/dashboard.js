@@ -7,6 +7,9 @@ var observableArray = require("data/observable-array");
 
 var templates = require( "../templates/templates");
 
+var fs = require("file-system");
+var imageSource = require("image-source");
+
 var _page;
 
 /*
@@ -32,7 +35,9 @@ exports.load = function(args) {
 		// Call the UINavigationController's setNavigationBarHidden method
 		controller.navigationBarHidden = true;
 	}
+};
 
+exports.navigatedTo = function (args) {
 	populateMemeTemplates();
 	populateRecentMemes();
 };
@@ -63,28 +68,55 @@ function populateMemeTemplates() {
 }
 
 function populateRecentMemes() {
+	console.log("<><> Populating Recent Memes <><>");
 
 	//Get our parrent element such that we can add our items to it dynamically
 	var recentMemeContainer = _page.getViewById("recentMemeContainer");
     clearOldMemes(recentMemeContainer);
 
-	templates.getRecentMemes().forEach(function(meme) {
-		
-		//Create a new image element 
-		var image = new imageModule.Image();
-		image.source = meme.source;
+	var recentMemes = [];
+	var documents = fs.knownFolders.documents();
+	var recentMemeFolder = documents.getFolder(global.recentMemeFolderName);
 
-		//What do to...  share delete?
-		var observer = image.observe(gestures.GestureTypes.Tap, function () { templateSelected(image.source) });
-		
-		//add to the element.
-		recentMemeContainer.addChild(image);	
-	});
+	recentMemeFolder.getEntities()
+		.then(function (entities) {
+			console.log("****** in first then");
+		    entities.forEach(function (entity) {
+		    	var source = imageSource.fromFile(entity.path);	
+				recentMemes.push({ source: source });
+		    });
+		}).then(function () {
+			console.log("****** in second then");
+			recentMemes.forEach(function(meme) {			
+				console.log("****** Creating Images");
+
+				//Create a new image element 
+				var image = new imageModule.Image();
+				image.source = meme.source;
+
+				//What do to...  share delete?
+				var observer = image.observe(gestures.GestureTypes.Tap, function () { templateSelected(image.source) });
+				
+				//add to the element.
+				recentMemeContainer.addChild(image);	
+			});
+		}).catch(function (error) {
+			console.log("***** ERROR:", error);
+		});
 }
 
 function clearOldMemes(container) {
+    /*
     var items = container._subViews;
+    //TNS wrap doesn't seem to like this...
     items.splice(0, items.length);
+	*/
+	console.log("***** clearing child elements:", container.getChildrenCount());
+	if (container.getChildrenCount() > 0 ) {
+		for (var i = 0; i < container.getChildrenCount(); i++) {
+			container.removeChild(container.getChildAt(i)); 
+		}
+	}
 }
 
 function templateSelected(selectedImageSource) {

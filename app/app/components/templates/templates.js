@@ -11,24 +11,6 @@ module.exports = {
 	list: function() {
 		return templates;
 	},
-	getRecentMemes: function () {
-		var recentMemes = [];
-
-		var documents = fs.knownFolders.documents();
-		var recentMemeFolder = documents.getFolder(global.recentMemeFolderName);
-
-		recentMemeFolder.getEntities().then(function (entities) {
-		    entities.forEach(function (entity) {
-				var source = imageSource.fromFile(entity);	
-				recentMemes.push({ source: source });
-		    });
-		}, function (error) {
-		    // Failed to obtain folder's contents.
-		    globalConsole.error(error.message);
-		});
-
-		return recentMemes;
-	},
 	getByIndex: function(index) {
 		return templates[index];
 	}

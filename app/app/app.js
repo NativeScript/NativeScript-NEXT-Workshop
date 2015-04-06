@@ -1,3 +1,5 @@
+console.log("***** MEME App Starting *****");
+
 var application = require("application");
 application.mainModule = "app/components/splashscreen/splashscreen";
 

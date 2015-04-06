@@ -1,6 +1,7 @@
 <Page 
+	cssClass="page"
 	loaded="load"
-	cssClass="page">
+	navigatedTo="navigatedTo">
 
 	<GridLayout rows="auto, *" cssClass="mainContainer">
 		
