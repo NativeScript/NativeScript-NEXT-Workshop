@@ -21,6 +21,16 @@ var UIImagePickerControllerDelegateImpl = (function (_super) {
     UIImagePickerControllerDelegateImpl.prototype.imagePickerControllerDidFinishPickingMediaWithInfo = function (picker, info) {
         if (info) {
             var source = info.valueForKey(UIImagePickerControllerOriginalImage);
+
+            // TJ's custom configuration to resize images to a reasonable size
+            var newSize = CGSizeMake(750, 450);
+            UIGraphicsBeginImageContext(newSize);
+            source.drawInRect(
+                CGRectMake(0, 0, newSize.width, newSize.height)
+            );
+            source = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+
             if (source) {
                 var image = imageSource.fromNativeSource(source);
                 if (this._callback) {
