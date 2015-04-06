@@ -6,7 +6,7 @@
 	<GridLayout rows="auto, *" cssClass="mainContainer">
 		
 		<DockLayout row="0" stretchLastChild="true"  cssClass="dockHead">
-			<Label dock="left" text="Create Meme!" />
+			<Label dock="left" text="Create Template from Camera" />
 			<Image dock="right" url="~/app/images/icons/addBtn.png" tap="create" cssClass="addNewMeme"/>
 		</DockLayout>	
 
