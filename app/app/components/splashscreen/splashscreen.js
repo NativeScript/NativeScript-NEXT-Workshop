@@ -15,6 +15,6 @@ exports.load = function(args) {
 
 	//we should load some data here... so the dashboard page is ready.
 	setTimeout(function () {
-		frameModule.topmost().navigate("app/components/dashboard/dashboard");
+		frameModule.topmost().navigate(global.baseViewDirectory + "dashboard/dashboard");
 	}, 2000);
 };

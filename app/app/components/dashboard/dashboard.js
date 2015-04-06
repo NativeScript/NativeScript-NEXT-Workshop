@@ -1,27 +1,24 @@
 var applicationModule = require("application");
-
 var frameModule = require("ui/frame");
 var imageModule = require("ui/image");
 var gestures = require("ui/gestures");
-
 var observableModule = require("data/observable");
 var observableArray = require("data/observable-array");
 
 var templates = require( "../templates/templates");
 
-/*
-var data = new observableModule.Observable();
-var templatesArray = new observableArray.ObservableArray([]);
+var _page;
 
-templates.list().forEach(function(template) {
-	templatesArray.push(template);
-});
+/*
+	0. add onloading
+	1. pull images from responsive images.
+	2. do not repop the array if there is something already there.
+	3. sizes on the main screen
 */
 
-var page;
 
 exports.load = function(args) {
-	page = args.object;
+	_page = args.object;
 	//data.set("templates", templatesArray);
 	//page.bindingContext = data;
 
@@ -38,7 +35,9 @@ exports.load = function(args) {
 	}
 
 	//Get our parrent element such that we can add our items to it dynamically
-	var memeContainer = page.getViewById("memeContainer");			
+	var memeContainer = _page.getViewById("memeContainer");
+    
+    clearOldMemes(memeContainer);
 
 	//TODO: get the template from BES
 	templates.list().forEach(function(template) {
@@ -56,15 +55,20 @@ exports.load = function(args) {
 };
 
 exports.create = function() {
-	frameModule.topmost().navigate("app/components/edit-meme/edit-meme");
+	frameModule.topmost().navigate(global.baseViewDirectory + "edit-meme/edit-meme");
 };
 
-function templateSelected(args) {
+function clearOldMemes(container) {
+    var items = container._subViews;
+    items.splice(0, items.length);
+}
+
+function templateSelected(selectedImageSource) {
 	
-	var selectedImageSource = args;
-	frameModule.topmost().navigate({
-		moduleName: "app/components/edit-meme/edit-meme",
-		context: selectedImageSource
-	});
-	
+	if ( selectedImageSource) {
+		frameModule.topmost().navigate({
+			moduleName: global.baseViewDirectory + "edit-meme/edit-meme",
+			context: selectedImageSource
+		});
+	}
 };
