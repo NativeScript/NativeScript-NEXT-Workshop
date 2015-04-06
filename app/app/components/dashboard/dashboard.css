@@ -1,14 +1,19 @@
 image {
-	height: 125;
 	margin: 5;
 }
 
 .dockHead {
 	background-color: 4CC000;
-	padding-left: 25px;
- 	padding-right: 25px;
+	padding-left: 15;
+ 	padding-right: 15;
+
+ 	height: 25;
+ 	font-family: arial;
 }
 
+.addNewMeme {
+	horizontal-align: right;
+}
 
 .mainContainer {
 	padding-top: 10px;

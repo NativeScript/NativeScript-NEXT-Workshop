@@ -2,11 +2,11 @@
 	loaded="load"
 	cssClass="page">
 
-	<GridLayout rows="25, *" cssClass="mainContainer">
+	<GridLayout rows="auto, *" cssClass="mainContainer">
 		
 		<DockLayout row="0" stretchLastChild="true"  cssClass="dockHead">
 			<Label dock="left" text="Create Meme!" />
-   			<Button dock="right" text="+" tap="create" />
+			<Image dock="right" url="~/app/images/icons/addBtn.png" tap="create" cssClass="addNewMeme"/>
 		</DockLayout>	
 
 		<TabView row="1">
