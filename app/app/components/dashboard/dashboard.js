@@ -106,16 +106,15 @@ function populateRecentMemes() {
 }
 
 function clearOldMemes(container) {
-    /*
-    var items = container._subViews;
-    //TNS wrap doesn't seem to like this...
-    items.splice(0, items.length);
-	*/
+
 	console.log("***** clearing child elements:", container.getChildrenCount());
-	if (container.getChildrenCount() > 0 ) {
-		for (var i = 0; i < container.getChildrenCount(); i++) {
-			container.removeChild(container.getChildAt(i)); 
-		}
+    
+    var memesCount = container.getChildrenCount();
+	if (memesCount > 0 ) {
+        
+        //Remove items in the reverse order, starting from the last to the first one.
+		for(var i=memesCount-1; i>=0; i--)
+		    container.removeChild(container.getChildAt(i)); 
 	}
 }
 
