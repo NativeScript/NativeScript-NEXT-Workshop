@@ -2,7 +2,7 @@ var application = require("application");
 var imageSource = require("image-source");
 
 module.exports = {
-	addText: function(image, topText, bottomText) {
+	addText: function(image, topText, bottomText, isBlackText) {
 		topText = topText || "";
 		bottomText = bottomText || "";
 
@@ -14,7 +14,12 @@ module.exports = {
 
 		var paint = new android.graphics.Paint();
 		paint.setStyle(android.graphics.Paint.Style.FILL);
+		
 		paint.setColor(android.graphics.Color.WHITE);
+		if (isBlackText) {
+			paint.setColor(android.graphics.Color.BLACK);
+		}
+		
 		paint.setTypeface(type);
 		paint.setTextAlign(android.graphics.Paint.Align.LEFT);
 		paint.setTextSize(40);

@@ -2,7 +2,7 @@ var imageSource = require("image-source");
 var font = UIFont.boldSystemFontOfSize(30);
 
 module.exports = {
-	addText: function(image, topText, bottomText) {
+	addText: function(image, topText, bottomText, isBlackText) {
 		topText = topText || "";
 		bottomText = bottomText || "";
 
@@ -22,6 +22,9 @@ module.exports = {
 
 		// Set the color of the text to white
 		UIColor.whiteColor().set();
+		if (isBlackText) {
+			UIColor.blackColor().set();
+		}
 
 		// Draw the top text into the image
 		var topString = NSString.alloc().initWithString(topText);

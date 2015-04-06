@@ -6,7 +6,16 @@ TextField {
 }
 Button {
 	background-color: green;
-	padding: 10;
 	margin: 10;
 	color: white;
+}
+
+.settingsDockLabel {
+	margin-left: 10;
+	width: 100%;
+}
+
+.settingsDockSwitch {
+	margin-right: 10;
+	horizontal-align: right;
 }
