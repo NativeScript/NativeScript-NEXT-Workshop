@@ -75,8 +75,8 @@ exports.deleteImage = function () {
 function saveImageLocally(memeImageSource, imageName) {
 
 	var documents = fs.knownFolders.documents();
-	var recentMemeFolder = documents.getFolder("recentMemes");
-	var fullPath = fs.path.join(documents.path, "recentMemes", imageName);
+	var recentMemeFolder = documents.getFolder(global.recentMemeFolderName);
+	var fullPath = fs.path.join(documents.path, global.recentMemeFolderName, imageName);
 	
 	var saved = memeImageSource.saveToFile(fullPath, imageSourceModule.ImageFormat.PNG);
 	

@@ -23,9 +23,10 @@
 
 				<TabEntry title="Recent">
 					<TabEntry.view>
-						<StackLayout>
-							<Label text="TODO: Implement" />
-						</StackLayout>
+						<ScrollView>
+							<WrapLayout id="recentMemeContainer" itemHeight="100" horizontalAlignment="center">
+							</WrapLayout>
+						</ScrollView>
 					</TabEntry.view>
 				</TabEntry>
 				

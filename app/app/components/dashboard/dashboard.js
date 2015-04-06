@@ -16,7 +16,6 @@ var _page;
 	3. sizes on the main screen
 */
 
-
 exports.load = function(args) {
 	_page = args.object;
 	//data.set("templates", templatesArray);
@@ -34,6 +33,15 @@ exports.load = function(args) {
 		controller.navigationBarHidden = true;
 	}
 
+	populateMemeTemplates();
+	populateRecentMemes();
+};
+
+exports.create = function() {
+	frameModule.topmost().navigate(global.baseViewDirectory + "edit-meme/edit-meme");
+};
+
+function populateMemeTemplates() {
 	//Get our parrent element such that we can add our items to it dynamically
 	var memeContainer = _page.getViewById("memeContainer");
     
@@ -52,11 +60,27 @@ exports.load = function(args) {
 		//add to the element.
 		memeContainer.addChild(image);	
 	});
-};
+}
 
-exports.create = function() {
-	frameModule.topmost().navigate(global.baseViewDirectory + "edit-meme/edit-meme");
-};
+function populateRecentMemes() {
+
+	//Get our parrent element such that we can add our items to it dynamically
+	var recentMemeContainer = _page.getViewById("recentMemeContainer");
+    clearOldMemes(recentMemeContainer);
+
+	templates.getRecentMemes().forEach(function(meme) {
+		
+		//Create a new image element 
+		var image = new imageModule.Image();
+		image.source = meme.source;
+
+		//What do to...  share delete?
+		var observer = image.observe(gestures.GestureTypes.Tap, function () { templateSelected(image.source) });
+		
+		//add to the element.
+		recentMemeContainer.addChild(image);	
+	});
+}
 
 function clearOldMemes(container) {
     var items = container._subViews;
