@@ -68,8 +68,17 @@ function populateMyMemes() {
 		.then(function (entities) {
 			entities.forEach(function (entity) {
 		    	var source = imageSource.fromFile(entity.path);	
-				recentMemes.push({ source: source, fileName: entity.name });
+				recentMemes.push({ source: source, fileName: entity.name});
 		    });
+
+			/*
+		    recentMemes.sort(function (a, b) {
+		    	console.log("sorting", a.lastModified);
+		    	
+		    	//Not sure what exactly get's returned.
+		    	return new Date(a.lastModified).getTime() - new Date(b.lastModified).getTime();
+			});
+			*/
 		}).then(function () {
 			recentMemes.forEach(function(meme) {			
 				//Create a new image element 
@@ -120,7 +129,7 @@ function deleteMeme(imageFileName) {
 		    console.log("Meme Removed")
 		    
 		    //Repopulate the screen
-		    populateRecentMemes();
+		    populateMyMemes();
 
 		}).catch(function (error) {
 			console.log("***** ERROR:", error);
@@ -136,7 +145,7 @@ function deleteAllMemes() {
 				    console.log("Folder Cleared")
 				    
 				    //Repopulate the screen
-				    populateRecentMemes();
+				    populateMyMemes();
 				}).catch(function (error) {  
 					console.log("***** ERROR:", error);
 				});

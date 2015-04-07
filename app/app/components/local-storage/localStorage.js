@@ -17,7 +17,7 @@ module.exports = {
 }
 
 function _getMyMemes() {
-	return _recentMemeFolder.getEntities()
+	return _recentMemeFolder.getEntities();
 }
 
 function _deleteMeme(imageFileName) {
