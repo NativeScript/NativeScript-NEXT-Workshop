@@ -1,7 +1,6 @@
 <Page 
 	cssClass="page"
-	loaded="load"
-	navigatedTo="navigatedTo">
+	loaded="load">
 
 	<GridLayout rows="auto, *" cssClass="mainContainer">
 
@@ -22,7 +21,7 @@
 					</TabEntry.view>
 				</TabEntry>
 
-				<TabEntry title="Recent">
+				<TabEntry title="My Memes">
 					<TabEntry.view>
 						<ScrollView>
 							<WrapLayout id="recentMemeContainer" itemHeight="100" horizontalAlignment="center">
