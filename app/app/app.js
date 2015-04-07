@@ -7,5 +7,7 @@ application.mainModule = "app/components/splashscreen/splashscreen";
 global.baseViewDirectory = "app/components/";
 global.recentMemeFolderName = "recentMemes";
 
+global.everliveApiKey = "wFQtgknUo8yPqENA";
+
 application.start();
 

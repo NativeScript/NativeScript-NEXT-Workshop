@@ -81,20 +81,15 @@ function refreshMeme() {
 	data.set("imageSource", image);
 };
 
-
 exports.save = function() {
     refreshMeme();
     
-	//Save locally
+	//Save to localStorage
 	saveImageLocally(data.get("imageSource"), _uniqueImageNameForSession);
 };
 
 exports.share = function() {
 	socialShare.share(data.get("imageSource"));
-};
-
-exports.deleteImage = function () {
-
 };
 
 function saveImageLocally(memeImageSource, imageName) {
