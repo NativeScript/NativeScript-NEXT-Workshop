@@ -135,17 +135,22 @@ function deleteMeme(imageFileName) {
 }
 
 function deleteAllMemes() {
-	var documents = fs.knownFolders.documents();
-	var recentMemeFolder = documents.getFolder(global.recentMemeFolderName);
 
-	recentMemeFolder.clear().then(function () {
-	    console.log("Folder Cleared")
-	    
-	    //Repopulate the screen
-	    populateRecentMemes();
+	dialogsModule.confirm("Are you sure?").then(function (result) {
+		if(result) {
+	  		var documents = fs.knownFolders.documents();
+			var recentMemeFolder = documents.getFolder(global.recentMemeFolderName);
 
-	}, function (error) {
-	    console.log("***** ERROR *****", error);
+			recentMemeFolder.clear().then(function () {
+			    console.log("Folder Cleared")
+			    
+			    //Repopulate the screen
+			    populateRecentMemes();
+
+			}, function (error) {
+			    console.log("***** ERROR *****", error);
+			});
+		}
 	});
 }
 
