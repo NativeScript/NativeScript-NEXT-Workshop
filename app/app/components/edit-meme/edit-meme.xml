@@ -5,9 +5,10 @@
 		<TextField hint="Bottom text" text="{{ bottomText }}" />
 
         
-		<Label text="Text Size" />
-		<Slider value="{{ fontSize }}" minValue="10" maxValue="100" />
-        
+        <DockLayout>
+			<Label dock="left" cssClass="settingsDockLabel" text="Text Size" />
+			<Slider dock="right" cssClass="settingsDockSwitch" value="{{ fontSize }}" minValue="10" maxValue="100" />
+        </DockLayout>
 		<DockLayout>
 			<Label dock="left" cssClass="settingsDockLabel" text="Black Text" />
 			<Switch dock="right" cssClass="settingsDockSwitch" checked="{{ isBlackText }}" />
