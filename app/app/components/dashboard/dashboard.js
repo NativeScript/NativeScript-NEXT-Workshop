@@ -71,7 +71,6 @@ function populateRecentMemes() {
 		.then(function (entities) {
 			entities.forEach(function (entity) {
 		    	var source = imageSource.fromFile(entity.path);	
-		    	console.log("FILE NAME", entity.name);
 				recentMemes.push({ source: source, fileName: entity.name });
 		    });
 		}).then(function () {
@@ -91,7 +90,7 @@ function populateRecentMemes() {
 		});
 }
 
-function myMemesActionSheet (imageSource, imagePath) {
+function myMemesActionSheet (imageSource, imageFileName) {
 	var options = {
 	    title: "My Memes",
 	    message: "What Do You Want To Do?",
@@ -105,7 +104,7 @@ function myMemesActionSheet (imageSource, imagePath) {
     			deleteMeme(imageFileName);
     			break;
     		case "Share" : 
-    			shareMeme(imagePath);
+    			shareMeme(imageSource);
     			break;
     	}
 	});
