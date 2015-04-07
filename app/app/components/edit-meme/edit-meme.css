@@ -12,6 +12,11 @@ Button {
 	color: white;
 }
 
+.textSizeLabel {
+	margin-left: 10;
+	margin-top: 10;
+}
+
 .settingsDockLabel {
 	margin-left: 10;
 	width: 100%;
