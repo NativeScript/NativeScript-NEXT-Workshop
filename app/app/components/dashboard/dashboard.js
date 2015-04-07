@@ -66,8 +66,6 @@ function populateMemeTemplates() {
 		//add to the element.
 		memeContainer.addChild(image);	
 	});
-	//Not sure if we need to call requestLayout
-	memeContainer.requestLayout();
 }
 
 function populateRecentMemes() {
@@ -101,35 +99,17 @@ function populateRecentMemes() {
 				//add to the element.
 				recentMemeContainer.addChild(image);	
 			});
-		}).then(function () {
-			recentMemeContainer.requestLayout();
 		}).catch(function (error) {
 			console.log("***** ERROR:", error);
 		});
 }
 
 function clearOldMemes(container) {
-    /*
-	var items = container._subViews;
-    //TNS wrap doesn't seem to like this...
-    items.splice(0, items.length);
-	*/
-    
-    /*
-	viewModule.eachDescendant(container, function(view) {
-        if (view) {        	
-            container.removeChild(view);
-        }
-    });
-
-	*/
-
 	console.log("***** clearing child elements:", container.getChildrenCount());
-	for (var i = 0; i < container.getChildrenCount(); i++) {
-		var childItem = container.getChildAt(i);
-		container.removeChild(childItem); 
-	}
-	
+
+	while (container.getChildrenCount() > 0) {
+		container.removeChild(container.getChildAt(0));
+	}	
 }
 
 function templateSelected(selectedImageSource) {
