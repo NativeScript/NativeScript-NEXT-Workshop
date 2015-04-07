@@ -1,5 +1,6 @@
 <Page loaded="loaded" navigatedTo="navigatedTo">
 	<ScrollView>
+		
 		<StackLayout>
 			<Image source="{{ imageSource }}" />
 			<TextField hint="Top text" text="{{ topText }}" />
@@ -13,7 +14,7 @@
 				<Label dock="left" cssClass="settingsDockLabel" text="Black Text" />
 				<Switch dock="right" cssClass="settingsDockSwitch" checked="{{ isBlackText }}" />
 			</DockLayout>
-
+			
 			<!-- TODO: Move to nav bar -->
 			<Button text="Save" tap="save" />
 			<Button text="Share" tap="share" />

@@ -17,6 +17,8 @@ var _initialised = false;
 
 exports.loaded = function(args) {
 	_page = args.object;
+
+	data.set("isBusy", false);
 	_page.bindingContext = data;
     
 	// run this code only once
@@ -96,7 +98,6 @@ exports.deleteImage = function () {
 };
 
 function saveImageLocally(memeImageSource, imageName) {
-
 	var documents = fs.knownFolders.documents();
 	var recentMemeFolder = documents.getFolder(global.recentMemeFolderName);
 	var fullPath = fs.path.join(documents.path, global.recentMemeFolderName, imageName);
