@@ -34,7 +34,7 @@ exports.load = function(args) {
 	populateMyMemes();
 };
 
-exports.create = function() {
+exports.createNewTemplate = function() {
 	frameModule.topmost().navigate(global.baseViewDirectory + "edit-meme/edit-meme");
 };
 

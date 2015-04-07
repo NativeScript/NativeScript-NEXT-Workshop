@@ -4,9 +4,9 @@
 
 	<GridLayout rows="auto, *" cssClass="mainContainer">
 
-		<DockLayout row="0" stretchLastChild="true" cssClass="dockHead">
-			<Label dock="left" text="Create Template from Camera" />
-			<Image dock="right" url="~/app/images/icons/addBtn.png" tap="create" cssClass="addNewMeme"/>
+		<DockLayout row="0" stretchLastChild="true" cssClass="dockHead" tap="createNewTemplate">
+			<Label dock="left" text="Create New Template" />
+			<Image dock="right" url="~/app/images/icons/addBtn.png" cssClass="addNewMeme" />
 		</DockLayout>
 
 		<TabView row="1">
