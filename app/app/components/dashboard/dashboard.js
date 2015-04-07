@@ -96,7 +96,7 @@ function myMemesActionSheet (imageSource, imageFileName) {
 	    title: "My Memes",
 	    message: "What Do You Want To Do?",
 	    cancelButtonText: "Cancel",
-	    actions: ["Delete", "Share"]
+	    actions: ["Delete", "Delete All", "Share"]
 	};
 	
 	dialogsModule.action(options).then(function (result) {
@@ -106,6 +106,9 @@ function myMemesActionSheet (imageSource, imageFileName) {
     			break;
     		case "Share" : 
     			shareMeme(imageSource);
+    			break;
+			case "Delete All" : 
+    			deleteAllMemes();
     			break;
     	}
 	});
@@ -122,6 +125,21 @@ function deleteMeme(imageFileName) {
 	var file = recentMemeFolder.getFile(imageFileName);
 	file.remove().then(function (result) {
 	    console.log("Meme Removed")
+	    
+	    //Repopulate the screen
+	    populateRecentMemes();
+
+	}, function (error) {
+	    console.log("***** ERROR *****", error);
+	});
+}
+
+function deleteAllMemes() {
+	var documents = fs.knownFolders.documents();
+	var recentMemeFolder = documents.getFolder(global.recentMemeFolderName);
+
+	recentMemeFolder.clear().then(function () {
+	    console.log("Folder Cleared")
 	    
 	    //Repopulate the screen
 	    populateRecentMemes();
