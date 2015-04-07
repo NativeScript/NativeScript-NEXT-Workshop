@@ -13,12 +13,17 @@ var templateIndex;
 var _page;
 var _origImageSource;
 var _uniqueImageNameForSession;
+var _initialised = false;
 
 exports.loaded = function(args) {
 	_page = args.object;
 	_page.bindingContext = data;
     
-    //addRefreshOnChange();
+	// run this code only once
+	if(! _initialised) {
+		_initialised = true;
+    	addRefreshOnChange();
+	}
 };
 
 function invokeCamera() {
@@ -54,14 +59,12 @@ exports.navigatedTo = function(args) {
 };
 
 function addRefreshOnChange() {
+	data.addEventListener(observableModule.knownEvents.propertyChange, function(changes) {
+		//skip if imageSource changes
+		if(changes.propertyName === "imageSource")
+			return;
 
-	Object.observe(data, function(changes) {
-		//Get the last item, as it works better if changes happen at the same time or if there are quick changes.
-		var changedItem = changes[changes.length-1].name;
-
-		//Do nothing on imageSource update
-		if(changedItem !== "imageSource")
-			refreshMeme();
+		refreshMeme();
 	});
 }
 
