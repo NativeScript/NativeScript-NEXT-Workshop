@@ -7,6 +7,7 @@ var observableModule = require("data/observable");
 var observableArray = require("data/observable-array");
 
 var templates = require( "../templates/templates");
+var socialShare = require("../social-share/social-share");
 
 var fs = require("file-system");
 var imageSource = require("image-source");
@@ -111,7 +112,7 @@ function myMemesActionSheet (imageSource, imageFileName) {
 }
 
 function shareMeme(imageSource) {
-	console.log("SHARE MEME CALLED");
+	socialShare.share(imageSource);
 }
 
 function deleteMeme(imageFileName) {
