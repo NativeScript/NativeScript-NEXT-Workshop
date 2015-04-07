@@ -17,6 +17,8 @@ var _uniqueImageNameForSession;
 exports.loaded = function(args) {
 	_page = args.object;
 	_page.bindingContext = data;
+    
+    addRefreshOnChange();
 };
 
 function invokeCamera() {
@@ -37,7 +39,8 @@ exports.navigatedTo = function(args) {
 
 	data.set("topText", "");
 	data.set("bottomText", "");
-	data.set("isBlackText", false);
+    data.set("fontSize", 40);
+    data.set("isBlackText", false);
 
 	if ( selectedImageSource ) {
 		data.set("imageSource", selectedImageSource);
@@ -46,22 +49,39 @@ exports.navigatedTo = function(args) {
 		data.set("imageSource", null);
 		invokeCamera();
 	}
-
-	_uniqueImageNameForSession = generateUUID() + ".png";
+    
+    _uniqueImageNameForSession = generateUUID() + ".png";
 };
 
-exports.save = function() {
+function addRefreshOnChange() {
+
+	Object.observe(data, function(changes) {
+		//Get the last item, as it works better if changes happen at the same time or if there are quick changes.
+		var changedItem = changes[changes.length-1].name;
+
+		//Do nothing on imageSource update
+		if(changedItem !== "imageSource")
+			refreshMeme();
+	});
+}
+
+function refreshMeme() {
 	var image = imageManipulation.addText(
 		_origImageSource,
 		data.get("topText"),
 		data.get("bottomText"),
-		data.get("isBlackText")
+        data.get("fontSize"),
+        data.get("isBlackText")
 	);
-
 	data.set("imageSource", image);
+};
 
+
+exports.save = function() {
+    refreshMeme();
+    
 	//Save locally
-	saveImageLocally(image, _uniqueImageNameForSession);
+	saveImageLocally(data.get("imageSource"), _uniqueImageNameForSession);
 };
 
 exports.share = function() {
@@ -85,7 +105,7 @@ function saveImageLocally(memeImageSource, imageName) {
 	} else {
 		console.log("Recent Meme Saved To:", fullPath);
 	}
-}
+};
 
 function generateUUID(){
     var d = new Date().getTime();
