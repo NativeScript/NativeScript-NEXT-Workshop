@@ -4,11 +4,11 @@
 	navigatedTo="navigatedTo">
 
 	<GridLayout rows="auto, *" cssClass="mainContainer">
-		
+
 		<DockLayout row="0" stretchLastChild="true"  cssClass="dockHead">
 			<Label dock="left" text="Create Template from Camera" />
 			<Image dock="right" url="~/app/images/icons/addBtn.png" tap="create" cssClass="addNewMeme"/>
-		</DockLayout>	
+		</DockLayout>
 
 		<TabView row="1">
 			<TabView.items>
@@ -30,7 +30,7 @@
 						</ScrollView>
 					</TabEntry.view>
 				</TabEntry>
-				
+
 			</TabView.items>
 		</TabView>
 
