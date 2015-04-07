@@ -14,13 +14,14 @@ module.exports = {
 
 		var paint = new android.graphics.Paint();
 		paint.setStyle(android.graphics.Paint.Style.FILL);
-        
-        if(isBlackText)
-		    paint.setColor(android.graphics.Color.BLACK);
-        else
-		    paint.setColor(android.graphics.Color.WHITE);
-		
-        paint.setTypeface(type);
+
+		if (isBlackText) {
+			paint.setColor(android.graphics.Color.BLACK);
+		} else {
+			paint.setColor(android.graphics.Color.WHITE);
+		}
+
+		paint.setTypeface(type);
 		paint.setTextAlign(android.graphics.Paint.Align.LEFT);
 		paint.setTextSize(fontSize);
 

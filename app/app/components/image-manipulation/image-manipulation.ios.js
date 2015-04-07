@@ -4,9 +4,9 @@ module.exports = {
 	addText: function(image, topText, bottomText, fontSize, isBlackText) {
 		topText = topText || "";
 		bottomText = bottomText || "";
-        fontSize = fontSize || 30;
-        
-        var font = UIFont.boldSystemFontOfSize(fontSize);
+		fontSize = fontSize || 30;
+
+		var font = UIFont.boldSystemFontOfSize(fontSize);
 
 		// Get the UIImage
 		image = image.ios;
@@ -23,10 +23,11 @@ module.exports = {
 		var bottomRect = CGRectMake(30, image.size.height - 100, image.size.width, image.size.height);
 
 		// Set the color of the text to white
-        if(isBlackText)
-		    UIColor.blackColor().set();
-        else
-            UIColor.whiteColor().set();
+		if (isBlackText) {
+			UIColor.blackColor().set();
+		} else {
+			UIColor.whiteColor().set();
+		}
 
 		// Draw the top text into the image
 		var topString = NSString.alloc().initWithString(topText);
