@@ -9,8 +9,6 @@ var templates = require( "../templates/templates");
 
 var fs = require("file-system");
 var imageSource = require("image-source");
-var viewModule = require("ui/core/view");
-var wrapLayoutModule = require("ui/layouts/wrap-layout");
 
 var _page;
 
@@ -114,10 +112,10 @@ function clearOldMemes(container) {
 
 function templateSelected(selectedImageSource) {
 	
-	if ( selectedImageSource) {
+	if ( selectedImageSource ) {
 		frameModule.topmost().navigate({
 			moduleName: global.baseViewDirectory + "edit-meme/edit-meme",
 			context: selectedImageSource
 		});
 	}
-};
+}

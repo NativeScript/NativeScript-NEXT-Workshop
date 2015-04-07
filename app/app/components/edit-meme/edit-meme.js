@@ -18,7 +18,7 @@ exports.loaded = function(args) {
 	_page = args.object;
 	_page.bindingContext = data;
     
-    addRefreshOnChange();
+    //addRefreshOnChange();
 };
 
 function invokeCamera() {
