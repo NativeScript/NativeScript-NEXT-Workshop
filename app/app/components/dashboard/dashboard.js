@@ -7,9 +7,9 @@ var observableModule = require("data/observable");
 var observableArray = require("data/observable-array");
 
 var templates = require( "../templates/templates");
+var localStorage = require( "../local-storage/localStorage");
 var socialShare = require("../social-share/social-share");
 
-var fs = require("file-system");
 var imageSource = require("image-source");
 
 var _page;
@@ -65,10 +65,8 @@ function populateRecentMemes() {
 	clearOldMemes(recentMemeContainer);
 
 	var recentMemes = [];
-	var documents = fs.knownFolders.documents();
-	var recentMemeFolder = documents.getFolder(global.recentMemeFolderName);
-
-	recentMemeFolder.getEntities()
+	
+	localStorage.getMyMemes()
 		.then(function (entities) {
 			entities.forEach(function (entity) {
 		    	var source = imageSource.fromFile(entity.path);	
@@ -119,18 +117,14 @@ function shareMeme(imageSource) {
 }
 
 function deleteMeme(imageFileName) {
-	var documents = fs.knownFolders.documents();
-	var recentMemeFolder = documents.getFolder(global.recentMemeFolderName);
-
-	var file = recentMemeFolder.getFile(imageFileName);
-	file.remove().then(function (result) {
+	localStorage.deleteMeme(imageFileName).then(function (result) {
 	    console.log("Meme Removed")
 	    
 	    //Repopulate the screen
 	    populateRecentMemes();
 
-	}, function (error) {
-	    console.log("***** ERROR *****", error);
+	}).catch(function (error) {
+		console.log("***** ERROR:", error);
 	});
 }
 
@@ -138,17 +132,13 @@ function deleteAllMemes() {
 
 	dialogsModule.confirm("Are you sure?").then(function (result) {
 		if(result) {
-	  		var documents = fs.knownFolders.documents();
-			var recentMemeFolder = documents.getFolder(global.recentMemeFolderName);
-
-			recentMemeFolder.clear().then(function () {
+			localStorage.deleteAllMemes().then(function () {
 			    console.log("Folder Cleared")
 			    
 			    //Repopulate the screen
 			    populateRecentMemes();
-
-			}, function (error) {
-			    console.log("***** ERROR *****", error);
+			}).catch(function (error) {  
+				console.log("***** ERROR:", error);
 			});
 		}
 	});
