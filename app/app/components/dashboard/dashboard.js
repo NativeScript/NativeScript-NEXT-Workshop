@@ -14,16 +14,11 @@ var imageSource = require("image-source");
 var _page;
 
 /*
-	0. add onloading
 	1. pull images from responsive images.
-	2. do not repop the array if there is something already there.
-	3. sizes on the main screen
 */
 
 exports.load = function(args) {
 	_page = args.object;
-	//data.set("templates", templatesArray);
-	//page.bindingContext = data;
 
 	// Make sure we're on iOS before configuring the navigation bar
 	if (applicationModule.ios) {
@@ -76,7 +71,8 @@ function populateRecentMemes() {
 		.then(function (entities) {
 			entities.forEach(function (entity) {
 		    	var source = imageSource.fromFile(entity.path);	
-				recentMemes.push({ source: source });
+		    	console.log("FILE NAME", entity.name);
+				recentMemes.push({ source: source, fileName: entity.name });
 		    });
 		}).then(function () {
 			recentMemes.forEach(function(meme) {			
@@ -85,7 +81,7 @@ function populateRecentMemes() {
 				image.source = meme.source;
 
 				//What do to...  share delete?
-				var observer = image.observe(gesturesModule.GestureTypes.Tap, myMemesActionSheet );
+				var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(meme.source, meme.fileName) });
 				
 				//add to the element.
 				recentMemeContainer.addChild(image);	
@@ -95,7 +91,7 @@ function populateRecentMemes() {
 		});
 }
 
-function myMemesActionSheet () {
+function myMemesActionSheet (imageSource, imagePath) {
 	var options = {
 	    title: "My Memes",
 	    message: "What Do You Want To Do?",
@@ -106,21 +102,33 @@ function myMemesActionSheet () {
 	dialogsModule.action(options).then(function (result) {
     	switch (result) {
     		case "Delete" :
-    			deleteMeme();
+    			deleteMeme(imageFileName);
     			break;
     		case "Share" : 
-    			shareMeme();
+    			shareMeme(imagePath);
     			break;
     	}
 	});
 }
 
-function shareMeme() {
+function shareMeme(imageSource) {
 	console.log("SHARE MEME CALLED");
 }
 
-function deleteMeme() {
-	console.log("DELETE MEME CALLED");
+function deleteMeme(imageFileName) {
+	var documents = fs.knownFolders.documents();
+	var recentMemeFolder = documents.getFolder(global.recentMemeFolderName);
+
+	var file = recentMemeFolder.getFile(imageFileName);
+	file.remove().then(function (result) {
+	    console.log("Meme Removed")
+	    
+	    //Repopulate the screen
+	    populateRecentMemes();
+
+	}, function (error) {
+	    console.log("***** ERROR *****", error);
+	});
 }
 
 function clearOldMemes(container) {
