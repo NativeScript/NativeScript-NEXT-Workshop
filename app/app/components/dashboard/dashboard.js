@@ -31,7 +31,7 @@ exports.load = function(args) {
 	}
 
 	populateMemeTemplates();
-	populateRecentMemes();
+	populateMyMemes();
 };
 
 exports.create = function() {
@@ -58,14 +58,12 @@ function populateMemeTemplates() {
 	});
 }
 
-//TODO: this should navigate to a new page. not the edit meme.
-function populateRecentMemes() {
+function populateMyMemes() {
 	//Get our parrent element such that we can add our items to it dynamically
 	var recentMemeContainer = _page.getViewById("recentMemeContainer");
 	clearOldMemes(recentMemeContainer);
 
-	var recentMemes = [];
-	
+	var recentMemes = [];	
 	localStorage.getMyMemes()
 		.then(function (entities) {
 			entities.forEach(function (entity) {
@@ -117,31 +115,33 @@ function shareMeme(imageSource) {
 }
 
 function deleteMeme(imageFileName) {
-	localStorage.deleteMeme(imageFileName).then(function (result) {
-	    console.log("Meme Removed")
-	    
-	    //Repopulate the screen
-	    populateRecentMemes();
+	localStorage.deleteMeme(imageFileName)
+		.then(function (result) {
+		    console.log("Meme Removed")
+		    
+		    //Repopulate the screen
+		    populateRecentMemes();
 
-	}).catch(function (error) {
-		console.log("***** ERROR:", error);
-	});
+		}).catch(function (error) {
+			console.log("***** ERROR:", error);
+		});
 }
 
 function deleteAllMemes() {
 
-	dialogsModule.confirm("Are you sure?").then(function (result) {
-		if(result) {
-			localStorage.deleteAllMemes().then(function () {
-			    console.log("Folder Cleared")
-			    
-			    //Repopulate the screen
-			    populateRecentMemes();
-			}).catch(function (error) {  
-				console.log("***** ERROR:", error);
-			});
-		}
-	});
+	dialogsModule.confirm("Are you sure?")
+		.then(function (result) {
+			if(result) {
+				localStorage.deleteAllMemes().then(function () {
+				    console.log("Folder Cleared")
+				    
+				    //Repopulate the screen
+				    populateRecentMemes();
+				}).catch(function (error) {  
+					console.log("***** ERROR:", error);
+				});
+			}
+		});
 }
 
 function clearOldMemes(container) {
