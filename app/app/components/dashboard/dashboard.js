@@ -1,16 +1,15 @@
 var applicationModule = require("application");
+var imageSourceModule = require("image-source");
 var frameModule = require("ui/frame");
 var imageModule = require("ui/image");
 var gesturesModule = require("ui/gestures");
 var dialogsModule = require("ui/dialogs");
-var observableModule = require("data/observable");
-var observableArray = require("data/observable-array");
 
 var templates = require( "../templates/templates");
 var localStorage = require( "../local-storage/local-storage");
 var socialShare = require("../social-share/social-share");
 
-var imageSource = require("image-source");
+
 
 var _page;
 
@@ -68,7 +67,7 @@ function populateMyMemes() {
 	localStorage.getMyMemes()
 		.then(function (entities) {
 			entities.forEach(function (entity) {
-		    	var source = imageSource.fromFile(entity.path);	
+		    	var source = imageSourceModule.fromFile(entity.path);	
 				recentMemes.push({ source: source, fileName: entity.name, lastModified: entity.lastModified});
 		    });
 
