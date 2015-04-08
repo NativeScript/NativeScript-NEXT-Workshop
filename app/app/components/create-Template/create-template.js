@@ -26,6 +26,8 @@ exports.navigatedTo = function (args){
 //Submit the template to everlive for everyone to use.
 exports.submitToEverlive = function() {
 
+	//Will also need to write record to content type...
+
 	everlive.uploadFile(_uniqueImageNameForSession, _viewData.get("imageSource"))
 		.then(function(e){
 			if ( e.content.statusCode != '200' ) {
@@ -48,11 +50,15 @@ exports.saveLocally = function() {
 };
 
 function invokeCamera() {
-	cameraModule.takePicture().then(function(r) {
-		_viewData.set("imageSource", r);
-	}, function(e) {
-		alert("An error occurred taking the photo");
-	});
+	console.log("***** INVOKE CAMERA *****");
+
+	cameraModule.takePicture()
+		.then(function(r) {
+			_viewData.set("imageSource", r);
+		}).catch(function (error){
+				console.log("***** ERROR *****", error);
+				//alert("An error occurred taking the photo");
+		});
 }
 
 //todo:: pull out into util folder
