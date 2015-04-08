@@ -1,25 +1,21 @@
-var camera = require("camera");
-var imageManipulation = require("../image-manipulation/image-manipulation");
-var observableModule = require("data/observable");
-var socialShare = require("../social-share/social-share");
-var templates = require("../templates/templates");
-
 var imageSourceModule = require("image-source");
-var fs = require("file-system");
+var cameraModule = require("camera");
 
-var data = new observableModule.Observable();
-var templateIndex;
+var localStorage = require( "../local-storage/local-storage");
+var imageManipulation = require("../image-manipulation/image-manipulation");
+var socialShare = require("../social-share/social-share");
 
-var _page;
-var _origImageSource;
-var _uniqueImageNameForSession;
-var _initialised = false;
+var observableModule = require("data/observable");
+var _viewData = new observableModule.Observable();
+
+var	_page,
+	_origImageSource,
+	_uniqueImageNameForSession,
+	_initialised = false;
 
 exports.loaded = function(args) {
 	_page = args.object;
-
-	data.set("isBusy", false);
-	_page.bindingContext = data;
+	_page.bindingContext = _viewData;
     
 	// run this code only once
 	if(! _initialised) {
@@ -28,40 +24,25 @@ exports.loaded = function(args) {
 	}
 };
 
-function invokeCamera() {
-	camera.takePicture().then(function(r) {
-		data.set("imageSource", r);
-		_origImageSource = r;
-	}, function(e) {
-		alert("An error occurred taking the photo");
-	});
-}
-
 exports.navigatedTo = function(args) {
 
 	//grab the image from the navigation context.
 	var selectedImageSource = _page.navigationContext;
+	
 	//Save off the original...
 	_origImageSource = selectedImageSource;
 
-	data.set("topText", "");
-	data.set("bottomText", "");
-    data.set("fontSize", 40);
-    data.set("isBlackText", false);
-
-	if ( selectedImageSource ) {
-		data.set("imageSource", selectedImageSource);
-	} else {
-		templateIndex = null;
-		data.set("imageSource", null);
-		invokeCamera();
-	}
-    
+	_viewData.set("topText", "");
+	_viewData.set("bottomText", "");
+    _viewData.set("fontSize", 40);
+    _viewData.set("isBlackText", false);
+	_viewData.set("imageSource", selectedImageSource);
+	
     _uniqueImageNameForSession = generateUUID() + ".png";
 };
 
 function addRefreshOnChange() {
-	data.addEventListener(observableModule.knownEvents.propertyChange, function(changes) {
+	_viewData.addEventListener(observableModule.knownEvents.propertyChange, function(changes) {
 		//skip if imageSource changes
 		if(changes.propertyName === "imageSource")
 			return;
@@ -73,37 +54,28 @@ function addRefreshOnChange() {
 function refreshMeme() {
 	var image = imageManipulation.addText(
 		_origImageSource,
-		data.get("topText"),
-		data.get("bottomText"),
-        data.get("fontSize"),
-        data.get("isBlackText")
+		_viewData.get("topText"),
+		_viewData.get("bottomText"),
+        _viewData.get("fontSize"),
+        _viewData.get("isBlackText")
 	);
-	data.set("imageSource", image);
+	_viewData.set("imageSource", image);
 };
 
-exports.save = function() {
+//Save to localStorage
+exports.saveLocally = function() {
     refreshMeme();
-    
-	//Save to localStorage
-	saveImageLocally(data.get("imageSource"), _uniqueImageNameForSession);
-};
+	var saved = localStorage.saveLocally(_uniqueImageNameForSession, _viewData.get("imageSource"));
 
-exports.share = function() {
-	socialShare.share(data.get("imageSource"));
-};
-
-function saveImageLocally(memeImageSource, imageName) {
-	var documents = fs.knownFolders.documents();
-	var recentMemeFolder = documents.getFolder(global.recentMemeFolderName);
-	var fullPath = fs.path.join(documents.path, global.recentMemeFolderName, imageName);
-	
-	var saved = memeImageSource.saveToFile(fullPath, imageSourceModule.ImageFormat.PNG);
-	
 	if (!saved) {
 		console.log("Recent meme not saved....");
 	} else {
-		console.log("Recent Meme Saved To:", fullPath);
+		console.log("Recent template saved.");
 	}
+};
+
+exports.share = function() {
+	socialShare.share(_viewData.get("imageSource"));
 };
 
 function generateUUID(){

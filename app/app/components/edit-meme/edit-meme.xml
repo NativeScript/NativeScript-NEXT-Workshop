@@ -16,7 +16,7 @@
 			</DockLayout>
 			
 			<!-- TODO: Move to nav bar -->
-			<Button text="Save" tap="save" />
+			<Button text="Save" tap="saveLocally" />
 			<Button text="Share" tap="share" />
 		</StackLayout>
 	</ScrollView>
