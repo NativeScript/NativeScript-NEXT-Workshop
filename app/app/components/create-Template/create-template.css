@@ -1,0 +1,10 @@
+Image {
+	height: 200;
+}
+
+Button {
+	background-color: green;
+	margin: 10;
+	color: white;
+}
+

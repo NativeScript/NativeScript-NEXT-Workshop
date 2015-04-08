@@ -1,0 +1,10 @@
+<Page loaded="loaded" navigatedTo="navigatedTo">
+	
+	<StackLayout>
+		<Image source="{{ imageSource }}" />
+ 
+		<Button text="Save" tap="saveLocally" />
+		<Button text="Submit" tap="submitToEverlive" />
+	</StackLayout>
+	
+</Page>

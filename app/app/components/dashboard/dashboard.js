@@ -7,7 +7,7 @@ var observableModule = require("data/observable");
 var observableArray = require("data/observable-array");
 
 var templates = require( "../templates/templates");
-var localStorage = require( "../local-storage/localStorage");
+var localStorage = require( "../local-storage/local-storage");
 var socialShare = require("../social-share/social-share");
 
 var imageSource = require("image-source");
@@ -35,7 +35,7 @@ exports.load = function(args) {
 };
 
 exports.createNewTemplate = function() {
-	frameModule.topmost().navigate(global.baseViewDirectory + "edit-meme/edit-meme");
+	frameModule.topmost().navigate(global.baseViewDirectory + "create-template/create-template");
 };
 
 function populateMemeTemplates() {
@@ -51,6 +51,7 @@ function populateMemeTemplates() {
 		image.source = template.source;
 
 		//Add the gesture to the image such that we can interact with it.
+		//todo... this callback should be renamed to a navigate to edit. something....
 		var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(image.source) });
 		
 		//add to the element.
