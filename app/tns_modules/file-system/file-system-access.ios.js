@@ -11,9 +11,10 @@ var FileSystemAccess = (function () {
         var fileManager = NSFileManager.defaultManager();
         var attributes = fileManager.attributesOfItemAtPathError(path, null);
         if (attributes) {
-            var date = attributes.objectForKey(this.keyModificationTime);
-            var interval = date.timeIntervalSince1970();
-            return new Date(interval * 1000);
+          var date = attributes.objectForKey(this.keyModificationTime);
+          var interval = date.timeIntervalSince1970;
+          return new Date(interval * 1000);
+
         }
         else {
             return new Date();

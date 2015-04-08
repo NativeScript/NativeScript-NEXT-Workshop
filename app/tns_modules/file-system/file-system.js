@@ -120,6 +120,7 @@ var FileSystemEntity = (function () {
     Object.defineProperty(FileSystemEntity.prototype, "lastModified", {
         get: function () {
             var value = this[lastModifiedProperty];
+
             if (!this[lastModifiedProperty]) {
                 value = this[lastModifiedProperty] = getFileAccess().getLastModified(this.path);
             }

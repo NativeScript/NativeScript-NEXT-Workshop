@@ -68,17 +68,14 @@ function populateMyMemes() {
 		.then(function (entities) {
 			entities.forEach(function (entity) {
 		    	var source = imageSource.fromFile(entity.path);	
-				recentMemes.push({ source: source, fileName: entity.name});
+				recentMemes.push({ source: source, fileName: entity.name, lastModified: entity.lastModified});
 		    });
 
-			/*
-		    recentMemes.sort(function (a, b) {
-		    	console.log("sorting", a.lastModified);
-		    	
-		    	//Not sure what exactly get's returned.
-		    	return new Date(a.lastModified).getTime() - new Date(b.lastModified).getTime();
+			//sort to get in the order of most recent
+			recentMemes.sort(function (a, b) {
+		    	return b.lastModified.getTime() - a.lastModified.getTime();
 			});
-			*/
+			
 		}).then(function () {
 			recentMemes.forEach(function(meme) {			
 				//Create a new image element 
