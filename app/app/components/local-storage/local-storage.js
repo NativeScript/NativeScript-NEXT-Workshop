@@ -4,6 +4,7 @@ var imageSourceModule = require("image-source");
 
 var _documentsFolder = fs.knownFolders.documents();
 var _recentMemeFolder = _documentsFolder.getFolder(global.recentMemeFolderName);
+var _templateFolder = _documentsFolder.getFolder(global.templateFolderName);
 
 module.exports = {
 	getMyMemes: function () {
@@ -17,7 +18,11 @@ module.exports = {
 	},
 	saveLocally: function(imageName, imageSource) {
 		return _saveImageLocally(imageName, imageSource);
-	}
+	},
+	saveTemplateLocally: function(imageName, imageSource) {
+		return _saveImageTemplateLocally(imageName, imageSource);
+	},
+
 }
 
 function _getMyMemes() {
@@ -34,6 +39,13 @@ function _clearMemeFolder () {
 }
 
 function _saveImageLocally (imageName, imageSource) {
+	var fullPath = fs.path.join(_recentMemeFolder.path, imageName);
+	var saved = imageSource.saveToFile(fullPath, imageSourceModule.ImageFormat.PNG);
+
+	return saved;
+}
+
+function _saveImageTemplateLocally(imageName, imageSource) {
 	var fullPath = fs.path.join(_recentMemeFolder.path, imageName);
 	var saved = imageSource.saveToFile(fullPath, imageSourceModule.ImageFormat.PNG);
 

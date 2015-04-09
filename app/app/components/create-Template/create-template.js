@@ -75,7 +75,7 @@ function generateUUID(){
 };
 
 function saveImageLocally(memeImageSource, imageName) {
-	var saved = localStorage.saveLocally(imageName, memeImageSource);
+	var saved = localStorage._saveImageTemplateLocally(imageName, memeImageSource);
 
 	if (!saved) {
 		console.log("Recent meme not saved....");
