@@ -2,7 +2,7 @@
 	<ScrollView>
 
 		<StackLayout>
-			<Image source="{{ memeImage }}" />
+			<Image source="{{ imageSource }}" />
 			<TextField hint="Top text" text="{{ topText }}" />
 			<TextField hint="Bottom text" text="{{ bottomText }}" />
 

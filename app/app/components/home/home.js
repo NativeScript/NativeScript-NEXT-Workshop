@@ -4,7 +4,6 @@ var frameModule = require("ui/frame");
 var imageModule = require("ui/image");
 var gesturesModule = require("ui/gestures");
 var dialogsModule = require("ui/dialogs");
-var observableModule = require("data/observable");
 
 var templates = require( "../templates/templates");
 var localStorage = require( "../local-storage/local-storage");
@@ -50,7 +49,7 @@ function populateMemeTemplates() {
 
 		//Add the gesture to the image such that we can interact with it.
 		//todo... this callback should be renamed to a navigate to edit. something....
-		var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(image.source) });
+		var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(template.source) });
 		
 		//add to the element.
 		memeContainer.addChild(image);
