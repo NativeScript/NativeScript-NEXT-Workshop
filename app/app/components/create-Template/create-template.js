@@ -26,16 +26,18 @@ exports.navigatedTo = function (args){
 
 //Submit the template to everlive for everyone to use.
 exports.submitToEverlive = function() {
-
-	//Will also need to write record to content type...
-
-	everlive.uploadFile(_uniqueImageNameForSession, _viewData.get("imageSource"))
+	everlive.addTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"))
 		.then(function(e){
+			/* 
+			//TODO:: I think I chained things wrong here based on the internal call...
+			
 			if ( e.content.statusCode != '200' ) {
 				console.log("EVERLIVE RESPONSE", JSON.stringify(e));
 			} else {
 				console.log("***** Uploaded File *****");
 			}
+			*/
+			
 		}).catch(function (error){
 			console.log("***** ERROR *****", error);
 		});
@@ -51,17 +53,18 @@ exports.saveLocally = function() {
 };
 
 function invokeCamera() {
-	console.log("***** INVOKE CAMERA *****");
+	console.log("***** INVOKING CAMERA *****");
 
 	//TODO: bug here with the promise...
 	cameraModule.takePicture()
 		.then(function(r) {
+			console.log("***** Invoke Camera Return *****", r);
 			_viewData.set("imageSource", r);
 		}, function() {
 			console.log("***** ERROR *****", error);
 		});
 
-	//TODO... if on cancel... we should show the camera roll to choose a picture from...
+	//TODO... if on cancel... we should show the camera roll to choose a picture from???...
 }
 
 function saveImageLocally(memeImageSource, imageName) {

@@ -42,6 +42,8 @@ function populateMemeTemplates() {
 		templateList.push(x);
 	});
 
+	
+
 	localStorage.getMyTemplates()
 		.then(function (localTemplateEntities) {
 

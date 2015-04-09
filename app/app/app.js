@@ -9,6 +9,7 @@ global.recentMemeFolderName = "recentMemes";
 global.templateFolderName = "templates";
 
 global.everliveApiKey = "wFQtgknUo8yPqENA";
+global.everliveBaseAddress = "http://api.everlive.com/v1/" + global.everliveApiKey;
 
 application.start();
 
