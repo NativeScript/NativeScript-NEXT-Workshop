@@ -8,7 +8,7 @@ var socialShare = require("../social-share/social-share");
 var observableModule = require("data/observable");
 var _viewData = new observableModule.Observable();
 
-var	_page,
+var _page,
 	_origImageSource,
 	_uniqueImageNameForSession,
 	_initialised = false;
@@ -16,11 +16,11 @@ var	_page,
 exports.loaded = function(args) {
 	_page = args.object;
 	_page.bindingContext = _viewData;
-    
+
 	// run this code only once
 	if(! _initialised) {
 		_initialised = true;
-    	addRefreshOnChange();
+		addRefreshOnChange();
 	}
 };
 
@@ -34,11 +34,11 @@ exports.navigatedTo = function(args) {
 
 	_viewData.set("topText", "");
 	_viewData.set("bottomText", "");
-    _viewData.set("fontSize", 40);
-    _viewData.set("isBlackText", false);
+	_viewData.set("fontSize", 40);
+	_viewData.set("isBlackText", false);
 	_viewData.set("imageSource", selectedImageSource);
 	
-    _uniqueImageNameForSession = generateUUID() + ".png";
+	_uniqueImageNameForSession = generateUUID() + ".png";
 };
 
 function addRefreshOnChange() {
@@ -56,15 +56,15 @@ function refreshMeme() {
 		_origImageSource,
 		_viewData.get("topText"),
 		_viewData.get("bottomText"),
-        _viewData.get("fontSize"),
-        _viewData.get("isBlackText")
+		_viewData.get("fontSize"),
+		_viewData.get("isBlackText")
 	);
 	_viewData.set("imageSource", image);
 };
 
 //Save to localStorage
 exports.saveLocally = function() {
-    refreshMeme();
+	refreshMeme();
 	var saved = localStorage.saveLocally(_uniqueImageNameForSession, _viewData.get("imageSource"));
 
 	if (!saved) {
@@ -79,11 +79,11 @@ exports.share = function() {
 };
 
 function generateUUID(){
-    var d = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (d + Math.random()*16)%16 | 0;
-        d = Math.floor(d/16);
-        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-    });
-    return uuid;
+	var d = new Date().getTime();
+	var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		var r = (d + Math.random()*16)%16 | 0;
+		d = Math.floor(d/16);
+		return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+	});
+	return uuid;
 };

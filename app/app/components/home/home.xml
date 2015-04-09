@@ -11,7 +11,7 @@
 
 		<TabView row="1">
 			<TabView.items>
-				
+
 				<TabEntry title="Templates">
 					<TabEntry.view>
 						<ScrollView>

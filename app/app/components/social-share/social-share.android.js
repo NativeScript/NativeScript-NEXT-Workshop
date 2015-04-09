@@ -8,7 +8,7 @@ module.exports = {
 
 		var intent = new android.content.Intent(android.content.Intent.ACTION_SEND);
 		intent.setType("image/jpeg");
-		
+
 		var stream = new java.io.ByteArrayOutputStream();
 		image.android.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, stream);
 		var path = android.provider.MediaStore.Images.Media.insertImage(

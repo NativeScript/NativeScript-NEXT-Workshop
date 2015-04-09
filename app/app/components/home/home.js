@@ -9,8 +9,6 @@ var templates = require( "../templates/templates");
 var localStorage = require( "../local-storage/local-storage");
 var socialShare = require("../social-share/social-share");
 
-
-
 var _page;
 
 /*
@@ -40,7 +38,7 @@ exports.createNewTemplate = function() {
 function populateMemeTemplates() {
 	//Get our parrent element such that we can add our items to it dynamically
 	var memeContainer = _page.getViewById("memeContainer");
-    clearOldMemes(memeContainer);
+	clearOldMemes(memeContainer);
 
 	//TODO: get the template from BES
 	templates.list().forEach(function(template) {
@@ -54,30 +52,30 @@ function populateMemeTemplates() {
 		var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(image.source) });
 		
 		//add to the element.
-		memeContainer.addChild(image);	
+		memeContainer.addChild(image);
 	});
 }
 
 function populateMyMemes() {
-	//Get our parrent element such that we can add our items to it dynamically
+	//Get our parent element such that we can add our items to it dynamically
 	var recentMemeContainer = _page.getViewById("recentMemeContainer");
 	clearOldMemes(recentMemeContainer);
 
-	var recentMemes = [];	
+	var recentMemes = [];
 	localStorage.getMyMemes()
 		.then(function (entities) {
 			entities.forEach(function (entity) {
-		    	var source = imageSourceModule.fromFile(entity.path);	
+			var source = imageSourceModule.fromFile(entity.path);
 				recentMemes.push({ source: source, fileName: entity.name, lastModified: entity.lastModified});
-		    });
+			});
 
 			//sort to get in the order of most recent
 			recentMemes.sort(function (a, b) {
-		    	return b.lastModified.getTime() - a.lastModified.getTime();
+				return b.lastModified.getTime() - a.lastModified.getTime();
 			});
 			
 		}).then(function () {
-			recentMemes.forEach(function(meme) {			
+			recentMemes.forEach(function(meme) {
 				//Create a new image element 
 				var image = new imageModule.Image();
 				image.source = meme.source;
@@ -86,7 +84,7 @@ function populateMyMemes() {
 				var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(meme.source, meme.fileName) });
 				
 				//add to the element.
-				recentMemeContainer.addChild(image);	
+				recentMemeContainer.addChild(image);
 			});
 		}).catch(function (error) {
 			console.log("***** ERROR:", error);
@@ -95,24 +93,24 @@ function populateMyMemes() {
 
 function myMemesActionSheet (imageSource, imageFileName) {
 	var options = {
-	    title: "My Memes",
-	    message: "What Do You Want To Do?",
-	    cancelButtonText: "Cancel",
-	    actions: ["Delete", "Delete All", "Share"]
+		title: "My Memes",
+		message: "What Do You Want To Do?",
+		cancelButtonText: "Cancel",
+		actions: ["Delete", "Delete All", "Share"]
 	};
 	
 	dialogsModule.action(options).then(function (result) {
-    	switch (result) {
-    		case "Delete" :
-    			deleteMeme(imageFileName);
-    			break;
-    		case "Share" : 
-    			shareMeme(imageSource);
-    			break;
+		switch (result) {
+			case "Delete" :
+				deleteMeme(imageFileName);
+				break;
+			case "Share" : 
+				shareMeme(imageSource);
+				break;
 			case "Delete All" : 
-    			deleteAllMemes();
-    			break;
-    	}
+				deleteAllMemes();
+				break;
+		}
 	});
 }
 
@@ -123,10 +121,10 @@ function shareMeme(imageSource) {
 function deleteMeme(imageFileName) {
 	localStorage.deleteMeme(imageFileName)
 		.then(function (result) {
-		    console.log("Meme Removed")
-		    
-		    //Repopulate the screen
-		    populateMyMemes();
+			console.log("Meme Removed")
+
+			//Repopulate the screen
+			populateMyMemes();
 
 		}).catch(function (error) {
 			console.log("***** ERROR:", error);
@@ -139,11 +137,11 @@ function deleteAllMemes() {
 		.then(function (result) {
 			if(result) {
 				localStorage.deleteAllMemes().then(function () {
-				    console.log("Folder Cleared")
-				    
-				    //Repopulate the screen
-				    populateMyMemes();
-				}).catch(function (error) {  
+					console.log("Folder Cleared")
+
+					//Repopulate the screen
+					populateMyMemes();
+				}).catch(function (error) {
 					console.log("***** ERROR:", error);
 				});
 			}
@@ -166,7 +164,6 @@ function clearOldMemes(container) {
 }
 
 function templateSelected(selectedImageSource) {
-	
 	if ( selectedImageSource ) {
 		frameModule.topmost().navigate({
 			moduleName: global.baseViewDirectory + "create-meme/create-meme",
