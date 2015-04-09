@@ -2,7 +2,7 @@
 	<ScrollView>
 
 		<StackLayout>
-			<Image source="{{ imageSource }}" />
+			<Image source="{{ memeImage }}" />
 			<TextField hint="Top text" text="{{ topText }}" />
 			<TextField hint="Bottom text" text="{{ bottomText }}" />
 
@@ -14,8 +14,7 @@
 				<Label dock="left" cssClass="settingsDockLabel" text="Black Text" />
 				<Switch dock="right" cssClass="settingsDockSwitch" checked="{{ isBlackText }}" />
 			</DockLayout>
-
-			<!-- TODO: Move to nav bar -->
+			
 			<Button id="saveButton" text="Save" tap="saveLocally" />
 			<Button text="Share" tap="share" />
 		</StackLayout>
