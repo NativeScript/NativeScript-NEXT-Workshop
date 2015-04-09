@@ -68,7 +68,6 @@ exports.saveLocally = function() {
 	refreshMeme();
 	var saved = localStorage.saveLocally(_uniqueImageNameForSession, _viewData.get("imageSource"));
 
-	console.log("****** SAVED", saved);
 	if (!saved) {
 		console.log("New meme not saved....");
 	} else {
@@ -79,8 +78,6 @@ exports.saveLocally = function() {
 		};
 
 		dialogsModule.alert(options);
-
-		console.log("New Meme Saved.");
 	}
 };
 
