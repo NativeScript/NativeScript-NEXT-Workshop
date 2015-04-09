@@ -4,6 +4,7 @@ var frameModule = require("ui/frame");
 var imageModule = require("ui/image");
 var gesturesModule = require("ui/gestures");
 var dialogsModule = require("ui/dialogs");
+var observableModule = require("data/observable");
 
 var templates = require( "../templates/templates");
 var localStorage = require( "../local-storage/local-storage");
@@ -161,8 +162,7 @@ function clearOldMemes(container) {
 	for (var i = container.getChildrenCount() - 1; i >= 0; i-- ) {
 		var childItem = container.getChildAt(i);
 		
-		//we need to remove the tap event listener to keep us from creating a memory leak...
-		childItem.off(gesturesModule.GestureTypes.Tap);
+		//DO we need to remove the tap event listener to keep us from creating a memory leak...
 		container.removeChild(childItem);
 	}
 }

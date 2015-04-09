@@ -1,5 +1,6 @@
 var imageSourceModule = require("image-source");
 var cameraModule = require("camera");
+var dialogsModule = require("ui/dialogs");
 
 var localStorage = require( "../local-storage/local-storage");
 var imageManipulation = require("../image-manipulation/image-manipulation");
@@ -64,25 +65,22 @@ function refreshMeme() {
 
 //Save to localStorage
 exports.saveLocally = function() {
-
-	var saveButton = _page.getViewById("saveButton");
-	saveLocally.visability = false;
-
-	/*
-	Disable the button....
-
-	show a saved... for a second...
-
-	reenable.
-	*/
-
 	refreshMeme();
 	var saved = localStorage.saveLocally(_uniqueImageNameForSession, _viewData.get("imageSource"));
 
+	console.log("****** SAVED", saved);
 	if (!saved) {
-		console.log("Recent meme not saved....");
+		console.log("New meme not saved....");
 	} else {
-		console.log("Recent template saved.");
+		var options = {
+		    title: "Meme Saved",
+		    message: "Congratulations, Meme Saved!",
+		    okButtonText: "OK"
+		};
+
+		dialogsModule.alert(options);
+
+		console.log("New Meme Saved.");
 	}
 };
 

@@ -13,8 +13,8 @@ exports.load = function(args) {
 	//Set the binding context on the page.
 	_page.bindingContext = _viewData;
 
-	//we should load some data here... so the dashboard page is ready.
+	//we should load some data here... so the home page is ready.
 	setTimeout(function () {
-		frameModule.topmost().navigate(global.baseViewDirectory + "dashboard/dashboard");
+		frameModule.topmost().navigate(global.baseViewDirectory + "home/home");
 	}, 2000);
 };
