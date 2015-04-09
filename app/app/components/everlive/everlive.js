@@ -31,25 +31,3 @@ function _uploadFile (fileName, imageSource) {
 
 	return httpModule.request(requestOptions);
 }
-
-/*
-
-	//SAMPLE CALLING CODE
-	
-	//TEMP... here for testing...
-	var everlive = require( "../everlive/everlive");
-
-	//TEMP just using for testing...
-	everlive.uploadFile(_uniqueImageNameForSession, data.get("imageSource")).then(function(e){
-		if ( e.content.statusCode != '200' ) {
-			console.log(JSON.stringify(e));	
-		} else {
-			console.log("***** Uploaded File *****");
-		}
-	}).catch(function (error){
-		console.log("***** ERROR *****", error);
-	});
-
-
-
-*/
