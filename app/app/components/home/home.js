@@ -5,15 +5,11 @@ var imageModule = require("ui/image");
 var gesturesModule = require("ui/gestures");
 var dialogsModule = require("ui/dialogs");
 
-var templates = require( "../templates/templates");
-var localStorage = require( "../local-storage/local-storage");
+var templates = require( "../../shared/templates/templates");
+var localStorage = require( "../../shared/local-storage/local-storage");
 var socialShare = require("../social-share/social-share");
 
 var _page;
-
-/*
-	1. pull images from responsive images.
-*/
 
 exports.load = function(args) {
 	_page = args.object;

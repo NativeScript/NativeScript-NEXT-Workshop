@@ -2,10 +2,12 @@ var imageSourceModule = require("image-source");
 var cameraModule = require("camera");
 var dialogsModule = require("ui/dialogs");
 
-var localStorage = require( "../local-storage/local-storage");
+var localStorage = require( "../../shared/local-storage/local-storage");
+var utilities = require( "../../shared/utilities");
+
 var imageManipulation = require("../image-manipulation/image-manipulation");
 var socialShare = require("../social-share/social-share");
-var utilities = require( "../../shared/utilities");
+
 
 var observableModule = require("data/observable");
 var _viewData = new observableModule.Observable();

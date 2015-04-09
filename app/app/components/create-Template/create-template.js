@@ -2,8 +2,8 @@ var frameModule = require("ui/frame");
 var imageSourceModule = require("image-source");
 var cameraModule = require("camera");
 
-var everlive = require( "../everlive/everlive");
-var localStorage = require( "../local-storage/local-storage");
+var everlive = require( "../../shared/everlive/everlive");
+var localStorage = require( "../../shared/local-storage/local-storage");
 var utilities = require( "../../shared/utilities");
 
 var observableModule = require("data/observable");
