@@ -39,21 +39,32 @@ function populateMemeTemplates() {
 	//Get our parrent element such that we can add our items to it dynamically
 	var memeContainer = _page.getViewById("memeContainer");
 	clearOldMemes(memeContainer);
+	
+	localStorage.getMyTemplates()
+		.then(function (localTemplateEntities) {
 
-	//TODO: get the template from BES
-	templates.list().forEach(function(template) {
-		
-		//Create a new image element 
-		var image = new imageModule.Image();
-		image.source = template.source;
+			var templateList = templates.list();
 
-		//Add the gesture to the image such that we can interact with it.
-		//todo... this callback should be renamed to a navigate to edit. something....
-		var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(template.source) });
-		
-		//add to the element.
-		memeContainer.addChild(image);
-	});
+			localTemplateEntities.forEach(function(item){
+				templateList.push(item);
+			});
+
+			//TODO: Do we need to sort this list????
+
+			templateList.forEach(function(template) {
+			
+				//Create a new image element 
+				var image = new imageModule.Image();
+				image.source = imageSourceModule.fromFile(template.path);
+			
+				//Add the gesture to the image such that we can interact with it.
+				//todo... this callback should be renamed to a navigate to edit. something....
+				var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(template.source) });
+				
+				//add to the element.
+				memeContainer.addChild(image);
+			});
+		});
 }
 
 function populateMyMemes() {

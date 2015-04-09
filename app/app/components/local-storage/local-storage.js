@@ -10,6 +10,9 @@ module.exports = {
 	getMyMemes: function () {
 		return _getMyMemes();
 	},
+	getMyTemplates: function () {
+		return _getMyTemplates();
+	},
 	deleteMeme: function (imageFileName) {
 		return _deleteMeme(imageFileName);
 	},
@@ -20,13 +23,17 @@ module.exports = {
 		return _saveImageLocally(imageName, imageSource);
 	},
 	saveTemplateLocally: function(imageName, imageSource) {
-		return _saveImageTemplateLocally(imageName, imageSource);
+		return _saveTemplateLocally(imageName, imageSource);
 	},
 
 }
 
 function _getMyMemes() {
 	return _recentMemeFolder.getEntities();
+}
+
+function _getMyTemplates() {
+	return _templateFolder.getEntities();
 }
 
 function _deleteMeme(imageFileName) {
@@ -45,8 +52,8 @@ function _saveImageLocally (imageName, imageSource) {
 	return saved;
 }
 
-function _saveImageTemplateLocally(imageName, imageSource) {
-	var fullPath = fs.path.join(_recentMemeFolder.path, imageName);
+function _saveTemplateLocally(imageName, imageSource) {
+	var fullPath = fs.path.join(_templateFolder.path, imageName);
 	var saved = imageSource.saveToFile(fullPath, imageSourceModule.ImageFormat.PNG);
 
 	return saved;

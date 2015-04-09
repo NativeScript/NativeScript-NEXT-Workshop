@@ -3,8 +3,8 @@ var fs = require("file-system");
 
 var templates = [];
 for (var i = 0; i <= 12; i++) {
-	var source = imageSource.fromFile("~/app/images/templates/" + i + ".png");
-	templates.push({ source: source });
+	var path = "~/app/images/templates/" + i + ".png";
+	templates.push({ path: path });
 }
 
 module.exports = {
