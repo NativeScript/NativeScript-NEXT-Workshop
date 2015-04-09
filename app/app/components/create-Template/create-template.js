@@ -55,9 +55,8 @@ function invokeCamera() {
 	cameraModule.takePicture()
 		.then(function(r) {
 			_viewData.set("imageSource", r);
-		}).catch(function (error){
-				console.log("***** ERROR *****", error);
-				//alert("An error occurred taking the photo");
+		}, function() {
+			console.log("***** ERROR *****", error);
 		});
 }
 
