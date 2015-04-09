@@ -39,11 +39,15 @@ function populateMemeTemplates() {
 	//Get our parrent element such that we can add our items to it dynamically
 	var memeContainer = _page.getViewById("memeContainer");
 	clearOldMemes(memeContainer);
-	
+
+	//getting of the lists needs to get pulled out...	
+	var templateList = [];
+	templates.list().forEach(function(x){
+		templateList.push(x);
+	});
+
 	localStorage.getMyTemplates()
 		.then(function (localTemplateEntities) {
-
-			var templateList = templates.list();
 
 			localTemplateEntities.forEach(function(item){
 				templateList.push(item);
@@ -168,6 +172,7 @@ function clearOldMemes(container) {
 	*/
 
 	//Or just work backwards picking off the back
+	console.log("***** Clearing X children:", container.getChildrenCount());
 	
 	for (var i = container.getChildrenCount() - 1; i >= 0; i-- ) {
 		var childItem = container.getChildAt(i);
