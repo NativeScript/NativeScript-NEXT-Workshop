@@ -52,14 +52,14 @@ function populateMemeTemplates() {
 			//TODO: Do we need to sort this list????
 
 			templateList.forEach(function(template) {
-			
-				//Create a new image element 
+				var currentImageSource = imageSourceModule.fromFile(template.path);
+
 				var image = new imageModule.Image();
-				image.source = imageSourceModule.fromFile(template.path);
+				image.source = currentImageSource;
 			
 				//Add the gesture to the image such that we can interact with it.
 				//todo... this callback should be renamed to a navigate to edit. something....
-				var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(template.source) });
+				var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(currentImageSource) });
 				
 				//add to the element.
 				memeContainer.addChild(image);
