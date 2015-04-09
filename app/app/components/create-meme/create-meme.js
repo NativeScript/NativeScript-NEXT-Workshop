@@ -5,6 +5,7 @@ var dialogsModule = require("ui/dialogs");
 var localStorage = require( "../local-storage/local-storage");
 var imageManipulation = require("../image-manipulation/image-manipulation");
 var socialShare = require("../social-share/social-share");
+var utilities = require( "../../shared/utilities");
 
 var observableModule = require("data/observable");
 var _viewData = new observableModule.Observable();
@@ -39,7 +40,7 @@ exports.navigatedTo = function(args) {
 	_viewData.set("isBlackText", false);
 	_viewData.set("imageSource", selectedImageSource);
 	
-	_uniqueImageNameForSession = generateUUID() + ".png";
+	_uniqueImageNameForSession = utilities.generateUUID() + ".png";
 };
 
 function addRefreshOnChange() {
@@ -83,14 +84,4 @@ exports.saveLocally = function() {
 
 exports.share = function() {
 	socialShare.share(_viewData.get("imageSource"));
-};
-
-function generateUUID(){
-	var d = new Date().getTime();
-	var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-		var r = (d + Math.random()*16)%16 | 0;
-		d = Math.floor(d/16);
-		return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-	});
-	return uuid;
 };

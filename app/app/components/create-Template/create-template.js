@@ -4,6 +4,7 @@ var cameraModule = require("camera");
 
 var everlive = require( "../everlive/everlive");
 var localStorage = require( "../local-storage/local-storage");
+var utilities = require( "../../shared/utilities");
 
 var observableModule = require("data/observable");
 var _viewData = new observableModule.Observable();
@@ -15,7 +16,7 @@ exports.loaded = function(args) {
 	_page = args.object;
 	_page.bindingContext = _viewData;
 
-	_uniqueImageNameForSession = generateUUID() + ".png";
+	_uniqueImageNameForSession = utilities.generateUUID() + ".png";
 };
 
 exports.navigatedTo = function (args){
@@ -62,17 +63,6 @@ function invokeCamera() {
 
 	//TODO... if on cancel... we should show the camera roll to choose a picture from...
 }
-
-//todo:: pull out into util folder
-function generateUUID(){
-	var d = new Date().getTime();
-	var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-		var r = (d + Math.random()*16)%16 | 0;
-		d = Math.floor(d/16);
-		return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-	});
-	return uuid;
-};
 
 function saveImageLocally(memeImageSource, imageName) {
 	var saved = localStorage.saveTemplateLocally(imageName, memeImageSource);
