@@ -83,5 +83,5 @@ function saveImageLocally(memeImageSource, imageName) {
 };
 
 function goHome() {
-	frameModule.topmost().navigate(global.baseViewDirectory + "dashboard/dashboard");
+	frameModule.topmost().navigate(global.baseViewDirectory + "home/home");
 }

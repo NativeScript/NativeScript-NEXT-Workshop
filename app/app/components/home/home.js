@@ -169,7 +169,7 @@ function templateSelected(selectedImageSource) {
 	
 	if ( selectedImageSource ) {
 		frameModule.topmost().navigate({
-			moduleName: global.baseViewDirectory + "edit-meme/edit-meme",
+			moduleName: global.baseViewDirectory + "create-meme/create-meme",
 			context: selectedImageSource
 		});
 	}
