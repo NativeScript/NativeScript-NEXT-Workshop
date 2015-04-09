@@ -52,12 +52,15 @@ exports.saveLocally = function() {
 function invokeCamera() {
 	console.log("***** INVOKE CAMERA *****");
 
+	//TODO: bug here with the promise...
 	cameraModule.takePicture()
 		.then(function(r) {
 			_viewData.set("imageSource", r);
 		}, function() {
 			console.log("***** ERROR *****", error);
 		});
+
+	//TODO... if on cancel... we should show the camera roll to choose a picture from...
 }
 
 //todo:: pull out into util folder

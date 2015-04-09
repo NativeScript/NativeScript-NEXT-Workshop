@@ -159,7 +159,11 @@ function clearOldMemes(container) {
 	//Or just work backwards picking off the back
 	
 	for (var i = container.getChildrenCount() - 1; i >= 0; i-- ) {
-		container.removeChild(container.getChildAt(i));
+		var childItem = container.getChildAt(i);
+		
+		//we need to remove the tap event listener to keep us from creating a memory leak...
+		childItem.off(gesturesModule.GestureTypes.Tap);
+		container.removeChild(childItem);
 	}
 }
 

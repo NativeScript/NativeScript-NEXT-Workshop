@@ -64,6 +64,18 @@ function refreshMeme() {
 
 //Save to localStorage
 exports.saveLocally = function() {
+
+	var saveButton = _page.getViewById("saveButton");
+	saveLocally.visability = false;
+
+	/*
+	Disable the button....
+
+	show a saved... for a second...
+
+	reenable.
+	*/
+
 	refreshMeme();
 	var saved = localStorage.saveLocally(_uniqueImageNameForSession, _viewData.get("imageSource"));
 
