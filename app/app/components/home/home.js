@@ -37,12 +37,12 @@ function populateMemeTemplates() {
 	clearOldMemes(memeContainer);
 
 	//getting of the lists needs to get pulled out...	
+	//templates.getFromEverlive();
+
 	var templateList = [];
 	templates.list().forEach(function(x){
 		templateList.push(x);
 	});
-
-	
 
 	localStorage.getMyTemplates()
 		.then(function (localTemplateEntities) {

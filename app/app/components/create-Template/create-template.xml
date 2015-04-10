@@ -1,4 +1,4 @@
-<Page loaded="loaded" navigatedTo="navigatedTo">
+<Page loaded="loaded">
 
 	<StackLayout>
 		<Image source="{{ imageSource }}" />

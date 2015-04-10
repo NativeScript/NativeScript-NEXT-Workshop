@@ -17,12 +17,10 @@ exports.loaded = function(args) {
 	_page.bindingContext = _viewData;
 
 	_uniqueImageNameForSession = utilities.generateUUID() + ".png";
-};
 
-exports.navigatedTo = function (args){
 	_viewData.set("imageSource", null);
 	invokeCamera();
-}
+};
 
 function invokeCamera() {
 	console.log("***** INVOKING CAMERA *****");
