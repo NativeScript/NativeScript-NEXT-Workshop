@@ -12,6 +12,14 @@ for (var i = 0; i <= 12; i++) {
 }
 
 module.exports = {
+	getMyMemes: function(callback) {
+		return _getMyMemes(callback);
+	},
+	getTemplates: function(callback) {
+
+	},
+
+	//TEMP....
 	list: function() {
 		return templates;
 	},
@@ -19,11 +27,34 @@ module.exports = {
 		return templates[index];
 	},
 	getFromEverlive: function() {
-		return _getFromEverlive();
+		return _getTemplatesFromEverlive();
 	}
 }
 
-function _getFromEverlive() {
+function _getMyMemes(callback) {
+	var recentMemes = [];
+
+	localStorage.getMyMemes()
+	.then(function (entities) {
+
+		entities.forEach(function (entity) {
+			var source = imageSource.fromFile(entity.path);
+			recentMemes.push({ source: source, fileName: entity.name, lastModified: entity.lastModified});
+		});
+
+		//sort to get in the order of most recent
+		recentMemes.sort(function (a, b) {
+			return b.lastModified.getTime() - a.lastModified.getTime();
+		});
+		
+		recentMemes.forEach(function(meme) {
+			callback(meme.source, meme.fileName);
+		});
+
+	});
+}
+
+function _getTemplatesFromEverlive(callback) {
 	var templatesFound = 0;
 
 	return new Promise(function (resolve, reject) {
@@ -42,7 +73,13 @@ function _getFromEverlive() {
 						httpModule.getImage(template.Url).then(function(imageSource) {
 							templatesFound++;
 							console.log("**** Got " + template.Url + " ****");
-							localStorage.saveTemplateLocally(template.FileName, imageSource);
+							var saved = localStorage.saveTemplateLocally(template.FileName, imageSource);
+							
+							/*
+							if (saved) {
+								callback(imageSource);
+							}
+							*/
 							resolve();
 						});
 					} else {
@@ -54,6 +91,7 @@ function _getFromEverlive() {
 			Promise.all(imagePromises).then(function() {
 				resolve(templatesFound);
 			});
+
 		}).catch(function(error){
 			console.log("***** ERROR", JSON.stringify(error));
 			reject(error);

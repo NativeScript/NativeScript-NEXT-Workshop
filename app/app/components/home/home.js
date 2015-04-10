@@ -74,34 +74,18 @@ function populateMyMemes() {
 	var recentMemeContainer = _page.getViewById("recentMemeContainer");
 	clearOldMemes(recentMemeContainer);
 
-	var recentMemes = [];
-	localStorage.getMyMemes()
-		.then(function (entities) {
-			entities.forEach(function (entity) {
-			var source = imageSourceModule.fromFile(entity.path);
-				recentMemes.push({ source: source, fileName: entity.name, lastModified: entity.lastModified});
-			});
+	templates.getMyMemes(function(imageSource, fileName){
+		//Create a new image element 
+		console.log("****** IN CALLBACK", fileName);
+		var image = new imageModule.Image();
+		image.source = imageSource;
 
-			//sort to get in the order of most recent
-			recentMemes.sort(function (a, b) {
-				return b.lastModified.getTime() - a.lastModified.getTime();
-			});
-			
-		}).then(function () {
-			recentMemes.forEach(function(meme) {
-				//Create a new image element 
-				var image = new imageModule.Image();
-				image.source = meme.source;
-
-				//What do to...  share delete?
-				var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(meme.source, meme.fileName) });
-				
-				//add to the element.
-				recentMemeContainer.addChild(image);
-			});
-		}).catch(function (error) {
-			console.log("***** ERROR:", error);
-		});
+		//What do to...  share delete?
+		var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) });
+		
+		//add to the element.
+		recentMemeContainer.addChild(image);
+	});
 }
 
 function myMemesActionSheet (imageSource, imageFileName) {
