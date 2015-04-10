@@ -1,3 +1,4 @@
+var applicationModule = require("application");
 var imageSourceModule = require("image-source");
 var frameModule = require("ui/frame");
 var imageModule = require("ui/image");
@@ -12,6 +13,16 @@ var _page;
 
 exports.load = function(args) {
 	_page = args.object;
+
+	// Make sure we're on iOS before configuring the navigation bar
+	if (applicationModule.ios) {
+		// Get access to the native iOS UINavigationController
+		var controller = frameModule.topmost().ios.controller;
+		
+		// Call the UINavigationController's setNavigationBarHidden method
+		controller.navigationBarHidden = true;
+	}
+
 	populateMemeTemplates();
 	populateMyMemes();
 };
