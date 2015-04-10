@@ -36,13 +36,18 @@ function _getFromEverlive() {
 			var imagePromises = [];
 			results.Result.forEach(function(template) {
 				imagePromises.push(new Promise(function(resolve, reject) {
-					console.log("**** Getting " + template.Url + " ****");
-					httpModule.getImage(template.Url).then(function(imageSource) {
-						templatesFound++;
-						console.log("**** Got " + template.Url + " ****");
-						localStorage.saveTemplateLocally(template.FileName, imageSource);
+					//Before we download, check to see if we already have it...
+					if (!localStorage.doesTemplateExist(template.FileName)) {
+						console.log("**** Getting " + template.Url + " ****");
+						httpModule.getImage(template.Url).then(function(imageSource) {
+							templatesFound++;
+							console.log("**** Got " + template.Url + " ****");
+							localStorage.saveTemplateLocally(template.FileName, imageSource);
+							resolve();
+						});
+					} else {
 						resolve();
-					});
+					}
 				}));
 			});
 

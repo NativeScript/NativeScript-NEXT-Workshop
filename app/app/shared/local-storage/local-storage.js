@@ -24,6 +24,9 @@ module.exports = {
 	},
 	saveTemplateLocally: function(imageName, imageSource) {
 		return _saveTemplateLocally(imageName, imageSource);
+	},
+	doesTemplateExist: function(imageFileName) {
+		return _doesTemplateExist(imageFileName);
 	}
 }
 
@@ -51,9 +54,13 @@ function _saveImageLocally (imageName, imageSource) {
 	return saved;
 }
 
+function _doesTemplateExist(imageName) {
+	var fullPath = fs.path.join(_templateFolder.path, imageName);
+	return fs.File.exists(fullPath);
+}
+
 function _saveTemplateLocally(imageName, imageSource) {
 	var fullPath = fs.path.join(_templateFolder.path, imageName);
 	var saved = imageSource.saveToFile(fullPath, imageSourceModule.ImageFormat.PNG);
-
 	return saved;
 }
