@@ -28,21 +28,27 @@ function _getFromEverlive() {
 
 	return new Promise(function (resolve, reject) {
 		everlive.getTemplateIndex()
-		.then(function(result){
+		.then(function(result) {
 			var results = JSON.parse(result.content);
 			console.log("***** TemplateIndex Result *****", JSON.stringify(result));
 			console.log("***** Templates Returned *****", results.Count);
 
-			Promise.all(results.Result.forEach(function (template){
-				httpModule.getImage(template.Url).then(function(imageSource){
-					templatesFound++;
-					localStorage.saveTemplateLocally(template.FileName, imageSource).then(function(){
-						console.log("***** _getFromEverlive SAVED *****");
+			var imagePromises = [];
+			results.Result.forEach(function(template) {
+				imagePromises.push(new Promise(function(resolve, reject) {
+					console.log("**** Getting " + template.Url + " ****");
+					httpModule.getImage(template.Url).then(function(imageSource) {
+						templatesFound++;
+						console.log("**** Got " + template.Url + " ****");
+						localStorage.saveTemplateLocally(template.FileName, imageSource);
+						resolve();
 					});
-				});
-			}));
-		}).then(function(){
-			resolve(templatesFound);
+				}));
+			});
+
+			Promise.all(imagePromises).then(function() {
+				resolve(templatesFound);
+			});
 		}).catch(function(error){
 			console.log("***** ERROR", JSON.stringify(error));
 			reject(error);
