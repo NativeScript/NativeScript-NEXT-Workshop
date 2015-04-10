@@ -2,7 +2,7 @@ var frameModule = require("ui/frame");
 var imageSourceModule = require("image-source");
 var cameraModule = require("camera");
 
-var everlive = require( "../../shared/everlive/everlive");
+var templates = require( "../../shared/templates/templates");
 var localStorage = require( "../../shared/local-storage/local-storage");
 var utilities = require( "../../shared/utilities");
 
@@ -45,6 +45,7 @@ exports.saveLocally = function() {
 };
 
 function saveImageLocally(memeImageSource, imageName) {
+	//todo.... pump this through templates... combine with above...
 	var saved = localStorage.saveTemplateLocally(imageName, memeImageSource);
 
 	if (!saved) {
@@ -56,19 +57,8 @@ function saveImageLocally(memeImageSource, imageName) {
 
 //Submit the template to everlive for everyone to use.
 exports.submitToEverlive = function() {
-	everlive.addTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"))
-		.then(function(e){
-			/* 
-			//TODO:: I think I chained things wrong here based on the internal call...
-			
-			if ( e.content.statusCode != '200' ) {
-				console.log("EVERLIVE RESPONSE", JSON.stringify(e));
-			} else {
-				console.log("***** Uploaded File *****");
-			}
-			*/
-			
-		}).catch(function (error){
+	templates.addNewPublicTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"))
+		.catch(function (error){
 			console.log("***** ERROR *****", error);
 		});
 

@@ -4,14 +4,22 @@ var imageSourceModule = require("image-source");
 
 var _documentsFolder = fs.knownFolders.documents();
 var _recentMemeFolder = _documentsFolder.getFolder(global.recentMemeFolderName);
-var _templateFolder = _documentsFolder.getFolder(global.templateFolderName);
+var _appTemplateFolder = _documentsFolder.getFolder(global.appTemplateFolderName);
+var _localTemplateFolder = _documentsFolder.getFolder(global.localTemplateFolderName);
+var _everliveTemplateFolder = _documentsFolder.getFolder(global.everliveTemplateFolderName);
 
 module.exports = {
 	getMyMemes: function () {
 		return _getMyMemes();
 	},
+	getAppTemplates: function () {
+		return _getAppTemplates();
+	},
 	getMyTemplates: function () {
 		return _getMyTemplates();
+	},
+	getEverliveTemplates: function () {
+		return _getEverliveTemplates();
 	},
 	deleteMeme: function (imageFileName) {
 		return _deleteMeme(imageFileName);
@@ -25,8 +33,11 @@ module.exports = {
 	saveTemplateLocally: function(imageName, imageSource) {
 		return _saveTemplateLocally(imageName, imageSource);
 	},
-	doesTemplateExist: function(imageFileName) {
-		return _doesTemplateExist(imageFileName);
+	saveEverliveTemplateLocally: function(imageName, imageSource) {
+		return _saveEverliveTemplateLocally(imageName, imageSource);
+	},
+	doesEverliveTemplateExist: function(imageFileName) {
+		return _doesEverliveTemplateExist(imageFileName);
 	}
 }
 
@@ -34,8 +45,16 @@ function _getMyMemes() {
 	return _recentMemeFolder.getEntities();
 }
 
+function _getAppTemplates() {
+	return _appTemplateFolder.getEntities();
+}
+
 function _getMyTemplates() {
-	return _templateFolder.getEntities();
+	return _localTemplateFolder.getEntities();
+}
+
+function _getEverliveTemplates () {
+	return _everliveTemplateFolder.getEntities();
 }
 
 function _deleteMeme(imageFileName) {
@@ -54,13 +73,19 @@ function _saveImageLocally (imageName, imageSource) {
 	return saved;
 }
 
-function _doesTemplateExist(imageName) {
-	var fullPath = fs.path.join(_templateFolder.path, imageName);
+function _doesEverliveTemplateExist(imageName) {
+	var fullPath = fs.path.join(_everliveTemplateFolder.path, imageName);
 	return fs.File.exists(fullPath);
 }
 
 function _saveTemplateLocally(imageName, imageSource) {
-	var fullPath = fs.path.join(_templateFolder.path, imageName);
+	var fullPath = fs.path.join(_localTemplateFolder.path, imageName);
+	var saved = imageSource.saveToFile(fullPath, imageSourceModule.ImageFormat.PNG);
+	return saved;
+}
+
+function _saveEverliveTemplateLocally(imageName, imageSource) {
+	var fullPath = fs.path.join(_everliveTemplateFolder.path, imageName);
 	var saved = imageSource.saveToFile(fullPath, imageSourceModule.ImageFormat.PNG);
 	return saved;
 }

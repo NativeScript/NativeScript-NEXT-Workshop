@@ -4,6 +4,7 @@ var httpModule = require("http");
 module.exports = {
 	
 	addTemplate: function (fileName, imageSource) {
+		//This should also save locally....
 		return _addTemplate(fileName, imageSource );
 	},
 	getTemplateIndex: function() {

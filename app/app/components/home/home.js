@@ -23,7 +23,7 @@ exports.load = function(args) {
 		controller.navigationBarHidden = true;
 	}
 
-	populateMemeTemplates();
+	populateTemplates();
 	populateMyMemes();
 };
 
@@ -31,52 +31,29 @@ exports.createNewTemplate = function() {
 	frameModule.topmost().navigate(global.baseViewDirectory + "create-template/create-template");
 };
 
-function populateMemeTemplates() {
+function populateTemplates() {
 	//Get our parrent element such that we can add our items to it dynamically
-	var memeContainer = _page.getViewById("memeContainer");
-	clearOldMemes(memeContainer);
+	var container = _page.getViewById("memeContainer");
+	clearOldMemes(container);
 
-	//getting of the lists needs to get pulled out...	
-	//templates.getFromEverlive();
-
-	var templateList = [];
-	templates.list().forEach(function(x){
-		templateList.push(x);
-	});
-
-	localStorage.getMyTemplates()
-		.then(function (localTemplateEntities) {
-
-			localTemplateEntities.forEach(function(item){
-				templateList.push(item);
-			});
-
-			//TODO: Do we need to sort this list????
-
-			templateList.forEach(function(template) {
-				var currentImageSource = imageSourceModule.fromFile(template.path);
-
-				var image = new imageModule.Image();
-				image.source = currentImageSource;
+	templates.getTemplates(function(imageSource){						
+		var image = new imageModule.Image();
+		image.source = imageSource;
 			
-				//Add the gesture to the image such that we can interact with it.
-				//todo... this callback should be renamed to a navigate to edit. something....
-				var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(currentImageSource) });
+		var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) });
 				
-				//add to the element.
-				memeContainer.addChild(image);
-			});
-		});
+		//add to the element.
+		container.addChild(image);
+	});
 }
 
 function populateMyMemes() {
 	//Get our parent element such that we can add our items to it dynamically
-	var recentMemeContainer = _page.getViewById("recentMemeContainer");
-	clearOldMemes(recentMemeContainer);
+	var container = _page.getViewById("recentMemeContainer");
+	clearOldMemes(container);
 
 	templates.getMyMemes(function(imageSource, fileName){
 		//Create a new image element 
-		console.log("****** IN CALLBACK", fileName);
 		var image = new imageModule.Image();
 		image.source = imageSource;
 
@@ -84,7 +61,7 @@ function populateMyMemes() {
 		var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) });
 		
 		//add to the element.
-		recentMemeContainer.addChild(image);
+		container.addChild(image);
 	});
 }
 

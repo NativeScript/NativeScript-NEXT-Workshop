@@ -5,18 +5,16 @@ var httpModule = require("http");
 var everlive = require("../everlive/everlive");
 var localStorage = require("../local-storage/local-storage");
 
-var templates = [];
-for (var i = 0; i <= 12; i++) {
-	var path = "~/app/images/templates/" + i + ".png";
-	templates.push({ path: path });
-}
 
 module.exports = {
 	getMyMemes: function(callback) {
 		return _getMyMemes(callback);
 	},
 	getTemplates: function(callback) {
-
+		return _getTemplates(callback);
+	},
+	addNewPublicTemplate: function(fileName, imageSource) {
+		return _addNewPublicTemplate(fileName, imageSource);
 	},
 
 	//TEMP....
@@ -29,6 +27,74 @@ module.exports = {
 	getFromEverlive: function() {
 		return _getTemplatesFromEverlive();
 	}
+}
+
+function _addNewPublicTemplate(fileName, imageSource) {
+	return everlive.addTemplate(fileName, imageSource)
+			.then(function(){
+				//Save locally too, then we don't have to ever download again...
+				localStorage.addEverliveTemplate(fileName, imageSource);
+			});
+}
+
+function _getTemplates(callback, container) {
+
+	/*
+	Templates come from three places... 
+		1. included in the app.
+		2. templates someone saved locally
+		3. templates from everlive. 
+	*/
+
+	var templateImageSources = [];
+	localStorage.getAppTemplates()
+	.then(function(entities){
+		entities.forEach(function (template) {
+			callback(imageSource.fromFile(template.path));
+		});
+	});
+
+	//Should see if we can get this differently... From local storage
+	/*
+	var templates = [];
+	for (var i = 0; i <= 12; i++) {
+		var path = "~/app/images/templates/" + i + ".png";
+		templates.push({ path: path });
+	}
+
+	var templateList = [];
+
+	templates.list().forEach(function(x){
+		templateList.push(x);
+	});
+
+	localStorage.getMyTemplates()
+		.then(function (localTemplateEntities) {
+
+			localTemplateEntities.forEach(function(item){
+				templateList.push(item);
+			});
+
+			//TODO: Do we need to sort this list????
+
+			templateList.forEach(callback());
+
+				function(template) {
+				var currentImageSource = imageSourceModule.fromFile(template.path);
+
+				var image = new imageModule.Image();
+				image.source = currentImageSource;
+			
+				//Add the gesture to the image such that we can interact with it.
+				//todo... this callback should be renamed to a navigate to edit. something....
+				var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(currentImageSource) });
+				
+				//add to the element.
+				memeContainer.addChild(image);
+			});
+		});
+
+	*/
 }
 
 function _getMyMemes(callback) {
@@ -68,18 +134,17 @@ function _getTemplatesFromEverlive(callback) {
 			results.Result.forEach(function(template) {
 				imagePromises.push(new Promise(function(resolve, reject) {
 					//Before we download, check to see if we already have it...
-					if (!localStorage.doesTemplateExist(template.FileName)) {
+					if (!localStorage.doesEverliveTemplateExist(template.FileName)) {
 						console.log("**** Getting " + template.Url + " ****");
 						httpModule.getImage(template.Url).then(function(imageSource) {
 							templatesFound++;
 							console.log("**** Got " + template.Url + " ****");
-							var saved = localStorage.saveTemplateLocally(template.FileName, imageSource);
+							var saved = localStorage.saveEverliveTemplateLocally(template.FileName, imageSource);
 							
-							/*
 							if (saved) {
 								callback(imageSource);
 							}
-							*/
+							
 							resolve();
 						});
 					} else {

@@ -12,16 +12,9 @@ exports.load = function(args) {
 
 	//Set the binding context on the page.
 	_page.bindingContext = _viewData;
-
-	templates.getFromEverlive().then(function(result){
-		console.log("***** Loaded Templates, found >>>>>", result);
-		frameModule.topmost().navigate(global.baseViewDirectory + "home/home");
-
-	});
-
-	/*
+	
 	setTimeout(function () {
 		frameModule.topmost().navigate(global.baseViewDirectory + "home/home");
 	}, 2000);
-	*/
+	
 };
