@@ -4,7 +4,7 @@ application.mainModule = "app/components/splashscreen/splashscreen";
 global.baseViewDirectory = "app/components/";
 global.recentMemeFolderName = "myMemes";
 
-global.appTemplateFolderName = "~/app/images/templates/";
+global.appTemplateFolderName = "app/images/templates";
 global.localTemplateFolderName = "localTemplates";
 global.everliveTemplateFolderName = "everliveTemplates";
 

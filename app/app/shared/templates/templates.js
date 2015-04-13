@@ -5,7 +5,6 @@ var httpModule = require("http");
 var everlive = require("../everlive/everlive");
 var localStorage = require("../local-storage/local-storage");
 
-
 module.exports = {
 	getMyMemes: function(callback) {
 		return _getMyMemes(callback);
@@ -37,66 +36,6 @@ function _addNewPublicTemplate(fileName, imageSource) {
 			});
 }
 
-function _getTemplates(callback, container) {
-
-	/*
-	Templates come from three places... 
-		1. included in the app.
-		2. templates someone saved locally
-		3. templates from everlive. 
-	*/
-
-	var templateImageSources = [];
-	localStorage.getAppTemplates()
-	.then(function(entities){
-		entities.forEach(function (template) {
-			callback(imageSource.fromFile(template.path));
-		});
-	});
-
-	//Should see if we can get this differently... From local storage
-	/*
-	var templates = [];
-	for (var i = 0; i <= 12; i++) {
-		var path = "~/app/images/templates/" + i + ".png";
-		templates.push({ path: path });
-	}
-
-	var templateList = [];
-
-	templates.list().forEach(function(x){
-		templateList.push(x);
-	});
-
-	localStorage.getMyTemplates()
-		.then(function (localTemplateEntities) {
-
-			localTemplateEntities.forEach(function(item){
-				templateList.push(item);
-			});
-
-			//TODO: Do we need to sort this list????
-
-			templateList.forEach(callback());
-
-				function(template) {
-				var currentImageSource = imageSourceModule.fromFile(template.path);
-
-				var image = new imageModule.Image();
-				image.source = currentImageSource;
-			
-				//Add the gesture to the image such that we can interact with it.
-				//todo... this callback should be renamed to a navigate to edit. something....
-				var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(currentImageSource) });
-				
-				//add to the element.
-				memeContainer.addChild(image);
-			});
-		});
-
-	*/
-}
-
 function _getMyMemes(callback) {
 	var recentMemes = [];
 
@@ -120,6 +59,57 @@ function _getMyMemes(callback) {
 	});
 }
 
+function _getTemplates(callback) {
+
+	localStorage.getAppTemplates()
+	.then(function(entities){
+		//Load the app templates
+		entities.forEach(function (template) {
+			callback(imageSource.fromFile(template.path));
+		});
+	});
+
+	localStorage.getMyTemplates()
+	.then(function(entities){
+		//Load the app templates
+		entities.forEach(function (template) {
+			callback(imageSource.fromFile(template.path));
+		});
+	});
+
+	_getTemplatesFromEverlive(callback);
+}
+
+function _getTemplatesFromEverlive(callback) {
+
+	everlive.getTemplateIndex()
+		.then(function(result) {
+			var results = JSON.parse(result.content);
+			console.log("***** found templates on everlive", results.Count);
+
+			results.Result.forEach(function(template) {
+				//Before we download, check to see if we already have it...
+				if (!localStorage.doesEverliveTemplateExist(template.FileName)) {
+					console.log("**** Getting " + template.Url + " ****");
+					httpModule.getImage(template.Url).then(function(imageSource) {
+						console.log("**** Got " + template.Url + " ****");
+						
+						var saved = localStorage.saveEverliveTemplateLocally(template.FileName, imageSource);
+						if (saved) {
+							callback(imageSource);
+						}
+					});
+				} else {
+					var templateImage = localStorage.getEverliveTemplateFile(template.FileName);
+					callback(templateImage);
+				}
+			});	
+		}).catch(function(error){
+			console.log("***** ERROR", JSON.stringify(error));
+		});
+}
+
+/*
 function _getTemplatesFromEverlive(callback) {
 	var templatesFound = 0;
 
@@ -127,8 +117,6 @@ function _getTemplatesFromEverlive(callback) {
 		everlive.getTemplateIndex()
 		.then(function(result) {
 			var results = JSON.parse(result.content);
-			console.log("***** TemplateIndex Result *****", JSON.stringify(result));
-			console.log("***** Templates Returned *****", results.Count);
 
 			var imagePromises = [];
 			results.Result.forEach(function(template) {
@@ -163,3 +151,5 @@ function _getTemplatesFromEverlive(callback) {
 		});
 	});	
 }
+
+*/

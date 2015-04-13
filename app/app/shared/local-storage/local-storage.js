@@ -4,7 +4,7 @@ var imageSourceModule = require("image-source");
 
 var _documentsFolder = fs.knownFolders.documents();
 var _recentMemeFolder = _documentsFolder.getFolder(global.recentMemeFolderName);
-var _appTemplateFolder = _documentsFolder.getFolder(global.appTemplateFolderName);
+var _appTemplateFolder = global.appTemplateFolderName;
 var _localTemplateFolder = _documentsFolder.getFolder(global.localTemplateFolderName);
 var _everliveTemplateFolder = _documentsFolder.getFolder(global.everliveTemplateFolderName);
 
@@ -20,6 +20,9 @@ module.exports = {
 	},
 	getEverliveTemplates: function () {
 		return _getEverliveTemplates();
+	},
+	getEverliveTemplateFile: function (fileName) {
+		return _getEverliveTemplateFile(fileName);
 	},
 	deleteMeme: function (imageFileName) {
 		return _deleteMeme(imageFileName);
@@ -46,7 +49,11 @@ function _getMyMemes() {
 }
 
 function _getAppTemplates() {
-	return _appTemplateFolder.getEntities();
+	
+	var fullPath = fs.path.join(fs.knownFolders.currentApp().path, _appTemplateFolder);
+	var templatesFolder = fs.Folder.fromPath(fullPath);
+	
+	return templatesFolder.getEntities();
 }
 
 function _getMyTemplates() {
@@ -55,6 +62,14 @@ function _getMyTemplates() {
 
 function _getEverliveTemplates () {
 	return _everliveTemplateFolder.getEntities();
+}
+
+function _getEverliveTemplateFile(fileName) {
+	
+	var fullPath = fs.path.join(_everliveTemplateFolder.path, fileName);
+	var templateImage = imageSourceModule.fromFile(fullPath);
+
+	return templateImage;
 }
 
 function _deleteMeme(imageFileName) {

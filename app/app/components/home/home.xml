@@ -15,7 +15,7 @@
 				<TabEntry title="Templates">
 					<TabEntry.view>
 						<ScrollView>
-							<WrapLayout id="memeContainer" itemHeight="100" horizontalAlignment="center">
+							<WrapLayout id="templateContainer" itemHeight="100" horizontalAlignment="center">
 							</WrapLayout>
 						</ScrollView>
 					</TabEntry.view>
@@ -24,7 +24,7 @@
 				<TabEntry title="My Memes">
 					<TabEntry.view>
 						<ScrollView>
-							<WrapLayout id="recentMemeContainer" itemHeight="100" horizontalAlignment="center">
+							<WrapLayout id="myMemeContainer" itemHeight="100" horizontalAlignment="center">
 							</WrapLayout>
 						</ScrollView>
 					</TabEntry.view>

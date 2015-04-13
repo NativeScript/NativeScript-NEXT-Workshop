@@ -33,7 +33,7 @@ exports.createNewTemplate = function() {
 
 function populateTemplates() {
 	//Get our parrent element such that we can add our items to it dynamically
-	var container = _page.getViewById("memeContainer");
+	var container = _page.getViewById("templateContainer");
 	clearOldMemes(container);
 
 	templates.getTemplates(function(imageSource){						
@@ -49,7 +49,7 @@ function populateTemplates() {
 
 function populateMyMemes() {
 	//Get our parent element such that we can add our items to it dynamically
-	var container = _page.getViewById("recentMemeContainer");
+	var container = _page.getViewById("myMemeContainer");
 	clearOldMemes(container);
 
 	templates.getMyMemes(function(imageSource, fileName){
