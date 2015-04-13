@@ -28,7 +28,7 @@ function _addNewPublicTemplate(fileName, imageSource) {
 }
 
 function _addNewLocalTemplate(fileName, imageSource) {
-	return localStorage.saveTemplateLocally(imageName, memeImageSource);	
+	return localStorage.saveTemplateLocally(fileName, imageSource);	
 }
 
 function _getMyMemes(callback) {
