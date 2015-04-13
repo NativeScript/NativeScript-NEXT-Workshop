@@ -1,0 +1,37 @@
+{"content":
+  {"Result":
+    {"Filename":"d3254059-b8c0-4522-8c52-8c52a3ef5d5f.png",
+      "CreatedBy":"00000000-0000-0000-0000-000000000000",
+      "Owner":"00000000-0000-0000-0000-000000000000",
+      "ContentType":"image/png",
+      "CreatedAt":"2015-04-09T21:44:11.547Z",
+      "ModifiedAt":"2015-04-09T21:44:11.547Z",
+      "ModifiedBy":"00000000-0000-0000-0000-000000000000",
+      "Length":956929,
+      "Id":"8e7f8280-df01-11e4-a52b-ad52039904b3",
+      "Storage":"internal",
+      "Uri":"https://bs3.cdn.telerik.com/v1/wFQtgknUo8yPqENA/8e7f8280-df01-11e4-a52b-ad52039904b3"}},
+  "statusCode":200,
+  "headers":
+    {"Server":"nginx",
+    "Content-Type":"application/json;
+    charset=utf-8","X-Powered-By":"Everlive","Content-Length":"495","Connection":"keep-alive","Date":"Thu, 09 Apr 2015 21:44:11 GMT","Access-Control-Allow-Credentials":"true"}}
+
+
+
+    {"content":
+      {"Count":3,
+      "Result":[
+
+        {"Url":"https://bs1.cdn.telerik.com/v1/wFQtgknUo8yPqENA/035a87e0-df06-11e4-a52b-ad52039904b3",
+          "FileName":"bca33c53-5a01-41b5-8e8a-52e2e9331f2d.png",
+          "ImageId":"035a87e0-df06-11e4-a52b-ad52039904b3",
+          "CreatedAt":"2015-04-09T22:16:05.631Z",
+          "ModifiedAt":"2015-04-09T22:16:05.631Z",
+          "CreatedBy":"00000000-0000-0000-0000-000000000000",
+          "ModifiedBy":"00000000-0000-0000-0000-000000000000",
+          "Owner":"00000000-0000-0000-0000-000000000000",
+          "Id":"03e848f0-df06-11e4-a479-058c34790fa7",
+          "Meta":{"Permissions":{"CanRead":true,"CanUpdate":false,"CanDelete":false}}},
+
+        {"Url":"https://bs3.cdn.telerik.com/v1/wFQtgknUo8yPqENA/21f8dc00-df07-11e4-8d35-21d0aaba4af9","FileName":"73579519-477f-490c-ae39-7913e435256b.png","ImageId":"21f8dc00-df07-11e4-8d35-21d0aaba4af9","CreatedAt":"2015-04-09T22:24:06.773Z","ModifiedAt":"2015-04-09T22:24:06.773Z","CreatedBy":"00000000-0000-0000-0000-000000000000","ModifiedBy":"00000000-0000-0000-0000-000000000000","Owner":"00000000-0000-0000-0000-000000000000","Id":"22b0ba50-df07-11e4-b0e9-7d0bdabda5f2","Meta":{"Permissions":{"CanRead":true,"CanUpdate":false,"CanDelete":false}}},{"Url":"https://bs2.cdn.telerik.com/v1/wFQtgknUo8yPqENA/3dc3ba40-df07-11e4-a135-a790acc31f35","FileName":"852b50b3-14b6-4e05-b88f-22dae111dcaa.png","ImageId":"3dc3ba40-df07-11e4-a135-a790acc31f35","CreatedAt":"2015-04-09T22:24:53.064Z","ModifiedAt":"2015-04-09T22:24:53.064Z","CreatedBy":"00000000-0000-0000-0000-000000000000","ModifiedBy":"00000000-0000-0000-0000-000000000000","Owner":"00000000-0000-0000-0000-000000000000","Id":"3e482c80-df07-11e4-a135-a790acc31f35","Meta":{"Permissions":{"CanRead":true,"CanUpdate":false,"CanDelete":false}}}]},"statusCode":200,"headers":{"Etag":"\"190658217\"","Server":"nginx","Content-Type":"application/json; charset=utf-8","Content-Length":"1663","Connection":"keep-alive","Date":"Thu, 09 Apr 2015 22:50:04 GMT","X-Powered-By":"Everlive","Access-Control-Allow-Credentials":"true"}}
