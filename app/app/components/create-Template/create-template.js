@@ -38,29 +38,18 @@ function invokeCamera() {
 
 //Save to localStorage
 exports.saveLocally = function() {
-	saveImageLocally(_viewData.get("imageSource"), _uniqueImageNameForSession);
-
+	templates.addNewLocalTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"));
 	goHome();
-};
-
-function saveImageLocally(memeImageSource, imageName) {
-	var saved = templates.addNewLocalTemplate(imageName, memeImageSource);
-
-	if (!saved) {
-		console.log("Recent meme not saved....");
-	} else {
-		console.log("Recent template saved.");
-	}
 };
 
 //Submit the template to everlive for everyone to use.
 exports.submitToEverlive = function() {
-	templates.addNewPublicTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"))
-		.catch(function (error){
-			console.log("***** ERROR *****", error);
-		});
+	_viewData.set("isBusy", true);
 
-	goHome();
+	templates.addNewPublicTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"))
+	.then(function(){
+		goHome();	
+	});
 };
 
 function goHome() {

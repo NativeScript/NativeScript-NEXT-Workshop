@@ -3,6 +3,8 @@
 	<StackLayout>
 		<Image source="{{ imageSource }}" />
 
+		<ActivityIndicator busy="{{ isBusy }}" width="50" height="50"/>
+
 		<Button text="Save" tap="saveLocally" />
 		<Button text="Submit" tap="submitToEverlive" />
 	</StackLayout>

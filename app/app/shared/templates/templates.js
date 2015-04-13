@@ -20,11 +20,16 @@ module.exports = {
 }
 
 function _addNewPublicTemplate(fileName, imageSource) {
+	localStorage.saveEverliveTemplateLocally(fileName, imageSource);
+	return everlive.addTemplate(fileName, imageSource);
+
+	/*
 	return everlive.addTemplate(fileName, imageSource)
-			.then(function(){
-				//Save locally too, then we don't have to ever download again...
-				localStorage.addEverliveTemplate(fileName, imageSource);
-			});
+		.then(function(){
+			//Save locally too, then we don't have to ever download again...
+			
+		});
+	*/
 }
 
 function _addNewLocalTemplate(fileName, imageSource) {
