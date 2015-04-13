@@ -3,7 +3,6 @@ var imageSourceModule = require("image-source");
 var cameraModule = require("camera");
 
 var templates = require( "../../shared/templates/templates");
-var localStorage = require( "../../shared/local-storage/local-storage");
 var utilities = require( "../../shared/utilities");
 
 var observableModule = require("data/observable");
@@ -45,8 +44,7 @@ exports.saveLocally = function() {
 };
 
 function saveImageLocally(memeImageSource, imageName) {
-	//todo.... pump this through templates... combine with above...
-	var saved = localStorage.saveTemplateLocally(imageName, memeImageSource);
+	var saved = templates.addNewLocalTemplate(imageName, memeImageSource);
 
 	if (!saved) {
 		console.log("Recent meme not saved....");

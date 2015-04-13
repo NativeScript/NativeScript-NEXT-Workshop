@@ -1,5 +1,4 @@
 var imageSource = require("image-source");
-var fs = require("file-system");
 var httpModule = require("http");
 
 var everlive = require("../everlive/everlive");
@@ -15,16 +14,8 @@ module.exports = {
 	addNewPublicTemplate: function(fileName, imageSource) {
 		return _addNewPublicTemplate(fileName, imageSource);
 	},
-
-	//TEMP....
-	list: function() {
-		return templates;
-	},
-	getByIndex: function(index) {
-		return templates[index];
-	},
-	getFromEverlive: function() {
-		return _getTemplatesFromEverlive();
+	addNewLocalTemplate: function(fileName, imageSource) {
+		return _addNewLocalTemplate(fileName, imageSource);	
 	}
 }
 
@@ -34,6 +25,10 @@ function _addNewPublicTemplate(fileName, imageSource) {
 				//Save locally too, then we don't have to ever download again...
 				localStorage.addEverliveTemplate(fileName, imageSource);
 			});
+}
+
+function _addNewLocalTemplate(fileName, imageSource) {
+	return localStorage.saveTemplateLocally(imageName, memeImageSource);	
 }
 
 function _getMyMemes(callback) {
