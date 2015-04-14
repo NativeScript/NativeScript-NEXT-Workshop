@@ -5,8 +5,9 @@
 
 		<ActivityIndicator busy="{{ isBusy }}" width="50" height="50"/>
 
-		<Button text="Save Locally" tap="saveLocally" />
-		<Button text="Submit For Approval" tap="submitToEverlive" />
+		<Button text="Take Picture" tap="startCamera"/>
+		<Button text="Save Locally" tap="saveLocally" isEnabled="{{ pictureTaken }}"/>
+		<Button text="Submit For Approval" tap="submitToEverlive" isEnabled="{{ pictureTaken }}"/>
 	</StackLayout>
 	
 </Page>
