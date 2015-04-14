@@ -12,12 +12,14 @@ Button {
 	color: white;
 }
 
-.settingsDockLabel {
+.settingsLeft {
 	margin-left: 10;
 	width: 100%;
+	horizontal-align: left;
 }
 
-.settingsDockSwitch {
+.settingsRight {
 	margin-right: 10;
+
 	horizontal-align: right;
 }

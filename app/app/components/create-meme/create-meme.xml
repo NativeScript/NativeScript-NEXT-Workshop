@@ -7,13 +7,23 @@
 			<TextField hint="Bottom text" text="{{ bottomText }}" />
 
 			<DockLayout>
-				<Label dock="left" cssClass="settingsDockLabel" text="Text Size" />
-				<Slider dock="right" cssClass="settingsDockSwitch" value="{{ fontSize }}" minValue="10" maxValue="100" />
+				<Label dock="left" cssClass="settingsLeft" text="Text Size" />
+				<Slider dock="right" cssClass="settingsRight" value="{{ fontSize }}" minValue="10" maxValue="100" />
 			</DockLayout>
 			<DockLayout>
-				<Label dock="left" cssClass="settingsDockLabel" text="Black Text" />
-				<Switch dock="right" cssClass="settingsDockSwitch" checked="{{ isBlackText }}" />
+				<Label dock="left" cssClass="settingsLeft" text="Black Text" />
+				<Switch dock="right" cssClass="settingsRight" checked="{{ isBlackText }}" />
 			</DockLayout>
+
+			<!--
+			<GridLayout rows="*, *" columns="100, auto">
+				<Label row="0" col="0" cssClass="settingsLeft" text="Text Size" />
+				<Slider row="0" col="1" cssClass="settingsRight" value="{{ fontSize }}" minValue="10" maxValue="100" />
+			
+				<Label row="1" col="0" cssClass="settingsLeft" text="Black Text" />
+				<Switch row="1" col="1" cssClass="settingsRight" checked="{{ isBlackText }}" />
+			</GridLayout>
+			-->
 			
 			<Button id="saveButton" text="Save" tap="saveLocally" />
 			<Button text="Share" tap="share" />
