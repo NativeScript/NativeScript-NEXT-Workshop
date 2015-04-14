@@ -13,12 +13,14 @@ Button {
 }
 
 .settingsLeft {
-	margin-left: 10;
+	margin: 10;
 	width: 100%;
 	horizontal-align: left;
+	vertical-align: center;
 }
 
 .settingsRight {
 	margin-right: 10;
+	margin-bottom: 10;
 	horizontal-align: right;
 }
