@@ -1,4 +1,4 @@
-var frameModule = require("ui/frame");
+var navigation = require( "../../shared/navigation");
 var imageSourceModule = require("image-source");
 var cameraModule = require("camera");
 
@@ -42,7 +42,7 @@ exports.saveLocally = function() {
 	_viewData.set("isBusy", true);
 	
 	templates.addNewLocalTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"));
-	goHome();
+	navigation.goHome();
 };
 
 //Submit the template to everlive for everyone to use.
@@ -51,10 +51,6 @@ exports.submitToEverlive = function() {
 
 	templates.addNewPublicTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"))
 	.then(function(){
-		goHome();	
+		navigation.goHome();
 	});
 };
-
-function goHome() {
-	frameModule.topmost().navigate(global.baseViewDirectory + "home/home");
-}

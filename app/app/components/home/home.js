@@ -1,6 +1,5 @@
 var applicationModule = require("application");
-var imageSourceModule = require("image-source");
-var frameModule = require("ui/frame");
+var navigation = require( "../../shared/navigation");
 var imageModule = require("ui/image");
 var gesturesModule = require("ui/gestures");
 var dialogsModule = require("ui/dialogs");
@@ -16,11 +15,7 @@ exports.load = function(args) {
 
 	// Make sure we're on iOS before configuring the navigation bar
 	if (applicationModule.ios) {
-		// Get access to the native iOS UINavigationController
-		var controller = frameModule.topmost().ios.controller;
-		
-		// Call the UINavigationController's setNavigationBarHidden method
-		controller.navigationBarHidden = true;
+		navigation.hideIOSNavigationBar();
 	}
 
 	populateTemplates();
@@ -28,7 +23,7 @@ exports.load = function(args) {
 };
 
 exports.createNewTemplate = function() {
-	frameModule.topmost().navigate(global.baseViewDirectory + "create-template/create-template");
+	navigation.goCreateTemplate();
 };
 
 function populateTemplates() {
@@ -143,9 +138,6 @@ function clearOldMemes(container) {
 
 function templateSelected(selectedImageSource) {
 	if ( selectedImageSource ) {
-		frameModule.topmost().navigate({
-			moduleName: global.baseViewDirectory + "create-meme/create-meme",
-			context: selectedImageSource
-		});
+		navigation.goCreateMeme(selectedImageSource);
 	}
 }

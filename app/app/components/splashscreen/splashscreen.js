@@ -1,5 +1,5 @@
 var observableModule = require("data/observable");
-var frameModule = require("ui/frame");
+var navigation = require( "../../shared/navigation");
 
 var templates = require( "../../shared/templates/templates");
 
@@ -14,7 +14,7 @@ exports.load = function(args) {
 	_page.bindingContext = _viewData;
 	
 	setTimeout(function () {
-		frameModule.topmost().navigate(global.baseViewDirectory + "home/home");
+		navigation.goHome();
 	}, 100);
 	
 };
