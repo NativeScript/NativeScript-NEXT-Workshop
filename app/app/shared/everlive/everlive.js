@@ -16,14 +16,18 @@ module.exports = {
 }
 
 function _getTemplatesIndex() {
-	var getUrl = global.everliveBaseAddress + "/TemplateIndex";
+	var getUrl = global.everliveFunctionBaseAddress + "/GetTemplates";
 	return _getFromEverlive(getUrl);
 }
 
 function _addTemplate (fileName, imageSource) {
 	return _uploadFile(fileName, imageSource)
 		.then(function(uploadResponse){
+			console.log("***** RESULT FROM EVERLIVE:", JSON.stringify(uploadResponse));
+
 			var result = JSON.parse(uploadResponse.content).Result;
+			
+			console.log("***** RESULT FROM EVERLIVE after:", result.Id);
 			_addTemplateToContentType(fileName, result.Id, result.Uri);
 		}); 
 }

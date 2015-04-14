@@ -17,6 +17,7 @@ exports.loaded = function(args) {
 
 	_uniqueImageNameForSession = utilities.generateUUID() + ".png";
 
+	_viewData.set("isBusy", false);
 	_viewData.set("imageSource", null);
 	invokeCamera();
 };

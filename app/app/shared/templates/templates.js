@@ -84,10 +84,12 @@ function _getTemplatesFromEverlive(callback) {
 
 	everlive.getTemplateIndex()
 		.then(function(result) {
-			var results = JSON.parse(result.content);
-			console.log("***** found templates on everlive", results.Count);
+			console.log("***** Everlive GetTemplates Payload:", JSON.stringify(result));
 
-			results.Result.forEach(function(template) {
+			var results = JSON.parse(result.content);
+			console.log("***** Everlive Templates Found:", results.length);
+			
+			results.forEach(function(template) {
 				//Before we download, check to see if we already have it...
 				if (!localStorage.doesEverliveTemplateExist(template.FileName)) {
 					console.log("**** Getting " + template.Url + " ****");
