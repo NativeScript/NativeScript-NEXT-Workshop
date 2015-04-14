@@ -11,7 +11,7 @@ var _viewData = new observableModule.Observable();
 var _page,
 	_uniqueImageNameForSession;
 
-exports.loaded = function(args) {
+exports.navigatedTo = function(args) {
 	_page = args.object;
 	_page.bindingContext = _viewData;
 
