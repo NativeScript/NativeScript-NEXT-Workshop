@@ -10,19 +10,19 @@ var viewModel = new observable.Observable();
 viewModel.prepareNewMeme = function(baseImage) {
 	this.selectedImage = baseImage;
 
-    this.set("topText", "");
-    this.set("bottomText", "");
-    this.set("fontSize", 40);
-    this.set("isBlackText", false);
-    this.set("memeImage", baseImage);
+	this.set("topText", "");
+	this.set("bottomText", "");
+	this.set("fontSize", 40);
+	this.set("isBlackText", false);
+	this.set("memeImage", baseImage);
 
-    this.uniqueImageName = utilities.generateUUID() + ".png";
+	this.uniqueImageName = utilities.generateUUID() + ".png";
 };
 
 viewModel.refreshMeme = function () {
-    var image = imageManipulation.addText(this.selectedImage, this.topText, this.bottomText, this.fontSize, this.isBlackText);
+	var image = imageManipulation.addText(this.selectedImage, this.topText, this.bottomText, this.fontSize, this.isBlackText);
 
-    this.set("memeImage", image);
+	this.set("memeImage", image);
 };
 
 viewModel.saveLocally = function () {
@@ -33,9 +33,9 @@ viewModel.saveLocally = function () {
 		console.log("New meme not saved....");
 	} else {
 		var options = {
-		    title: "Meme Saved",
-		    message: "Congratulations, Meme Saved!",
-		    okButtonText: "OK"
+			title: "Meme Saved",
+			message: "Congratulations, Meme Saved!",
+			okButtonText: "OK"
 		};
 
 		dialogsModule.alert(options);
@@ -47,12 +47,13 @@ viewModel.share = function() {
 };
 
 //Add event listener to refresh the memeImage every time there is a change to the params
-viewModel.addEventListener(observable.knownEvents.propertyChange, function (changes) {
-    //skip if memeImage changes
-    if (changes.propertyName === "memeImage")
-        return;
+viewModel.addEventListener(observable.knownEvents.propertyChange, function(changes) {
+	//skip if memeImage changes
+	if (changes.propertyName === "memeImage") {
+		return;
+	}
 
-    viewModel.refreshMeme();
+	viewModel.refreshMeme();
 });
 
 exports.viewModel = viewModel;
