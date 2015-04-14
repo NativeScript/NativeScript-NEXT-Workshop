@@ -20,6 +20,6 @@ Button {
 
 .settingsRight {
 	margin-right: 10;
-
+	width: 100%;
 	horizontal-align: right;
 }
