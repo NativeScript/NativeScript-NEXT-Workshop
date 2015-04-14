@@ -39,6 +39,8 @@ function invokeCamera() {
 
 //Save to localStorage
 exports.saveLocally = function() {
+	_viewData.set("isBusy", true);
+	
 	templates.addNewLocalTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"));
 	goHome();
 };
