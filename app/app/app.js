@@ -1,5 +1,14 @@
 var application = require("application");
+var frameModule = require("ui/frame");
+
 application.mainModule = "app/components/splashscreen/splashscreen";
+
+application.onResume = function (context) {	
+	console.log("***** application.onResume *****");
+	
+	//var topmost = frameModule.topmost();
+	//topmost.navigate(global.baseViewDirectory + "home/home");
+};
 
 global.baseViewDirectory = "app/components/";
 global.recentMemeFolderName = "myMemes";

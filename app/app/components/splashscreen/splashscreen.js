@@ -15,6 +15,6 @@ exports.load = function(args) {
 	
 	setTimeout(function () {
 		frameModule.topmost().navigate(global.baseViewDirectory + "home/home");
-	}, 500);
+	}, 100);
 	
 };
