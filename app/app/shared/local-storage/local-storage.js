@@ -95,12 +95,16 @@ function _doesEverliveTemplateExist(imageName) {
 
 function _saveTemplateLocally(imageName, imageSource) {
 	var fullPath = fs.path.join(_localTemplateFolder.path, imageName);
+	console.log("***** Saved image to:", fullPath);
+
 	var saved = imageSource.saveToFile(fullPath, imageSourceModule.ImageFormat.PNG);
 	return saved;
 }
 
 function _saveEverliveTemplateLocally(imageName, imageSource) {
 	var fullPath = fs.path.join(_everliveTemplateFolder.path, imageName);
+	console.log("***** Saved template to:", fullPath);
+	
 	var saved = imageSource.saveToFile(fullPath, imageSourceModule.ImageFormat.PNG);
 	return saved;
 }

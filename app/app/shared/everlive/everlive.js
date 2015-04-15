@@ -23,12 +23,15 @@ function _getTemplatesIndex() {
 function _addTemplate (fileName, imageSource) {
 	return _uploadFile(fileName, imageSource)
 		.then(function(uploadResponse){
-			console.log("***** RESULT FROM EVERLIVE:", JSON.stringify(uploadResponse));
+			console.log("***** Everlive upload image status code", uploadResponse.statusCode);
+			console.log("***** Everlive payload result:", JSON.stringify(uploadResponse));
 
 			var result = JSON.parse(uploadResponse.content).Result;
 			
 			console.log("***** RESULT FROM EVERLIVE after:", result.Id);
 			_addTemplateToContentType(fileName, result.Id, result.Uri);
+		}).catch(function(error){
+			console.log("***** AM I HERE 4", error);
 		}); 
 }
 

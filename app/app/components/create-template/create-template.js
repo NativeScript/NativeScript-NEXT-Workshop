@@ -55,6 +55,7 @@ exports.submitToEverlive = function() {
 
 	templates.addNewPublicTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"))
 	.then(function(){
+		console.log("***** AM I HERE");
 		navigation.goHome();
 	});
 };
