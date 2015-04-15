@@ -27,7 +27,7 @@ function invokeCamera() {
 	console.log("***** INVOKING CAMERA *****");
 
 	//TODO: bug here with the promise...
-	cameraModule.takePicture()
+	cameraModule.takePicture(750, 450)
 		.then(function(r) {
 			console.log("***** Invoke Camera Return *****", r);
 
@@ -40,16 +40,8 @@ function invokeCamera() {
 	//TODO... if on cancel... we should show the camera roll to choose a picture from???...
 }
 
-//Start camera
-exports.startCamera = function() {
-	invokeCamera();
-}
-
 //Save to localStorage
 exports.saveLocally = function() {
-	if(_viewData.pictureTaken === false)
-		return;
-	
 	_viewData.set("isBusy", true);
 
 	templates.addNewLocalTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"));
@@ -59,9 +51,6 @@ exports.saveLocally = function() {
 
 //Submit the template to everlive for everyone to use.
 exports.submitToEverlive = function() {
-	if(_viewData.pictureTaken === false)
-		return;
-	
 	_viewData.set("isBusy", true);
 
 	templates.addNewPublicTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"))

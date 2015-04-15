@@ -18,23 +18,28 @@ var UIImagePickerControllerDelegateImpl = (function (_super) {
         this._callback = callback;
         return this;
     };
+    UIImagePickerControllerDelegateImpl.prototype.initWithCallbackWidthAndHeight = function (callback, width, height) {
+        this._callback = callback;
+        this._width = width;
+        this._height = height;
+        return this;
+    };
     UIImagePickerControllerDelegateImpl.prototype.imagePickerControllerDidFinishPickingMediaWithInfo = function (picker, info) {
         if (info) {
             var source = info.valueForKey(UIImagePickerControllerOriginalImage);
-
-            // TJ's custom configuration to resize images to a reasonable size
-            var newSize = CGSizeMake(750, 450);
-            UIGraphicsBeginImageContext(newSize);
-            source.drawInRect(
-                CGRectMake(0, 0, newSize.width, newSize.height)
-            );
-            source = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-
             if (source) {
-                var image = imageSource.fromNativeSource(source);
+                var image = null;
+                if (this._width || this._height) {
+                    console.log("Image resized!!!");
+                    var newSize = CGSizeMake(this._width, this._height);
+                    UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0);
+                    source.drawInRect(CGRectMake(0, 0, newSize.width, newSize.height));
+                    image = UIGraphicsGetImageFromCurrentImageContext();
+                    UIGraphicsEndImageContext();
+                }
+                var imageSourceResult = image ? imageSource.fromNativeSource(image) : imageSource.fromNativeSource(source);
                 if (this._callback) {
-                    this._callback(image);
+                    this._callback(imageSourceResult);
                 }
             }
         }
@@ -46,10 +51,18 @@ var UIImagePickerControllerDelegateImpl = (function (_super) {
     UIImagePickerControllerDelegateImpl.ObjCProtocols = [UIImagePickerControllerDelegate];
     return UIImagePickerControllerDelegateImpl;
 })(NSObject);
-exports.takePicture = function () {
+exports.takePicture = function (width, height) {
     return new Promise(function (resolve, reject) {
         var imagePickerController = new UIImagePickerController();
-        var listener = UIImagePickerControllerDelegateImpl.new().initWithCallback(resolve);
+        var listener = null;
+        var reqWidth = width || 0;
+        var reqHeight = height || reqWidth;
+        if (reqWidth && reqHeight) {
+            listener = UIImagePickerControllerDelegateImpl.new().initWithCallbackWidthAndHeight(resolve, reqWidth, reqHeight);
+        }
+        else {
+            listener = UIImagePickerControllerDelegateImpl.new().initWithCallback(resolve);
+        }
         imagePickerController.delegate = listener;
         if (UIDevice.currentDevice().model !== "iPhone Simulator") {
             imagePickerController.mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.UIImagePickerControllerSourceTypeCamera);

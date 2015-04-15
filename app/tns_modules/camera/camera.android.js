@@ -2,9 +2,11 @@ var imageSource = require("image-source");
 var appModule = require("application");
 var fileSystem = require("file-system");
 var REQUEST_IMAGE_CAPTURE = 3453;
-exports.takePicture = function () {
+exports.takePicture = function (width, height) {
     return new Promise(function (resolve, reject) {
         try {
+            var reqWidth = width || 0;
+            var reqHeight = height || reqWidth;
             var takePictureIntent = new android.content.Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             var dateStamp = createDateTimeStamp();
             var tempPicturePath = fileSystem.path.join(appModule.android.currentContext.getExternalFilesDir(null).getAbsolutePath(), "cameraPicture_" + dateStamp + ".jpg");
@@ -16,9 +18,14 @@ exports.takePicture = function () {
                 appModule.android.onActivityResult = function (requestCode, resultCode, data) {
                     appModule.android.onActivityResult = previousResult;
                     if (requestCode === REQUEST_IMAGE_CAPTURE && resultCode === android.app.Activity.RESULT_OK) {
-                        var tempSource = imageSource.fromFile(tempPicturePath);
-                        var scaledBitmap = android.graphics.Bitmap.createScaledBitmap(tempSource.android, 750, 450, false);
-                        resolve(imageSource.fromNativeSource(scaledBitmap));
+                        var options = new android.graphics.BitmapFactory.Options();
+                        options.inJustDecodeBounds = true;
+                        android.graphics.BitmapFactory.decodeFile(tempPicturePath, options);
+                        var sampleSize = calculateInSampleSize(options.outWidth, options.outHeight, reqWidth, reqHeight);
+                        var finalBitmapOptions = new android.graphics.BitmapFactory.Options();
+                        finalBitmapOptions.inSampleSize = sampleSize;
+                        var bitmap = android.graphics.BitmapFactory.decodeFile(tempPicturePath, finalBitmapOptions);
+                        resolve(imageSource.fromNativeSource(bitmap));
                     }
                 };
                 appModule.android.foregroundActivity.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -30,6 +37,17 @@ exports.takePicture = function () {
             }
         }
     });
+};
+var calculateInSampleSize = function (imageWidth, imageHeight, reqWidth, reqHeight) {
+    var sampleSize = 1;
+    if (imageWidth > reqWidth && imageHeight > reqHeight) {
+        var halfWidth = imageWidth / 2;
+        var halfHeight = imageHeight / 2;
+        while ((halfWidth / sampleSize) > reqWidth && (halfHeight / sampleSize) > reqHeight) {
+            sampleSize *= 2;
+        }
+    }
+    return sampleSize;
 };
 var createDateTimeStamp = function () {
     var result = "";
