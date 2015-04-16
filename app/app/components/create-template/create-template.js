@@ -1,7 +1,8 @@
-var navigation = require( "../../shared/navigation");
+var applicationModule = require("application");
 var imageSourceModule = require("image-source");
 var cameraModule = require("camera");
 
+var navigation = require("../../shared/navigation");
 var templates = require( "../../shared/templates/templates");
 var utilities = require( "../../shared/utilities");
 
@@ -27,7 +28,9 @@ function invokeCamera() {
 	console.log("***** INVOKING CAMERA *****");
 
 	//TODO: bug here with the promise...
-	cameraModule.takePicture(750, 450)
+	cameraModule.takePicture(
+		applicationModule.ios ? 300 : 750,
+		applicationModule.ios ? 200 : 450)
 		.then(function(r) {
 			console.log("***** Invoke Camera Return *****", r);
 
