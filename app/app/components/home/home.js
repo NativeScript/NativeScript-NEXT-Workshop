@@ -9,9 +9,24 @@ var localStorage = require( "../../shared/local-storage/local-storage");
 var socialShare = require("../social-share/social-share");
 
 var _page;
+var _observers;
+var _containers;
 
 exports.load = function(args) {
 	_page = args.object;
+	
+	_observers = [];
+	_containers = [];
+
+	_page.onNavigatingFrom = function(){
+		_observers.forEach(function(observer){
+			observer.disconnect();
+		});
+
+		_containers.forEach(function(container){
+			clearOldMemes(container);
+		});
+	};
 
 	// Make sure we're on iOS before configuring the navigation bar
 	if (applicationModule.ios) {
@@ -29,13 +44,15 @@ exports.createNewTemplate = function() {
 function populateTemplates() {
 	//Get our parrent element such that we can add our items to it dynamically
 	var container = _page.getViewById("templateContainer");
-	clearOldMemes(container);
-
+	//clearOldMemes(container);
+	_containers.push(container);
+	
 	templates.getTemplates(function(imageSource){						
 		var image = new imageModule.Image();
 		image.source = imageSource;
 			
-		var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) });
+		_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) }));
+		//image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) });
 				
 		//add to the element.
 		container.addChild(image);
@@ -45,7 +62,8 @@ function populateTemplates() {
 function populateMyMemes() {
 	//Get our parent element such that we can add our items to it dynamically
 	var container = _page.getViewById("myMemeContainer");
-	clearOldMemes(container);
+	//clearOldMemes(container);
+	_containers.push(container);
 
 	templates.getMyMemes(function(imageSource, fileName){
 		//Create a new image element 
@@ -53,7 +71,8 @@ function populateMyMemes() {
 		image.source = imageSource;
 
 		//What do to...  share delete?
-		var observer = image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) });
+		_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) }));
+		//image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) });
 		
 		//add to the element.
 		container.addChild(image);
@@ -118,6 +137,7 @@ function deleteAllMemes() {
 }
 
 function clearOldMemes(container) {
+
 	/*
 	//you could loop through like this but the visual tree will have to reindex the items and shift things
 	while (container.getChildrenCount() > 0) {

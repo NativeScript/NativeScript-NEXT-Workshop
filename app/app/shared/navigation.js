@@ -4,25 +4,33 @@ var applicationModule = require("application");
 module.exports = {
 	goHome: function () {
 		isHome = true;
-		frameModule.topmost().navigate(global.baseViewDirectory + "home/home");
+		frameModule.topmost().navigate({
+			moduleName: global.baseViewDirectory + "home/home",
+			animated: true
+		});
 	},
 	goCreateMeme: function (imageSource) {
 		isHome = false;
 		
 		frameModule.topmost().navigate({
 			moduleName: global.baseViewDirectory + "create-meme/create-meme",
-			context: imageSource
+			context: imageSource,
+			animated: true
 		});
 		
 	},
 	goCreateTemplate: function () {
 		isHome = false;
-		frameModule.topmost().navigate(global.baseViewDirectory + "create-template/create-template");
+		frameModule.topmost().navigate({
+			moduleName: global.baseViewDirectory + "create-template/create-template",
+			animated: true
+		});
 	},
 	goBack: function () {
 		if(isHome === false)
 			frameModule.topmost().goBack();
 	},
+	
 	showIOSNavigationBar: function() {
 		// Make sure we're on iOS before configuring the navigation bar
 		if (applicationModule.ios) {

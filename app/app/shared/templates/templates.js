@@ -20,18 +20,8 @@ module.exports = {
 }
 
 function _addNewPublicTemplate(fileName, imageSource) {
-	console.log("***** AM I HERE 1 ");
 	localStorage.saveEverliveTemplateLocally(fileName, imageSource);
-	console.log("***** AM I HERE 2");
 	return everlive.addTemplate(fileName, imageSource);
-
-	/*
-	return everlive.addTemplate(fileName, imageSource)
-		.then(function(){
-			//Save locally too, then we don't have to ever download again...
-			
-		});
-	*/
 }
 
 function _addNewLocalTemplate(fileName, imageSource) {
