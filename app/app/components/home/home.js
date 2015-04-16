@@ -46,15 +46,19 @@ function populateTemplates() {
 	var container = _page.getViewById("templateContainer");
 	//clearOldMemes(container);
 	_containers.push(container);
-	
+
 	templates.getTemplates(function(imageSource){
 
 		var image = new imageModule.Image();
 		image.source = imageSource;
-			
-		//_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) }));
-		image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) });
-				
+
+		_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () {
+			templateSelected(imageSource);
+		}));
+		image.observe(gesturesModule.GestureTypes.Tap, function () {
+			templateSelected(imageSource);
+		});
+
 		//add to the element.
 		container.addChild(image);
 	});
@@ -72,9 +76,13 @@ function populateMyMemes() {
 		image.source = imageSource;
 
 		//What do to...  share delete?
-		//_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) }));
-		image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) });
-		
+		_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () {
+			myMemesActionSheet(imageSource, fileName);
+		}));
+		image.observe(gesturesModule.GestureTypes.Tap, function () {
+			myMemesActionSheet(imageSource, fileName);
+		});
+
 		//add to the element.
 		container.addChild(image);
 	});
