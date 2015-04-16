@@ -18,15 +18,7 @@ exports.load = function(args) {
 	_observers = [];
 	_containers = [];
 
-	_page.onNavigatingFrom = function(){
-		_observers.forEach(function(observer){
-			observer.disconnect();
-		});
-
-		_containers.forEach(function(container){
-			clearOldMemes(container);
-		});
-	};
+	_page.onNavigatingFrom = xxx();
 
 	// Make sure we're on iOS before configuring the navigation bar
 	if (applicationModule.ios) {
@@ -36,6 +28,16 @@ exports.load = function(args) {
 	populateTemplates();
 	populateMyMemes();
 };
+
+var xxx = function () {
+	_observers.forEach(function(observer){
+		observer.disconnect();
+	});
+
+	_containers.forEach(function(container){
+		clearOldMemes(container);
+	});
+}
 
 exports.createNewTemplate = function() {
 	navigation.goCreateTemplate();
@@ -52,8 +54,8 @@ function populateTemplates() {
 		var image = new imageModule.Image();
 		image.source = imageSource;
 			
-		//_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) }));
-		image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) });
+		_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) }));
+		//image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) });
 				
 		//add to the element.
 		container.addChild(image);
@@ -72,8 +74,8 @@ function populateMyMemes() {
 		image.source = imageSource;
 
 		//What do to...  share delete?
-		//_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) }));
-		image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) });
+		_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) }));
+		//image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) });
 		
 		//add to the element.
 		container.addChild(image);
