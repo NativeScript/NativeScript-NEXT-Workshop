@@ -15,10 +15,9 @@ var _containers;
 exports.load = function(args) {
 	_page = args.object;
 	
-	//_observers = [];
-	//_containers = [];
+	_observers = [];
+	_containers = [];
 
-	/*
 	_page.onNavigatingFrom = function(){
 		_observers.forEach(function(observer){
 			observer.disconnect();
@@ -29,7 +28,6 @@ exports.load = function(args) {
 		});
 	};
 
-	*/
 	// Make sure we're on iOS before configuring the navigation bar
 	if (applicationModule.ios) {
 		navigation.hideIOSNavigationBar();
@@ -46,10 +44,11 @@ exports.createNewTemplate = function() {
 function populateTemplates() {
 	//Get our parrent element such that we can add our items to it dynamically
 	var container = _page.getViewById("templateContainer");
-	clearOldMemes(container);
-	//_containers.push(container);
+	//clearOldMemes(container);
+	_containers.push(container);
 	
-	templates.getTemplates(function(imageSource){						
+	templates.getTemplates(function(imageSource){
+
 		var image = new imageModule.Image();
 		image.source = imageSource;
 			
