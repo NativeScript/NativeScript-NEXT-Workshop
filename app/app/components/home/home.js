@@ -15,9 +15,10 @@ var _containers;
 exports.load = function(args) {
 	_page = args.object;
 	
-	_observers = [];
-	_containers = [];
+	//_observers = [];
+	//_containers = [];
 
+	/*
 	_page.onNavigatingFrom = function(){
 		_observers.forEach(function(observer){
 			observer.disconnect();
@@ -28,6 +29,7 @@ exports.load = function(args) {
 		});
 	};
 
+	*/
 	// Make sure we're on iOS before configuring the navigation bar
 	if (applicationModule.ios) {
 		navigation.hideIOSNavigationBar();
@@ -44,15 +46,15 @@ exports.createNewTemplate = function() {
 function populateTemplates() {
 	//Get our parrent element such that we can add our items to it dynamically
 	var container = _page.getViewById("templateContainer");
-	//clearOldMemes(container);
-	_containers.push(container);
+	clearOldMemes(container);
+	//_containers.push(container);
 	
 	templates.getTemplates(function(imageSource){						
 		var image = new imageModule.Image();
 		image.source = imageSource;
 			
-		_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) }));
-		//image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) });
+		//_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) }));
+		image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) });
 				
 		//add to the element.
 		container.addChild(image);
@@ -71,8 +73,8 @@ function populateMyMemes() {
 		image.source = imageSource;
 
 		//What do to...  share delete?
-		_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) }));
-		//image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) });
+		//_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) }));
+		image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) });
 		
 		//add to the element.
 		container.addChild(image);
