@@ -31,7 +31,7 @@ function populateTemplates() {
 	var container = _page.getViewById("templateContainer");
 	clearOldMemes(container);
 
-	templates.getTemplates(function(imageSource){						
+	templates.getTemplates(function(imageSource){
 		var image = new imageModule.Image();
 		image.source = imageSource;
 			

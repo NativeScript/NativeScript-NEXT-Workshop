@@ -32,7 +32,7 @@ module.exports = {
 			// Call the UINavigationController's setNavigationBarHidden method
 			controller.navigationBarHidden = false;
 		}
-    },
+	},
 	hideIOSNavigationBar: function() {
 		// Make sure we're on iOS before configuring the navigation bar
 		if (applicationModule.ios) {
@@ -42,5 +42,5 @@ module.exports = {
 			// Call the UINavigationController's setNavigationBarHidden method
 			controller.navigationBarHidden = true;
 		}
-    }
+	}
 }
