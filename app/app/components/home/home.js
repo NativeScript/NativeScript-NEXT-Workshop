@@ -14,11 +14,7 @@ var _containers;
 
 exports.load = function(args) {
 	_page = args.object;
-	
-	_observers = [];
-	_containers = [];
-
-	_page.onNavigatingFrom = xxx();
+	_page.onNavigatingFrom = function(){};
 
 	// Make sure we're on iOS before configuring the navigation bar
 	if (applicationModule.ios) {
@@ -29,16 +25,6 @@ exports.load = function(args) {
 	populateMyMemes();
 };
 
-var xxx = function () {
-	_observers.forEach(function(observer){
-		observer.disconnect();
-	});
-
-	_containers.forEach(function(container){
-		clearOldMemes(container);
-	});
-}
-
 exports.createNewTemplate = function() {
 	navigation.goCreateTemplate();
 };
@@ -46,16 +32,16 @@ exports.createNewTemplate = function() {
 function populateTemplates() {
 	//Get our parrent element such that we can add our items to it dynamically
 	var container = _page.getViewById("templateContainer");
-	//clearOldMemes(container);
-	_containers.push(container);
+	clearOldMemes(container);
 	
 	templates.getTemplates(function(imageSource){
 
 		var image = new imageModule.Image();
 		image.source = imageSource;
-			
-		_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) }));
-		//image.observe(gesturesModule.GestureTypes.Tap, function () { templateSelected(imageSource) });
+		
+		image.observe(gesturesModule.GestureTypes.Tap, function () { 
+			templateSelected(imageSource); 
+		});
 				
 		//add to the element.
 		container.addChild(image);
@@ -65,8 +51,7 @@ function populateTemplates() {
 function populateMyMemes() {
 	//Get our parent element such that we can add our items to it dynamically
 	var container = _page.getViewById("myMemeContainer");
-	//clearOldMemes(container);
-	_containers.push(container);
+	clearOldMemes(container);
 
 	templates.getMyMemes(function(imageSource, fileName){
 		//Create a new image element 
@@ -74,8 +59,9 @@ function populateMyMemes() {
 		image.source = imageSource;
 
 		//What do to...  share delete?
-		_observers.push(image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) }));
-		//image.observe(gesturesModule.GestureTypes.Tap, function () { myMemesActionSheet(imageSource, fileName) });
+		image.observe(gesturesModule.GestureTypes.Tap, function () {
+		 	myMemesActionSheet(imageSource, fileName); 
+		});
 		
 		//add to the element.
 		container.addChild(image);
