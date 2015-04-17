@@ -1,4 +1,4 @@
-# TelerikNEXT 2015 NativeScript Workshop
+# Telerik's NEXT 2015 NativeScript Workshop
 
 This repository contains the presentations and app used in the “NativeScript Deep Dive” workshop at [TelerikNEXT](http://teleriknext.com/).
 
