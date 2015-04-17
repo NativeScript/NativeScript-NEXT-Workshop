@@ -51,21 +51,21 @@ Mac
 
 1. Your first NativeScript Application.
 
-** [Instructions](http://github.com)
-** [Starting Solution](http://github.com)
-** [Finished Solution](http://github.com)
+* [Instructions](http://github.com)
+* [Starting Solution](http://github.com)
+* [Finished Solution](http://github.com)
 
 2. Going beyond the basics.
 
-** [Instructions](http://github.com)
-** [Starting Solution](http://github.com)
-** [Finished Solution](http://github.com)
+* [Instructions](http://github.com)
+* [Starting Solution](http://github.com)
+* [Finished Solution](http://github.com)
 
 3. Diving in deep.
 
-** [Instructions](http://github.com)
-** [Starting Solution](http://github.com)
-** [Finished Solution](http://github.com)
+* [Instructions](http://github.com)
+* [Starting Solution](http://github.com)
+* [Finished Solution](http://github.com)
 
 # Running the application
  
