@@ -12,7 +12,7 @@ This repository contains the presentations and app used in the “NativeScript D
 
 ## Slides
 
-* 1) [NativeScript Intro](1-intro/intro.pdf)
+* 1) [NativeScript Intro](1-Intro/intro.pdf)
 * 2) [Data, styling, layouts, and more]()
 * 3) [MVVM, modules, TypeScript, and extensibility]()
 
