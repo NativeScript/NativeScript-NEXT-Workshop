@@ -11,3 +11,6 @@ There are a number of ways to use NativeScript, including an open source CLI, an
 * Select “Clone repository”, use https://step-1-link.git for a Repository Uri, and “MemeGen Lab 1” for a project name.
 * Click the green “Create project” button.
 
+## Step 1: Deploy to companion app
+
+After creating the project you're taken into the AppBuilder environment. AppBuilder offers a lot of functionality—everything from a coding IDE to
