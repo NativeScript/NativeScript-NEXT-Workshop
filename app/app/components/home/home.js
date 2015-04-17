@@ -9,8 +9,6 @@ var localStorage = require( "../../shared/local-storage/local-storage");
 var socialShare = require("../social-share/social-share");
 
 var _page;
-var _observers;
-var _containers;
 
 exports.load = function(args) {
 	_page = args.object;
