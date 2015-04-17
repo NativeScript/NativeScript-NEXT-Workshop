@@ -27,18 +27,18 @@ Our goal of this workshop is to introduce you to NativeScript or {N}. NativeScri
 We’ve chosen to walk your through building mobile application which exercises {N}, the Telerik Platform and is fun. How do you create fun, well we create Memes of course. Our day will be highly interactive with a good mixture of presentations and hand on coding. At the end, you have an app, we create memes. 
 
 # WorkShop Agenda
-* 9:00AM - 9:30am 	  - Setup and Configuration
-* 9:30AM - 10:30am  - Introductions and Welcome to NativeScript {N}, @tjvantoll
-* 10:30AM - 11:00am - [Lab #1](http://tbd.com) 
-* 11:00AM - 11:15am - Break 
-* 11:15AM - 12:15pm - [Beyond the Basics, @csell5]() 
-* 12:15pm - 12:30pm - [Lab #2 Start]()
-* 12:30pm - 1:30pm  - Lunch
-* 1:30pm - 2:00pm   - [Lab #2 Continued]()
-* 2:00pm - 3:00pm 	  - [Going deep with {N}, @sebawita]() 
-* 3:00pm - 3:15pm 	  - Break
-* 3:15pm - 4:00pm 	  - [Lab #3]()
-* 4:00pm - 4:30pm 	  - Panel Q&A and Wrap Up
+* 09:00 - 09:30 	  - Setup and Configuration
+* 09:30 - 10:30  - Introductions and Welcome to NativeScript {N}, @tjvantoll
+* 10:30 - 11:00 - [Lab #1](http://tbd.com) 
+* 11:00 - 11:15 - Break 
+* 11:15 - 12:15 - [Beyond the Basics, @csell5]() 
+* 12:15 - 12:30 - [Lab #2 Start]()
+* 12:30 - 13:30 - Lunch
+* 13:30 - 14:00 - [Lab #2 Continued]()
+* 14:00 - 15:00 	- [Going deep with {N}, @sebawita]() 
+* 15:00 - 15:15 	- Break
+* 15:15 - 16:00 	- [Lab #3]()
+* 16:00 - 16:30 	- Panel Q&A and Wrap Up
 
 # Presentations
 
