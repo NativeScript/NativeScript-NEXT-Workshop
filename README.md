@@ -55,20 +55,15 @@ The lab steps are all contained in this repository which serves as our master re
 
 Now of course we’re human, so if you find a mistake, please feel free to submit a patch.
 
-1. Your first {N} Application.
-
+1. Your first {N} app
 * [Instructions](http://github.com)
 * [Starting Solution](http://github.com)
 * [Finished Solution](http://github.com)
-
-2. Beyond the basics.
-
+2. Beyond the basics
 * [Instructions](http://github.com)
 * [Starting Solution](http://github.com)
 * [Finished Solution](http://github.com)
-
-3. Diving in deep.
-
+3. Diving in deep
 * [Instructions](http://github.com)
 * [Starting Solution](http://github.com)
 * [Finished Solution](http://github.com)
