@@ -1,4 +1,4 @@
-# TelerikNEXT 2015 NativeScript {N} Workshop
+# 2015 TelerikNEXT NativeScript {N} Workshop
 
 Contributors: [Clark Sell](http://csell.net) & [TJ Vantoll](http://tjvantoll.com/) & Sebastian Witalec. You can find us on Twitter at: [@csell5](https://twitter.com/csell5), [@tjvantoll](https://twitter.com/tjvantoll), [@sebawita](https://twitter.com/sebawita)
 
