@@ -47,6 +47,13 @@ We’ve chosen to walk your through building mobile application which exercises 
 3. [Going deep with {N}]() 
 
 # Labs
+Each lab is structured in two distinct parts. A starting project and a finished project. Each lab builds on what you completed in the lab prior. While we do provide a starting point each time it’s not required for you to start there if you would like to advance your own project. 
+
+You will find each lab in it’s own GitHub repository. Our desire is to easily enable you to run each of these side by side in Telerik’s AppBuilder. 
+
+The lab steps are all contained in this repository which serves as our master repository.
+
+Now of course we’re human, so if you find a mistake, please feel free to submit a patch.
 
 1. Your first {N} Application.
 
