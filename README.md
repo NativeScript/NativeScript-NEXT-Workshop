@@ -80,7 +80,7 @@ To run the application found in *this* repository it requires the [NativeScript 
 * [{N} on Twitter](https://twitter.com/nativescript/)
 * [{N} on StackOverflow](http://stackoverflow.com/questions/tagged/nativescript)
 * [{N} on IRC](http://webchat.freenode.net/?channels=nativescript)
-* [{N} on IRC](https://www.youtube.com/playlist?list=PLvmaC-XMqeBbaD1EoQwHmnxiENYBeNckt)
+* [{N} on YouTube](https://www.youtube.com/playlist?list=PLvmaC-XMqeBbaD1EoQwHmnxiENYBeNckt)
 
 * [Telerik Platform](http://platform.telerik.com)
 * [{N} and the Telerik Platform](http://docs.telerik.com/platform/appbuilder/nativescript/index)
