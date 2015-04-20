@@ -27,24 +27,24 @@ Our goal of this workshop is to introduce you to NativeScript or {N}. NativeScri
 We’ve chosen to walk your through building mobile application which exercises {N}, the Telerik Platform and is fun. How do you create fun, well we create Memes of course. Our day will be highly interactive with a good mixture of presentations and hand on coding. At the end, you have an app, we create memes. 
 
 # WorkShop Agenda
-* 09:00 - 09:30 	  - Setup and Configuration
-* 09:30 - 10:30  - Introductions and Welcome to NativeScript {N}, @tjvantoll
+* 09:00 - 09:30 	 - Setup and Configuration
+* 09:30 - 10:30  - [Introductions and Welcome to NativeScript {N}, @tjvantoll](http://tbd.com)
 * 10:30 - 11:00 - [Lab #1](http://tbd.com) 
 * 11:00 - 11:15 - Break 
-* 11:15 - 12:15 - [Beyond the Basics, @csell5]() 
-* 12:15 - 12:30 - [Lab #2 Start]()
+* 11:15 - 12:15 - [Beyond the Basics, @csell5](http://tbd.com) 
+* 12:15 - 12:30 - [Lab #2 Start](http://tbd.com)
 * 12:30 - 13:30 - Lunch
-* 13:30 - 14:00 - [Lab #2 Continued]()
-* 14:00 - 15:00 	- [Going deep with {N}, @sebawita]() 
+* 13:30 - 14:00 - [Lab #2 Continued](http://tbd.com)
+* 14:00 - 15:00 	- [Diving Deep with {N}, @sebawita](http://tbd.com) 
 * 15:00 - 15:15 	- Break
-* 15:15 - 16:00 	- [Lab #3]()
+* 15:15 - 16:00 	- [Lab #3](http://tbd.com)
 * 16:00 - 16:30 	- Panel Q&A and Wrap Up
 
 # Presentations
 
-1. [Welcome to NativeScript]()
-2. [Beyond the Basics]() 
-3. [Going deep with {N}]() 
+1. [Welcome to NativeScript](http://tbd.com)
+2. [Beyond the Basics](http://tbd.com) 
+3. [Diving Deep with {N}](http://tbd.com) 
 
 # Labs
 Each lab is structured in two distinct parts. A starting project and a finished project. Each lab builds on what you completed in the lab prior. While we do provide a starting point each time it’s not required for you to start there if you would like to advance your own project. 
@@ -56,17 +56,17 @@ The lab steps are all contained in this repository which serves as our master re
 Now of course we’re human, so if you find a mistake, please feel free to submit a patch.
 
 1. Your first {N} app
-* [Instructions](http://github.com)
-* [Starting Solution](http://github.com)
-* [Finished Solution](http://github.com)
+* [Instructions](http://tbd.com)
+* [Starting Solution](http://tbd.com)
+* [Finished Solution](http://tbd.com)
 2. Beyond the basics
-* [Instructions](http://github.com)
-* [Starting Solution](http://github.com)
-* [Finished Solution](http://github.com)
+* [Instructions](http://tbd.com)
+* [Starting Solution](http://tbd.com)
+* [Finished Solution](http://tbd.com)
 3. Diving in deep
-* [Instructions](http://github.com)
-* [Starting Solution](http://github.com)
-* [Finished Solution](http://github.com)
+* [Instructions](http://tbd.com)
+* [Starting Solution](http://tbd.com)
+* [Finished Solution](http://tbd.com)
 
 # Running the application found in this repo
  
