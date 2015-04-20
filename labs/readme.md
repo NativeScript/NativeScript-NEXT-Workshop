@@ -27,6 +27,9 @@ TBD
 
 After creating the project you’re taken into the AppBuilder environment. AppBuilder offers a lot of functionality—everything from a coding IDE to
 
+### Step 3: Updating your application
+LiveSync and the three finger update…
+
 ## Resources
 
 * [tbd](http://tbd.com)
