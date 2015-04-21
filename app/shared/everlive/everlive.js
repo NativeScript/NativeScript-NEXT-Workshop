@@ -32,7 +32,7 @@ function _addTemplate (fileName, imageSource) {
 			console.log("***** RESULT FROM EVERLIVE after:", result.Id);
 			_addTemplateToContentType(fileName, result.Id, result.Uri);
 		}).catch(function(error){
-			console.log("***** AM I HERE 4", error);
+			console.log("***** Add Tempalte ERROR", error);
 		}); 
 }
 

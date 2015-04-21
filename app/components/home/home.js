@@ -19,6 +19,8 @@ exports.load = function(args) {
 
 	// Make sure we're on iOS before configuring the navigation bar
 	if (applicationModule.ios) {
+		
+		// Temp CODE
 		_page.ios.title = "My App";
 
 		var controller = frameModule.topmost().ios.controller;
