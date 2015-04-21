@@ -19,10 +19,12 @@ exports.load = function(args) {
 	if (applicationModule.ios) {
 		navigation.hideIOSNavigationBar();
 	}
+};
 
+exports.navigatedTo = function(args){
 	populateTemplates();
 	populateMyMemes();
-};
+}
 
 exports.createNewTemplate = function() {
 	navigation.goCreateTemplate();
