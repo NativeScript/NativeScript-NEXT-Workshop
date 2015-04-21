@@ -2,5 +2,5 @@
 	loaded="load"
 	cssClass="splashPage">
 
-	<Image url="{{ imageSource }}" stretch="aspectFill" />
+	<Image src="{{ imageSource }}" stretch="aspectFill" />
 </Page>

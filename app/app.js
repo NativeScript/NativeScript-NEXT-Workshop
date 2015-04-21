@@ -28,10 +28,10 @@ application.onUncaughtError = function (error) {
 };
 */
 
-global.baseViewDirectory = "app/components/";
+global.baseViewDirectory = "./components/";
 global.recentMemeFolderName = "myMemes";
 
-global.appTemplateFolderName = "app/images/templates";
+global.appTemplateFolderName = "./images/templates";
 global.localTemplateFolderName = "localTemplates";
 global.everliveTemplateFolderName = "everliveTemplates";
 
