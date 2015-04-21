@@ -18,28 +18,13 @@ var UIImagePickerControllerDelegateImpl = (function (_super) {
         this._callback = callback;
         return this;
     };
-    UIImagePickerControllerDelegateImpl.prototype.initWithCallbackWidthAndHeight = function (callback, width, height) {
-        this._callback = callback;
-        this._width = width;
-        this._height = height;
-        return this;
-    };
     UIImagePickerControllerDelegateImpl.prototype.imagePickerControllerDidFinishPickingMediaWithInfo = function (picker, info) {
         if (info) {
             var source = info.valueForKey(UIImagePickerControllerOriginalImage);
             if (source) {
-                var image = null;
-                if (this._width || this._height) {
-                    console.log("Image resized!!!");
-                    var newSize = CGSizeMake(this._width, this._height);
-                    UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0);
-                    source.drawInRect(CGRectMake(0, 0, newSize.width, newSize.height));
-                    image = UIGraphicsGetImageFromCurrentImageContext();
-                    UIGraphicsEndImageContext();
-                }
-                var imageSourceResult = image ? imageSource.fromNativeSource(image) : imageSource.fromNativeSource(source);
+                var image = imageSource.fromNativeSource(source);
                 if (this._callback) {
-                    this._callback(imageSourceResult);
+                    this._callback(image);
                 }
             }
         }
@@ -51,18 +36,10 @@ var UIImagePickerControllerDelegateImpl = (function (_super) {
     UIImagePickerControllerDelegateImpl.ObjCProtocols = [UIImagePickerControllerDelegate];
     return UIImagePickerControllerDelegateImpl;
 })(NSObject);
-exports.takePicture = function (width, height) {
+exports.takePicture = function () {
     return new Promise(function (resolve, reject) {
         var imagePickerController = new UIImagePickerController();
-        var listener = null;
-        var reqWidth = width || 0;
-        var reqHeight = height || reqWidth;
-        if (reqWidth && reqHeight) {
-            listener = UIImagePickerControllerDelegateImpl.new().initWithCallbackWidthAndHeight(resolve, reqWidth, reqHeight);
-        }
-        else {
-            listener = UIImagePickerControllerDelegateImpl.new().initWithCallback(resolve);
-        }
+        var listener = UIImagePickerControllerDelegateImpl.new().initWithCallback(resolve);
         imagePickerController.delegate = listener;
         if (UIDevice.currentDevice().model !== "iPhone Simulator") {
             imagePickerController.mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.UIImagePickerControllerSourceTypeCamera);

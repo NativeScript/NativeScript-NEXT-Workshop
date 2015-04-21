@@ -79,10 +79,10 @@ var TabView = (function (_super) {
         for (i = 0; i < length; i++) {
             newItem = newItems[i];
             if (!newItem) {
-                throw new Error("TabEntry at index " + i + " is undefined.");
+                throw new Error("TabViewItem at index " + i + " is undefined.");
             }
             if (!newItem.view) {
-                throw new Error("TabEntry at index " + i + " does not have a view.");
+                throw new Error("TabViewItem at index " + i + " does not have a view.");
             }
         }
     };

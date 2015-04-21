@@ -44,6 +44,26 @@ var TextBase = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(TextBase.prototype, "fontSize", {
+        get: function () {
+            return this.style.fontSize;
+        },
+        set: function (value) {
+            this.style.fontSize = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TextBase.prototype, "textAlignment", {
+        get: function () {
+            return this.style.textAlignment;
+        },
+        set: function (value) {
+            this.style.textAlignment;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(TextBase.prototype, "formattedText", {
         get: function () {
             return this._getValue(TextBase.formattedTextProperty);
@@ -91,6 +111,9 @@ var TextBase = (function (_super) {
         }
     };
     TextBase.prototype._onFormattedTextPropertyChanged = function (data) {
+        if (data.newValue) {
+            data.newValue.parent = this;
+        }
         this.setFormattedTextPropertyToNative(data.newValue);
     };
     TextBase.prototype.onLayout = function (left, top, right, bottom) {

@@ -92,6 +92,9 @@ var Button = (function (_super) {
         }
     };
     Button.prototype._onFormattedTextPropertyChanged = function (data) {
+        if (data.newValue) {
+            data.newValue.parent = this;
+        }
         this.setFormattedTextPropertyToNative(data.newValue);
     };
     Button.textProperty = textProperty;

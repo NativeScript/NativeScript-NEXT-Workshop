@@ -10,12 +10,14 @@ var proxy = require("ui/core/proxy");
 var dependencyObservable = require("ui/core/dependency-observable");
 var builder = require("ui/builder");
 var label = require("ui/label");
+var color = require("color");
 var ITEMS = "items";
 var ITEMTEMPLATE = "itemTemplate";
 var ISSCROLLING = "isScrolling";
 var LISTVIEW = "ListView";
 var ITEMSCHANGED = "_itemsChanged";
 var CHANGE = "change";
+var SEPARATORCOLOR = "separatorColor";
 var knownEvents;
 (function (knownEvents) {
     knownEvents.itemLoading = "itemLoading";
@@ -80,6 +82,16 @@ var ListView = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(ListView.prototype, "separatorColor", {
+        get: function () {
+            return this._getValue(ListView.separatorColorProperty);
+        },
+        set: function (value) {
+            this._setValue(ListView.separatorColorProperty, value instanceof color.Color ? value : new color.Color(value));
+        },
+        enumerable: true,
+        configurable: true
+    });
     ListView.prototype.refresh = function () {
     };
     ListView.prototype._getItemTemplateContent = function (index) {
@@ -102,6 +114,7 @@ var ListView = (function (_super) {
         lbl.text = this._getDataItem(index) + "";
         return lbl;
     };
+    ListView.separatorColorProperty = new dependencyObservable.Property(SEPARATORCOLOR, LISTVIEW, new proxy.PropertyMetadata(undefined));
     ListView.itemsProperty = new dependencyObservable.Property(ITEMS, LISTVIEW, new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataSettings.AffectsLayout, onItemsPropertyChanged));
     ListView.itemTemplateProperty = new dependencyObservable.Property(ITEMTEMPLATE, LISTVIEW, new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataSettings.AffectsLayout, onItemTemplatePropertyChanged));
     ListView.isScrollingProperty = new dependencyObservable.Property(ISSCROLLING, LISTVIEW, new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataSettings.None));
@@ -113,5 +126,5 @@ function getExports(instance) {
     while (parent && parent.exports === undefined) {
         parent = parent.parent;
     }
-    return parent.exports;
+    return parent ? parent.exports : undefined;
 }

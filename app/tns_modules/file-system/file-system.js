@@ -120,7 +120,6 @@ var FileSystemEntity = (function () {
     Object.defineProperty(FileSystemEntity.prototype, "lastModified", {
         get: function () {
             var value = this[lastModifiedProperty];
-
             if (!this[lastModifiedProperty]) {
                 value = this[lastModifiedProperty] = getFileAccess().getLastModified(this.path);
             }
@@ -159,7 +158,7 @@ var File = (function (_super) {
     });
     Object.defineProperty(File.prototype, "isLocked", {
         get: function () {
-            return this[fileLockedProperty];
+            return !!this[fileLockedProperty];
         },
         enumerable: true,
         configurable: true

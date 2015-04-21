@@ -42,9 +42,31 @@ var DatePicker = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    DatePicker.yearProperty = new dependencyObservable.Property("year", "DatePicker", new proxy.PropertyMetadata(0));
-    DatePicker.monthProperty = new dependencyObservable.Property("month", "DatePicker", new proxy.PropertyMetadata(0));
-    DatePicker.dayProperty = new dependencyObservable.Property("day", "DatePicker", new proxy.PropertyMetadata(0));
+    Object.defineProperty(DatePicker.prototype, "maxDate", {
+        get: function () {
+            return this._getValue(DatePicker.maxDateProperty);
+        },
+        set: function (value) {
+            this._setValue(DatePicker.maxDateProperty, value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DatePicker.prototype, "minDate", {
+        get: function () {
+            return this._getValue(DatePicker.minDateProperty);
+        },
+        set: function (value) {
+            this._setValue(DatePicker.minDateProperty, value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    DatePicker.yearProperty = new dependencyObservable.Property("year", "DatePicker", new proxy.PropertyMetadata(undefined));
+    DatePicker.monthProperty = new dependencyObservable.Property("month", "DatePicker", new proxy.PropertyMetadata(undefined));
+    DatePicker.dayProperty = new dependencyObservable.Property("day", "DatePicker", new proxy.PropertyMetadata(undefined));
+    DatePicker.maxDateProperty = new dependencyObservable.Property("maxDate", "DatePicker", new proxy.PropertyMetadata(undefined));
+    DatePicker.minDateProperty = new dependencyObservable.Property("minDate", "DatePicker", new proxy.PropertyMetadata(undefined));
     return DatePicker;
 })(view.View);
 exports.DatePicker = DatePicker;

@@ -1,0 +1,16 @@
+{
+	"name": "tns-template-hello-world",
+	"main": "app.js",
+	"version": "0.10.0",
+	"author": "Telerik <support@telerik.com>",
+	"description": "Nativescript hello-world template",
+	"license": "BSD",
+	"keywords": [
+		"telerik",
+		"mobile",
+		"template"
+	],
+	"repository": {
+		"url": "https://github.com/NativeScript/cross-platform-modules/commit/27a20f5b425e81231ebe53e61a986102a52b7124"
+	}
+}

@@ -1,0 +1,6 @@
+<Page xmlns="http://www.nativescript.org/tns.xsd"
+	loaded="load"
+	cssClass="splashPage">
+
+	<Image url="{{ imageSource }}" stretch="aspectFill" />
+</Page>
