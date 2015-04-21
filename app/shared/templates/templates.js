@@ -76,7 +76,7 @@ function _getTemplatesFromEverlive(callback) {
 
 	everlive.getTemplateIndex()
 		.then(function(result) {
-			console.log("***** Everlive GetTemplates Payload:", JSON.stringify(result));
+			//console.log("***** Everlive GetTemplates Payload:", JSON.stringify(result));
 
 			var results = JSON.parse(result.content);
 			console.log("***** Everlive Templates Found:", results.length);

@@ -1,9 +1,12 @@
 var applicationModule = require("application");
-var navigation = require( "../../shared/navigation");
 var imageModule = require("ui/image");
 var gesturesModule = require("ui/gestures");
 var dialogsModule = require("ui/dialogs");
 
+var colorModule = require("color");
+var frameModule = require("ui/frame");
+
+var navigation = require( "../../shared/navigation");
 var templates = require( "../../shared/templates/templates");
 var localStorage = require( "../../shared/local-storage/local-storage");
 var socialShare = require("../social-share/social-share");
@@ -15,9 +18,19 @@ exports.load = function(args) {
 	_page.onNavigatingFrom = function(){};
 
 	// Make sure we're on iOS before configuring the navigation bar
-	//TODO: not working...
 	if (applicationModule.ios) {
-		navigation.hideIOSNavigationBar();
+		_page.ios.title = "My App";
+
+		var controller = frameModule.topmost().ios.controller;
+        var navBar = controller.navigationBar;
+
+        // Set the UINavigationBar's tintColor and barStyle
+        navBar.tintColor = new colorModule.Color("#FFFF00").ios;
+        navBar.barStyle = UIBarStyle.UIBarStyleBlack;
+
+		controller.navigationBarHidden = true;
+
+		//navigation.hideIOSNavigationBar();
 	}
 };
 
@@ -36,7 +49,6 @@ function populateTemplates() {
 	clearOldMemes(container);
 	
 	templates.getTemplates(function(imageSource){
-		console.log("I WAS HERE");
 		var image = new imageModule.Image();
 		image.imageSource = imageSource;
 		

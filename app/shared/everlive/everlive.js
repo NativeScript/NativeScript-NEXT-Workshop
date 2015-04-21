@@ -1,5 +1,6 @@
 var imageSourceModule = require("image-source");
 var httpModule = require("http");
+var enumsModule = require("ui/enums");
 
 module.exports = {
 	
@@ -41,7 +42,7 @@ function _uploadFile (fileName, imageSource) {
 	var postBody = {
 		"Filename": fileName,
 		"ContentType": "image/png",
-		"base64": imageSource.toBase64String(imageSourceModule.ImageFormat.PNG)
+		"base64": imageSource.toBase64String(enumsModule.ImageFormat.png)
 	};
 
 	return _postToEverlive(postUrl, postBody)

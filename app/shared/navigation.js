@@ -46,9 +46,11 @@ module.exports = {
 		if (applicationModule.ios) {
 			// Get access to the native iOS UINavigationController
 			var controller = frameModule.topmost().ios.controller;
-			
+			console.log(controller);
 			// Call the UINavigationController's setNavigationBarHidden method
 			controller.navigationBarHidden = true;
+			//controller.toolbarHidden = true;
+
 		}
 	}
 }
