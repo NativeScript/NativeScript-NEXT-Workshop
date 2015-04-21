@@ -3,7 +3,7 @@
 	navigatedTo="navigatedTo">
 
 	<StackLayout>
-		<Image source="{{ imageSource }}" />
+		<Image imageSource="{{ imageSource }}" />
 
 		<ActivityIndicator busy="{{ isBusy }}" width="50" height="50"/>
 

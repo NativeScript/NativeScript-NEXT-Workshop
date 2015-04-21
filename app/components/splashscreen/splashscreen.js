@@ -1,8 +1,6 @@
 var observableModule = require("data/observable");
 var navigation = require( "../../shared/navigation");
 
-var templates = require( "../../shared/templates/templates");
-
 var _viewData = new observableModule.Observable();
 var _page;
 
@@ -15,6 +13,5 @@ exports.load = function(args) {
 	
 	setTimeout(function () {
 		navigation.goHome();
-	}, 1000);
-	
+	}, 100);
 };

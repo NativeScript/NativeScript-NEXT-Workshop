@@ -15,6 +15,7 @@ exports.load = function(args) {
 	_page.onNavigatingFrom = function(){};
 
 	// Make sure we're on iOS before configuring the navigation bar
+	//TODO: not working...
 	if (applicationModule.ios) {
 		navigation.hideIOSNavigationBar();
 	}
@@ -33,9 +34,9 @@ function populateTemplates() {
 	clearOldMemes(container);
 	
 	templates.getTemplates(function(imageSource){
-
+		console.log("I WAS HERE");
 		var image = new imageModule.Image();
-		image.source = imageSource;
+		image.imageSource = imageSource;
 		
 		image.observe(gesturesModule.GestureTypes.Tap, function () { 
 			templateSelected(imageSource); 
@@ -54,7 +55,7 @@ function populateMyMemes() {
 	templates.getMyMemes(function(imageSource, fileName){
 		//Create a new image element 
 		var image = new imageModule.Image();
-		image.source = imageSource;
+		image.imageSource = imageSource;
 
 		//What do to...  share delete?
 		image.observe(gesturesModule.GestureTypes.Tap, function () {

@@ -12,23 +12,23 @@
 		<TabView row="1">
 			<TabView.items>
 
-				<TabEntry title="Templates">
-					<TabEntry.view>
+				<TabViewItem title="Templates">
+					<TabViewItem.view>
 						<ScrollView>
 							<WrapLayout id="templateContainer" itemHeight="100" horizontalAlignment="center">
 							</WrapLayout>
 						</ScrollView>
-					</TabEntry.view>
-				</TabEntry>
+					</TabViewItem.view>
+				</TabViewItem>
 
-				<TabEntry title="My Memes">
-					<TabEntry.view>
+				<TabViewItem title="My Memes">
+					<TabViewItem.view>
 						<ScrollView>
 							<WrapLayout id="myMemeContainer" itemHeight="100" horizontalAlignment="center">
 							</WrapLayout>
 						</ScrollView>
-					</TabEntry.view>
-				</TabEntry>
+					</TabViewItem.view>
+				</TabViewItem>
 
 			</TabView.items>
 		</TabView>

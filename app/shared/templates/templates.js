@@ -52,7 +52,7 @@ function _getMyMemes(callback) {
 }
 
 function _getTemplates(callback) {
-
+	
 	localStorage.getAppTemplates()
 	.then(function(entities){
 		//Load the app templates

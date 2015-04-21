@@ -1,6 +1,7 @@
 
 var fs = require("file-system");
 var imageSourceModule = require("image-source");
+var enumsModule = require("ui/enums");
 
 var _documentsFolder = fs.knownFolders.documents();
 var _recentMemeFolder = _documentsFolder.getFolder(global.recentMemeFolderName);
@@ -49,7 +50,6 @@ function _getMyMemes() {
 }
 
 function _getAppTemplates() {
-	
 	var fullPath = fs.path.join(fs.knownFolders.currentApp().path, _appTemplateFolder);
 	var templatesFolder = fs.Folder.fromPath(fullPath);
 	
@@ -83,7 +83,7 @@ function _clearMemeFolder () {
 
 function _saveImageLocally (imageName, imageSource) {
 	var fullPath = fs.path.join(_recentMemeFolder.path, imageName);
-	var saved = imageSource.saveToFile(fullPath, imageSourceModule.ImageFormat.PNG);
+	var saved = imageSource.saveToFile(fullPath, enumsModule.ImageFormat.PNG);
 
 	return saved;
 }
@@ -97,7 +97,7 @@ function _saveTemplateLocally(imageName, imageSource) {
 	var fullPath = fs.path.join(_localTemplateFolder.path, imageName);
 	console.log("***** Saved image to:", fullPath);
 
-	var saved = imageSource.saveToFile(fullPath, imageSourceModule.ImageFormat.PNG);
+	var saved = imageSource.saveToFile(fullPath, enumsModule.ImageFormat.PNG);
 	return saved;
 }
 
@@ -105,6 +105,6 @@ function _saveEverliveTemplateLocally(imageName, imageSource) {
 	var fullPath = fs.path.join(_everliveTemplateFolder.path, imageName);
 	console.log("***** Saved template to:", fullPath);
 	
-	var saved = imageSource.saveToFile(fullPath, imageSourceModule.ImageFormat.PNG);
+	var saved = imageSource.saveToFile(fullPath, enumsModule.ImageFormat.PNG);
 	return saved;
 }
