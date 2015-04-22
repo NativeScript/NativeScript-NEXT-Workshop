@@ -6,9 +6,9 @@ This repository contains the presentations, labs and the {N}  application used i
 
 Tags: TelerikNEXT, NativeScript, {N}, JavaScript, CSS3, iOS, Android
 
-# Prerequisites
+# Pre-Requisites
 
-Throughout the workshop we will be working in the [Telerik Platform](http://platform.telerik.com). While the Telerik Platform supports both a web based IDE and the CLI, we will only be working in the Web Editors (aka: AppBuilder). From there, you can easily build and deploy the application to either the {N}  app or if you have a device with a developer account, then directly to your device.
+Throughout the workshop we will be working in the [Telerik Platform](http://platform.telerik.com). While the Telerik Platform supports both a web based IDE and the CLI, we will only be working in the Web editor, AppBuilder. From there, you can easily build and deploy the application to either the {N}  app or if you have a device with a developer account, then directly to your device.
 
 ## Required
 
@@ -18,13 +18,13 @@ Throughout the workshop we will be working in the [Telerik Platform](http://plat
 ** [iOS App Store](https://itunes.apple.com/us/app/nativescript/id882561588?mt=8)
 ** [Google Play](https://play.google.com/store/apps/details?id=com.telerik.NativeScript&hl=en)
 
-## Required if you want to sideload
+## Required if you want to side-load
 * Device and developer account, at least one Android 4.2+ or iOS 7+ device
 
 # Workshop Goals
-Our goal of this workshop is to introduce you to NativeScript or {N}. NativeScript just released and a new world had been born. AT the end of the day you will have build a {N} application, while exploring different parts of the {N} architecture, framework and modules. A mixture of both presentations, and labs will run the entirety of the day.
+Our goal of this workshop is to introduce you to NativeScript or {N}. NativeScript just released and a new world had been born. At the end of the day you will have build a {N} application, while exploring different parts of the {N} architecture, framework and modules. A mixture of both presentations, and labs will run the entirety of the day.
 
-We’ve chosen to walk your through building mobile application which exercises {N}, the Telerik Platform and is fun. How do you create fun, well we create Memes of course. Our day will be highly interactive with a good mixture of presentations and hand on coding. At the end, you have an app, we create memes. 
+We’ve chosen to walk your through building mobile application which exercises {N}, the Telerik Platform and is fun. How do you create fun, well we create Memes what else. Our day will be highly interactive with a good mixture of presentations and hand on coding. At the end, you have an app, we create memes. 
 
 # WorkShop Agenda
 * 09:00 - 09:30 	 - Setup and Configuration
