@@ -27,12 +27,31 @@ exports.load = function(args) {
         var navBar = controller.navigationBar;
 
         // Set the UINavigationBar's tintColor and barStyle
-        navBar.tintColor = new colorModule.Color("#FFFF00").ios;
-        navBar.barStyle = UIBarStyle.UIBarStyleBlack;
+        //navBar.tintColor = new colorModule.Color("#FFFF00").ios;
+        //navBar.barStyle = UIBarStyle.UIBarStyleBlack;
 
-		controller.navigationBarHidden = true;
-
+		//controller.navigationBarHidden = true;
 		//navigation.hideIOSNavigationBar();
+
+		var navigationItem = controller.visibleViewController.navigationItem;
+
+		controller.navigationBarHidden = false;
+		navBar.barTintColor = UIColor.colorWithRedGreenBlueAlpha(0.86, 0.20, 0.25, 1);
+		navBar.titleTextAttributes =
+			new NSDictionary([UIColor.whiteColor()],
+				[NSForegroundColorAttributeName]);
+
+		navBar.barStyle = 1;
+		navBar.tintColor = UIColor.whiteColor();
+		
+
+		// creates item with UIBarButtonSystemItemAction icon
+		var shareItem = new UIBarButtonItem(UIBarButtonSystemItem.UIBarButtonSystemItemEdit, null, null);
+
+		// add item to navigation bar
+		var actionButtonItems = [shareItem];
+		navigationItem.rightBarButtonItems = actionButtonItems;
+
 	}
 };
 

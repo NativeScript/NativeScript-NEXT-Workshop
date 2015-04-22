@@ -5,12 +5,25 @@ var dialogsModule = require("ui/dialogs");
 application.mainModule = "./components/splashscreen/splashscreen";
 application.cssFile = "./app.css";
 
+
+application.onLaunch = function (context) {	
+	console.log("***** application.onLaunch *****");
+};
+
 application.onResume = function (context) {	
-	console.log("***** application.onResume *****");
-	
+	console.log("***** application.onResume *****");	
 	//var topmost = frameModule.topmost();
 	//topmost.navigate(global.baseViewDirectory + "home/home");
 };
+
+application.onSuspend = function () {	
+	console.log("***** application.onSuspend *****");
+};
+
+application.onExit = function () {	
+	console.log("***** application.onExit *****");
+};
+
 
 /*
 application.onUncaughtError = function (error) {	
