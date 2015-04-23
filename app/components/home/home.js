@@ -17,7 +17,7 @@ exports.load = function(args) {
 	_page = args.object;
 	
 	if (applicationModule.ios) {
-		_page.ios.title = "Meme";
+		_page.ios.title = "Just Meme";
 		var controller = frameModule.topmost().ios.controller;
 
 		var navigationItem = controller.visibleViewController.navigationItem;

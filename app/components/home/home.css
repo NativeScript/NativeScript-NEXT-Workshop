@@ -2,17 +2,6 @@ image {
 	margin: 5;
 }
 
-.dockHead {
-	background-color: #4CC000;
-	padding-left: 15;
-	padding-right: 15;
-	height: 40;
-	font-family: arial;
-	margin-bottom: 5;
-}
-
-.addNewMeme {
-	horizontal-align: right;
-	vertical-align: middle;
-	height: 25;
+.test {
+	font-size: 60;
 }

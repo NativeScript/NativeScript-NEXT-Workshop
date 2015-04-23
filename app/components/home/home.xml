@@ -5,13 +5,13 @@
 	navigatedTo="navigatedTo">
 
  	<Page.optionsMenu>
-    	<MenuItem text="New Template" tap="createNewTemplate" />
+    	<MenuItem text="New Template" tap="createNewTemplate" android.position="actionBar"/>
   	</Page.optionsMenu>
 
 	<TabView row="0">
 		<TabView.items>
 
-			<TabViewItem title="Templates">
+			<TabViewItem cssClass="test" title="Templates">
 				<TabViewItem.view>
 					<ScrollView>
 						<WrapLayout id="templateContainer" itemHeight="100" horizontalAlignment="center">

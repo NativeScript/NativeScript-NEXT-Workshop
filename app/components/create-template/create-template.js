@@ -26,20 +26,18 @@ exports.navigatedTo = function(args) {
 };
 
 function invokeCamera() {
-	console.log("***** INVOKING CAMERA *****");
-
-	//TODO: bug here with the promise...
+	//https://github.com/NativeScript/docs/blob/master/camera.md
+	
 	cameraModule.takePicture(
 		applicationModule.ios ? 300 : 750,
-		applicationModule.ios ? 200 : 450)
+		applicationModule.ios ? 200 : 450,
+		true)
 		.then(function(r) {
-
+			analyticsMonitor.trackFeature("CreateTemplate.TakePicture");
 			console.log("***** Invoke Camera Return *****", r);
 
 			_viewData.set("imageSource", r);
-			_viewData.set("pictureTaken", true);
-
-			analyticsMonitor.trackFeature("CreateTemplate.TakePicture");
+			_viewData.set("pictureTaken", true);			
 		}, function(error) {
 			analyticsMonitor.trackException(error, "Failed to TakePicture");
 			console.log("***** ERROR *****", error);
@@ -63,8 +61,6 @@ exports.submitToEverlive = function() {
 
 	templates.addNewPublicTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"))
 	.then(function(){
-		console.log("***** AM I HERE");
-		
 		analyticsMonitor.trackFeature("CreateTemplate.SavedToEverlive");
 		analyticsMonitor.trackFeatureStop("CreateTemplate.SavedToEverlive");
 

@@ -3,6 +3,7 @@ var httpModule = require("http");
 
 var everlive = require("../everlive/everlive");
 var localStorage = require("../local-storage/local-storage");
+var analyticsMonitor = require("../analytics");
 
 module.exports = {
 	getMyMemes: function(callback) {
@@ -33,6 +34,8 @@ function _getMyMemes(callback) {
 
 	localStorage.getMyMemes()
 	.then(function (entities) {
+		analyticsMonitor.trackFeature("Templates.getMyMemes");
+		analyticsMonitor.trackFeatureValue("Templates.getMyMemes", entities.length);
 
 		entities.forEach(function (entity) {
 			var source = imageSource.fromFile(entity.path);
@@ -63,6 +66,9 @@ function _getTemplates(callback) {
 
 	localStorage.getMyTemplates()
 	.then(function(entities){
+		analyticsMonitor.trackFeature("Templates.getMyTemplates");
+		analyticsMonitor.trackFeatureValue("Templates.getMyTemplates", entities.length);
+		
 		//Load the app templates
 		entities.forEach(function (template) {
 			callback(imageSource.fromFile(template.path));
@@ -85,7 +91,10 @@ function _getTemplatesFromEverlive(callback) {
 				//Before we download, check to see if we already have it...
 				if (!localStorage.doesEverliveTemplateExist(template.FileName)) {
 					console.log("**** Getting " + template.Url + " ****");
+					analyticsMonitor.trackFeatureStart("Templates.GetTemplateFromEverlive");
+
 					httpModule.getImage(template.Url).then(function(imageSource) {
+						analyticsMonitor.trackFeatureStop("Templates.GetTemplateFromEverlive");
 						console.log("**** Got " + template.Url + " ****");
 						
 						var saved = localStorage.saveEverliveTemplateLocally(template.FileName, imageSource);
@@ -99,6 +108,7 @@ function _getTemplatesFromEverlive(callback) {
 				}
 			});	
 		}).catch(function(error){
+			analyticsMonitor.trackException(error, "Get Templates From Everlive Failed");
 			console.log("***** ERROR", JSON.stringify(error));
 		});
 }

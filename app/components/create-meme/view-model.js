@@ -24,11 +24,11 @@ viewModel.refreshMeme = function () {
 	var image = imageManipulation.addText(viewModel.selectedImage, viewModel.topText, viewModel.bottomText, viewModel.fontSize, viewModel.isBlackText);
 
 	viewModel.set("memeImage", image);
-
 };
 
 viewModel.saveLocally = function () {
 	this.refreshMeme();
+	analyticsMonitor.trackFeature("CreateMeme.SaveLocally");
 	var saved = localStorage.saveLocally(this.uniqueImageName, this.memeImage);
 
 	if (!saved) {
@@ -42,14 +42,11 @@ viewModel.saveLocally = function () {
 
 		dialogsModule.alert(options);
 	}
-
-	analyticsMonitor.trackFeature("CreateMeme.SaveLocally");
 };
 
 viewModel.share = function() {
-	socialShare.share(this.memeImage);
-
 	analyticsMonitor.trackFeature("CreateMeme.Share");
+	socialShare.share(this.memeImage);
 };
 
 //Add event listener to refresh the memeImage every time there is a change to the params
