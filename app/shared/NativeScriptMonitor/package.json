@@ -1,0 +1,6 @@
+{
+    "name": "NativeScriptMonitor",
+    "version": "0.9.0",
+    "main": "NativeScriptMonitor.js",
+    "description": "NativeScript module allowing integration with Telerik Analytics"
+}

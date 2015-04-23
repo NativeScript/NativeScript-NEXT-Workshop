@@ -4,6 +4,7 @@ var localStorage = require("../../shared/local-storage/local-storage");
 var socialShare = require("../social-share/social-share");
 var utilities = require("../../shared/utilities");
 var dialogsModule = require("ui/dialogs");
+var analyticsMonitor = require("../../shared/analytics");
 
 var viewModel = new observable.Observable();
 
@@ -23,6 +24,7 @@ viewModel.refreshMeme = function () {
 	var image = imageManipulation.addText(viewModel.selectedImage, viewModel.topText, viewModel.bottomText, viewModel.fontSize, viewModel.isBlackText);
 
 	viewModel.set("memeImage", image);
+
 };
 
 viewModel.saveLocally = function () {
@@ -40,10 +42,14 @@ viewModel.saveLocally = function () {
 
 		dialogsModule.alert(options);
 	}
+
+	analyticsMonitor.trackFeature("CreateMeme.SaveLocally");
 };
 
 viewModel.share = function() {
 	socialShare.share(this.memeImage);
+
+	analyticsMonitor.trackFeature("CreateMeme.Share");
 };
 
 //Add event listener to refresh the memeImage every time there is a change to the params

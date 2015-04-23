@@ -5,6 +5,7 @@ var cameraModule = require("camera");
 var navigation = require("../../shared/navigation");
 var templates = require( "../../shared/templates/templates");
 var utilities = require( "../../shared/utilities");
+var analyticsMonitor = require("../../shared/analytics");
 
 var observableModule = require("data/observable");
 var _viewData = new observableModule.Observable();
@@ -32,12 +33,16 @@ function invokeCamera() {
 		applicationModule.ios ? 300 : 750,
 		applicationModule.ios ? 200 : 450)
 		.then(function(r) {
+
 			console.log("***** Invoke Camera Return *****", r);
 
 			_viewData.set("imageSource", r);
 			_viewData.set("pictureTaken", true);
-		}, function() {
+
+			analyticsMonitor.trackFeature("CreateTemplate.TakePicture");
+		}, function(error) {
 			console.log("***** ERROR *****", error);
+			analyticsMonitor.trackException(error, "Failed to TakePicture");
 		});
 
 	//TODO... if on cancel... we should show the camera roll to choose a picture from???...
@@ -49,16 +54,23 @@ exports.saveLocally = function() {
 
 	templates.addNewLocalTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"));
 
+	analyticsMonitor.trackFeature("CreateTemplate.SaveLocally");
+
 	navigation.goHome();
 };
 
 //Submit the template to everlive for everyone to use.
 exports.submitToEverlive = function() {
 	_viewData.set("isBusy", true);
+	analyticsMonitor.trackFeatureStart("CreateTemplate.SaveToBackend");
 
 	templates.addNewPublicTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"))
 	.then(function(){
 		console.log("***** AM I HERE");
+		
+		analyticsMonitor.trackFeature("CreateTemplate.SaveToBackend");
+		analyticsMonitor.trackFeatureStop("CreateTemplate.SaveToBackend");
+
 		navigation.goHome();
 	});
 };
