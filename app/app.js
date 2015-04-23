@@ -24,11 +24,6 @@ application.onResume = function (context) {
 
 application.onSuspend = function () {	
 	console.log("***** application.onSuspend *****");
-
-	/*
-	var analyticsMonitor = require("./shared/analytics");
-	analyticsMonitor.stop();
-	*/
 };
 
 application.onExit = function () {	
@@ -38,22 +33,12 @@ application.onExit = function () {
 	analyticsMonitor.stop();
 };
 
-
-/*
 application.onUncaughtError = function (error) {	
 	console.log("***** application onUncaughtError *****", error);
-	
-	dialogs.prompt({
-	  title: "Application Uncaught Error",
-	  message: error,
-	  okButtonText: "Go Back Home"
-	
-	}).then(function (r) {
-		var topmost = frameModule.topmost();
-		topmost.navigate(global.baseViewDirectory + "home/home");
-	});
+
+	var analyticsMonitor = require("./shared/analytics");
+	analyticsMonitor.trackException(error, "onUncaughtError");
 };
-*/
 
 global.baseViewDirectory = "./components/";
 global.recentMemeFolderName = "myMemes";
