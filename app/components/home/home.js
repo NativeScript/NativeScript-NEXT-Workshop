@@ -18,24 +18,28 @@ exports.load = function(args) {
 	_page.onNavigatingFrom = function(){};
 
 	// Make sure we're on iOS before configuring the navigation bar
+	var controller = frameModule.topmost().ios;
+	//controller.showNavigationBar = false;
+
+	controller.showNavigationBar = false;
+
+ 	console.log("frameModule controller::", controller);
+ 	//console.log("frameModule frame::", Object.keys(frameModule.Frame));
+ 	//console.log("frameModule topmost::", Object.keys(frameModule.topmost().ios));
+ 	
+
+	/*
 	if (applicationModule.ios) {
 		
 		// Temp CODE
-		_page.ios.title = "My App";
+		_page.ios.title = "Meme";
+		console.log("page" ,_page.ios);
 
 		var controller = frameModule.topmost().ios.controller;
-        var navBar = controller.navigationBar;
-
-        // Set the UINavigationBar's tintColor and barStyle
-        //navBar.tintColor = new colorModule.Color("#FFFF00").ios;
-        //navBar.barStyle = UIBarStyle.UIBarStyleBlack;
-
-		//controller.navigationBarHidden = true;
-		//navigation.hideIOSNavigationBar();
-
 		var navigationItem = controller.visibleViewController.navigationItem;
+		navigationItem.setHidesBackButtonAnimated(true, false);
 
-		controller.navigationBarHidden = false;
+		var navBar = controller.navigationBar;
 		navBar.barTintColor = UIColor.colorWithRedGreenBlueAlpha(0.86, 0.20, 0.25, 1);
 		navBar.titleTextAttributes =
 			new NSDictionary([UIColor.whiteColor()],
@@ -44,7 +48,6 @@ exports.load = function(args) {
 		navBar.barStyle = 1;
 		navBar.tintColor = UIColor.whiteColor();
 		
-
 		// creates item with UIBarButtonSystemItemAction icon
 		var shareItem = new UIBarButtonItem(UIBarButtonSystemItem.UIBarButtonSystemItemEdit, null, null);
 
@@ -53,6 +56,7 @@ exports.load = function(args) {
 		navigationItem.rightBarButtonItems = actionButtonItems;
 
 	}
+	*/
 };
 
 exports.navigatedTo = function(args){
