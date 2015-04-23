@@ -1,0 +1,4 @@
+{ 
+    "name" : "platform-ext",
+    "main" : "platform-ext.js" 
+}
