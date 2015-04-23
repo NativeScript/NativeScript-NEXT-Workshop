@@ -5,7 +5,7 @@ var dialogsModule = require("ui/dialogs");
 application.mainModule = "./components/splashscreen/splashscreen";
 application.cssFile = "./app.css";
 
-
+// Application Events: https://github.com/NativeScript/docs/tree/master/ApiReference/application
 application.onLaunch = function (context) {	
 	console.log("***** application.onLaunch *****");
 };

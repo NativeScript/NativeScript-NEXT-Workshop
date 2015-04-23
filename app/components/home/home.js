@@ -2,8 +2,6 @@ var applicationModule = require("application");
 var imageModule = require("ui/image");
 var gesturesModule = require("ui/gestures");
 var dialogsModule = require("ui/dialogs");
-
-var colorModule = require("color");
 var frameModule = require("ui/frame");
 
 var navigation = require( "../../shared/navigation");
@@ -19,44 +17,23 @@ exports.load = function(args) {
 	_page = args.object;
 	
 	if (applicationModule.ios) {
-		var controller = frameModule.topmost().ios;
-	
-	}
-
-	controller.showNavigationBar = false;
-
- 	console.log("frameModule controller::", controller);
- 	//console.log("frameModule frame::", Object.keys(frameModule.Frame));
- 	//console.log("frameModule topmost::", Object.keys(frameModule.topmost().ios));
- 	
-
-	/*
-		
-		// Temp CODE
 		_page.ios.title = "Meme";
-		console.log("page" ,_page.ios);
-
 		var controller = frameModule.topmost().ios.controller;
+
 		var navigationItem = controller.visibleViewController.navigationItem;
 		navigationItem.setHidesBackButtonAnimated(true, false);
 
 		var navBar = controller.navigationBar;
-		navBar.barTintColor = UIColor.colorWithRedGreenBlueAlpha(0.86, 0.20, 0.25, 1);
-		navBar.titleTextAttributes =
-			new NSDictionary([UIColor.whiteColor()],
-				[NSForegroundColorAttributeName]);
-
-		navBar.barStyle = 1;
-		navBar.tintColor = UIColor.whiteColor();
+		navBar.barTintColor = UIColor.colorWithRedGreenBlueAlpha(.35, .90, .0, 1.0);
+		navBar.barStyle = 0;
+		navBar.tintColor = UIColor.blackColor();
 		
-		// creates item with UIBarButtonSystemItemAction icon
-		var shareItem = new UIBarButtonItem(UIBarButtonSystemItem.UIBarButtonSystemItemEdit, null, null);
-
-		// add item to navigation bar
-		var actionButtonItems = [shareItem];
-		navigationItem.rightBarButtonItems = actionButtonItems;
+		navBar.titleTextAttributes =
+			new NSDictionary(
+				[UIColor.blackColor()],
+				[NSForegroundColorAttributeName]
+			);
 	}
-	*/
 };
 
 exports.unloaded = function(args){

@@ -4,36 +4,32 @@
 	unloaded="unloaded"
 	navigatedTo="navigatedTo">
 
-	<GridLayout rows="auto, *" cssClass="mainContainer">
+ 	<Page.optionsMenu>
+    	<MenuItem text="New Template" tap="createNewTemplate" />
+  	</Page.optionsMenu>
 
-		<DockLayout row="0" stretchLastChild="true" cssClass="dockHead" tap="createNewTemplate">
-			<Label dock="left" text="Create New Template" />
-			<Image dock="right" src="~/images/icons/addBtn.png" cssClass="addNewMeme" />
-		</DockLayout>
+	<TabView row="0">
+		<TabView.items>
 
-		<TabView row="1">
-			<TabView.items>
+			<TabViewItem title="Templates">
+				<TabViewItem.view>
+					<ScrollView>
+						<WrapLayout id="templateContainer" itemHeight="100" horizontalAlignment="center">
+						</WrapLayout>
+					</ScrollView>
+				</TabViewItem.view>
+			</TabViewItem>
 
-				<TabViewItem title="Templates">
-					<TabViewItem.view>
-						<ScrollView>
-							<WrapLayout id="templateContainer" itemHeight="100" horizontalAlignment="center">
-							</WrapLayout>
-						</ScrollView>
-					</TabViewItem.view>
-				</TabViewItem>
+			<TabViewItem title="My Memes">
+				<TabViewItem.view>
+					<ScrollView>
+						<WrapLayout id="myMemeContainer" itemHeight="100" horizontalAlignment="center">
+						</WrapLayout>
+					</ScrollView>
+				</TabViewItem.view>
+			</TabViewItem>
 
-				<TabViewItem title="My Memes">
-					<TabViewItem.view>
-						<ScrollView>
-							<WrapLayout id="myMemeContainer" itemHeight="100" horizontalAlignment="center">
-							</WrapLayout>
-						</ScrollView>
-					</TabViewItem.view>
-				</TabViewItem>
-
-			</TabView.items>
-		</TabView>
-
-	</GridLayout>
+		</TabView.items>
+	</TabView>
+	
 </Page>
