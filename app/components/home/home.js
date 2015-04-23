@@ -15,12 +15,13 @@ var analyticsMonitor = require("../../shared/analytics");
 var _page;
 
 exports.load = function(args) {
+	console.log("Home loaded Event Fired");
 	_page = args.object;
-	_page.onNavigatingFrom = function(){};
-
-	// Make sure we're on iOS before configuring the navigation bar
-	var controller = frameModule.topmost().ios;
-	//controller.showNavigationBar = false;
+	
+	if (applicationModule.ios) {
+		var controller = frameModule.topmost().ios;
+	
+	}
 
 	controller.showNavigationBar = false;
 
@@ -30,7 +31,6 @@ exports.load = function(args) {
  	
 
 	/*
-	if (applicationModule.ios) {
 		
 		// Temp CODE
 		_page.ios.title = "Meme";
@@ -59,10 +59,16 @@ exports.load = function(args) {
 	*/
 };
 
+exports.unloaded = function(args){
+	console.log("Home Unloaded Event Fired");
+};
+
 exports.navigatedTo = function(args){
+	console.log("Home Navigated To Event Fired");
+
 	populateTemplates();
 	populateMyMemes();
-}
+};
 
 exports.createNewTemplate = function() {
 	analyticsMonitor.trackFeature("Home.Template.CreateNew");

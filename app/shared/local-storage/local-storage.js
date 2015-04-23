@@ -85,6 +85,8 @@ function _saveImageLocally (imageName, imageSource) {
 	var fullPath = fs.path.join(_recentMemeFolder.path, imageName);
 	var saved = imageSource.saveToFile(fullPath, enumsModule.ImageFormat.png);
 
+	console.log("Meme Saved To:", fullPath);
+
 	return saved;
 }
 

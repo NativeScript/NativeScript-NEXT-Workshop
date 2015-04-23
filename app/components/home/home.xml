@@ -1,6 +1,7 @@
 <Page xmlns="http://www.nativescript.org/tns.xsd"
 	cssClass="page"
 	loaded="load"
+	unloaded="unloaded"
 	navigatedTo="navigatedTo">
 
 	<GridLayout rows="auto, *" cssClass="mainContainer">
