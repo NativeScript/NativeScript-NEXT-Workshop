@@ -41,8 +41,8 @@ function invokeCamera() {
 
 			analyticsMonitor.trackFeature("CreateTemplate.TakePicture");
 		}, function(error) {
-			console.log("***** ERROR *****", error);
 			analyticsMonitor.trackException(error, "Failed to TakePicture");
+			console.log("***** ERROR *****", error);
 		});
 
 	//TODO... if on cancel... we should show the camera roll to choose a picture from???...
@@ -51,25 +51,22 @@ function invokeCamera() {
 //Save to localStorage
 exports.saveLocally = function() {
 	_viewData.set("isBusy", true);
-
-	templates.addNewLocalTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"));
-
 	analyticsMonitor.trackFeature("CreateTemplate.SaveLocally");
-
+	templates.addNewLocalTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"));
 	navigation.goHome();
 };
 
 //Submit the template to everlive for everyone to use.
 exports.submitToEverlive = function() {
 	_viewData.set("isBusy", true);
-	analyticsMonitor.trackFeatureStart("CreateTemplate.SaveToBackend");
+	analyticsMonitor.trackFeatureStart("CreateTemplate.SavedToEverlive");
 
 	templates.addNewPublicTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"))
 	.then(function(){
 		console.log("***** AM I HERE");
 		
-		analyticsMonitor.trackFeature("CreateTemplate.SaveToBackend");
-		analyticsMonitor.trackFeatureStop("CreateTemplate.SaveToBackend");
+		analyticsMonitor.trackFeature("CreateTemplate.SavedToEverlive");
+		analyticsMonitor.trackFeatureStop("CreateTemplate.SavedToEverlive");
 
 		navigation.goHome();
 	});

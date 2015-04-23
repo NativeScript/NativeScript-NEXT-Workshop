@@ -65,9 +65,8 @@ exports.navigatedTo = function(args){
 }
 
 exports.createNewTemplate = function() {
-	navigation.goCreateTemplate();
-
 	analyticsMonitor.trackFeature("Home.Template.CreateNew");
+	navigation.goCreateTemplate();
 };
 
 function populateTemplates() {
@@ -119,16 +118,16 @@ function myMemesActionSheet (imageSource, imageFileName) {
 	dialogsModule.action(options).then(function (result) {
 		switch (result) {
 			case "Delete" :
+				analyticsMonitor.trackFeature("Home.ActionSheet.Delete");
 				deleteMeme(imageFileName);
-				analyticsMonitor.trackFeature("Home.MemesOptions.Delete");
 				break;
 			case "Share" : 
+				analyticsMonitor.trackFeature("Home.ActionSheet.ShareMeme");
 				shareMeme(imageSource);
-				analyticsMonitor.trackFeature("Home.MemesOptions.ShareMeme");
 				break;
 			case "Delete All" : 
+				analyticsMonitor.trackFeature("Home.ActionSheet.DeleteAllMemes");
 				deleteAllMemes();
-				analyticsMonitor.trackFeature("Home.MemesOptions.DeleteAllMemes");
 				break;
 		}
 	});
@@ -147,6 +146,7 @@ function deleteMeme(imageFileName) {
 			populateMyMemes();
 
 		}).catch(function (error) {
+			analyticsMonitor.trackException(error, "Delete Memes Failed");
 			console.log("***** ERROR:", error);
 		});
 }
@@ -162,6 +162,7 @@ function deleteAllMemes() {
 					//Repopulate the screen
 					populateMyMemes();
 				}).catch(function (error) {
+					analyticsMonitor.trackException(error, "Delete All Memes Failed");
 					console.log("***** ERROR:", error);
 				});
 			}
