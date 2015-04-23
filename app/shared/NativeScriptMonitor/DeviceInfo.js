@@ -8,7 +8,7 @@ var mainScreen = platform.screen.mainScreen,
 
 var info = {
     screen: mainScreen.widthPixels + 'x' + mainScreen.heightPixels,
-    language: "en-us" // device.language
+    language: device.language
 };
 
 exports.environmentInfo = info;

@@ -11,17 +11,31 @@ application.onLaunch = function (context) {
 };
 
 application.onResume = function (context) {	
-	console.log("***** application.onResume *****");	
+	console.log("***** application.onResume *****");
+
+	/*
+	var analyticsMonitor = require("./shared/analytics");
+	analyticsMonitor.start();
+	*/
+
 	//var topmost = frameModule.topmost();
 	//topmost.navigate(global.baseViewDirectory + "home/home");
 };
 
 application.onSuspend = function () {	
 	console.log("***** application.onSuspend *****");
+
+	/*
+	var analyticsMonitor = require("./shared/analytics");
+	analyticsMonitor.stop();
+	*/
 };
 
 application.onExit = function () {	
 	console.log("***** application.onExit *****");
+
+	var analyticsMonitor = require("./shared/analytics");
+	analyticsMonitor.stop();
 };
 
 
@@ -53,4 +67,3 @@ global.everliveBaseAddress = "http://api.everlive.com/v1/" + global.everliveApiK
 global.everliveFunctionBaseAddress = "https://platform.telerik.com/bs-api/v1/" + global.everliveApiKey + "/Functions"; 
 
 application.start();
-

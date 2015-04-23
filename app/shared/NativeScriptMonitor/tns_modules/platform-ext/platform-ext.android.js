@@ -9,7 +9,11 @@ var device = (function () {
             if (!device._language) {
                 var context = application.android.context,
                     locale = context.getResources().getConfiguration().locale;
-                device._language = locale.getDefault().toString();
+                if (locale) {
+                    device._language = locale.toString();
+                } else {
+                    device._language = java.util.Locale.getDefault().toString();
+                }
             }
             return device._language;
         },
