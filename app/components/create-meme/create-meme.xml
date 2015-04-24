@@ -4,7 +4,6 @@
 	navigatedTo="navigatedTo">
 	
 	<ScrollView>
-
 		<StackLayout>
 			<Image imageSource="{{ memeImage }}" />
 			<TextField hint="Top text" text="{{ topText }}" />

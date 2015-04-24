@@ -3,6 +3,7 @@ var frameModule = require("ui/frame");
 var dialogsModule = require("ui/dialogs");
 
 // Comment this to stop tracing
+/*
 var trace = require("trace");
 trace.enable();
 trace.setCategories(trace.categories.concat(
@@ -12,7 +13,7 @@ trace.setCategories(trace.categories.concat(
     //, trace.categories.ViewHierarchy
     //, trace.categories.VisualTreeEvents
     ));
-
+*/
 application.mainModule = "./components/splashscreen/splashscreen";
 application.cssFile = "./app.css";
 

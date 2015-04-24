@@ -1,5 +1,6 @@
 Image {
 	height: 200;
+	margin: 25;
 }
 
 TextField {
@@ -11,6 +12,7 @@ Button {
 	margin: 10;
 	color: black;
 }
+
 
 .settingsLeft {
 	margin: 10;
