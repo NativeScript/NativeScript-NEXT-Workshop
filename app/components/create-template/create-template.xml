@@ -1,6 +1,7 @@
 <Page 
 	xmlns="http://www.nativescript.org/tns.xsd"
-	navigatedTo="navigatedTo">
+	navigatedTo="navigatedTo"
+	loaded="loaded">
 
 	<StackLayout>
 		<Image imageSource="{{ imageSource }}" />

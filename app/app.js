@@ -22,16 +22,6 @@ application.cssFile = "./app.css";
 // Application Events: https://github.com/NativeScript/docs/tree/master/ApiReference/application
 application.onLaunch = function (context) {	
 	console.log("***** application.onLaunch *****");
-
-	console.log("Device model: " + platformModule.device.model);
-	console.log("Device type: " + platformModule.device.deviceType);
-	console.log("OS: " + platformModule.device.os);
-	console.log("OS version: " + platformModule.device.osVersion);
-	console.log("SDK Version: " + platformModule.device.sdkVersion);
-	console.log("Screen width: " + platformModule.screen.mainScreen.widthPixels);
-	console.log("Screen height: " + platformModule.screen.mainScreen.heightPixels);
-	console.log("Screen scale: " + platformModule.screen.mainScreen.scale);
-
 };
 
 application.onResume = function (context) {	

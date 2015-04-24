@@ -13,10 +13,18 @@ var _viewData = new observableModule.Observable();
 var _page,
 	_uniqueImageNameForSession;
 
-exports.navigatedTo = function(args) {
+exports.loaded = function(args) {
 	_page = args.object;
-	_page.bindingContext = _viewData;
 
+	if (applicationModule.ios) {
+		_page.ios.title = "Create Template";
+	}
+
+};
+
+exports.navigatedTo = function(args) {	
+	_page.bindingContext = _viewData;
+	
 	_uniqueImageNameForSession = utilities.generateUUID() + ".png";
 
 	_viewData.set("pictureTaken", false);
