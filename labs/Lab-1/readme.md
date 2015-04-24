@@ -36,3 +36,6 @@ There are a number of ways to use NativeScript, including an open source CLI, an
 ## Step 1: Deploy to companion app
 
 After creating the project you're taken into the AppBuilder environment. AppBuilder offers a lot of functionality—everything from a coding IDE to
+
+
+LiveSync
