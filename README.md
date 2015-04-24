@@ -34,7 +34,7 @@ We’ve chosen to walk your through building mobile application which exercises 
 * 11:15 - 12:15 - [Beyond the Basics, @csell5](http://tbd.com) 
 * 12:15 - 12:30 - [Lab #2 Start](labs/Lab-2/readme.md)
 * 12:30 - 13:30 - Lunch
-* 13:30 - 14:00 - [Lab #2 Continued](http://tbd.com)
+* 13:30 - 14:00 - Lab #2 Continued
 * 14:00 - 15:00 - [Diving Deep with {N}, @sebawita](http://tbd.com) 
 * 15:00 - 15:15 - Break
 * 15:15 - 16:00 - [Lab #3](labs/Lab-3/readme.md)
