@@ -65,6 +65,12 @@ function parseInternal(value, exports) {
                             subExports = require(jsPath.replace(".js", ""));
                         }
                         componentModule = loadInternal(xmlPath, subExports);
+                        if (types.isDefined(componentModule) && types.isDefined(componentModule.component)) {
+                            var attr;
+                            for (attr in args.attributes) {
+                                componentBuilder.setPropertyValue(componentModule.component, subExports, exports, attr, args.attributes[attr]);
+                            }
+                        }
                     }
                     else {
                         componentModule = componentBuilder.getComponentModule(args.elementName, args.namespace, args.attributes, exports);

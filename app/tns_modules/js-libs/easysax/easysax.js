@@ -1,4 +1,4 @@
-﻿	/*
+	/*
 	new function() {
 		var parser = new EasySAXParser();
 

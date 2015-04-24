@@ -61,7 +61,7 @@ function populateTemplates() {
 		var image = new imageModule.Image();
 		image.imageSource = imageSource;
 		
-		image.observe(gesturesModule.GestureTypes.Tap, function () { 
+		image.observe(gesturesModule.GestureTypes.tap, function () { 
 			templateSelected(imageSource); 
 		});
 				
@@ -81,7 +81,7 @@ function populateMyMemes() {
 		image.imageSource = imageSource;
 
 		//What do to...  share delete?
-		image.observe(gesturesModule.GestureTypes.Tap, function () {
+		image.observe(gesturesModule.GestureTypes.tap, function () {
 		 	myMemesActionSheet(imageSource, fileName); 
 		});
 		
