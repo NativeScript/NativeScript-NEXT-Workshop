@@ -50,7 +50,7 @@ viewModel.share = function() {
 };
 
 //Add event listener to refresh the memeImage every time there is a change to the params
-viewModel.addEventListener(observable.knownEvents.propertyChange, function(changes) {
+viewModel.addEventListener(observable.Observable.propertyChangeEvent, function(changes) {
 	//skip if memeImage changes
 	if (changes.propertyName === "memeImage") {
 		return;

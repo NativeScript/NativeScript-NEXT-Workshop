@@ -58,11 +58,6 @@ function getAncestor(view, typeName) {
     return parent;
 }
 exports.getAncestor = getAncestor;
-var knownEvents;
-(function (knownEvents) {
-    knownEvents.loaded = "loaded";
-    knownEvents.unloaded = "unloaded";
-})(knownEvents = exports.knownEvents || (exports.knownEvents = {}));
 var viewIdCounter = 0;
 function onCssClassPropertyChanged(data) {
     var view = data.object;
@@ -573,11 +568,11 @@ var View = (function (_super) {
     View.getMeasureSpec = function (view, parentLength, parentSpecMode, horizontal) {
         var density = utils.layout.getDisplayDensity();
         var margins = horizontal ? view.marginLeft + view.marginRight : view.marginTop + view.marginBottom;
-        margins = Math.round(margins * density);
+        margins = Math.floor(margins * density);
         var resultSize = 0;
         var resultMode = 0;
         var measureLength = Math.max(0, parentLength - margins);
-        var childLength = Math.round((horizontal ? view.width : view.height) * density);
+        var childLength = Math.floor((horizontal ? view.width : view.height) * density);
         if (!isNaN(childLength)) {
             if (parentSpecMode !== utils.layout.UNSPECIFIED) {
                 resultSize = Math.min(parentLength, childLength);
@@ -778,6 +773,8 @@ var View = (function (_super) {
     View.prototype.focus = function () {
         return undefined;
     };
+    View.loadedEvent = "loaded";
+    View.unloadedEvent = "unloaded";
     View.idProperty = idProperty;
     View.cssClassProperty = cssClassProperty;
     View.isEnabledProperty = isEnabledProperty;
