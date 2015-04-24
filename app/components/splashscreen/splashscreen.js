@@ -1,9 +1,6 @@
 var observableModule = require("data/observable");
 var navigation = require( "../../shared/navigation");
 
-var applicationModule = require("application");
-var frameModule = require("ui/frame");
-
 var _viewData = new observableModule.Observable();
 var _page;
 

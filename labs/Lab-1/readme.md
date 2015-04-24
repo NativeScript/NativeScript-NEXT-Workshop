@@ -4,38 +4,31 @@ Contributors: [Clark Sell](http://csell.net) & [TJ VanToll](http://tjvantoll.com
 
 Tags: TelerikNEXT, NativeScript, {N}, JavaScript, CSS3, iOS, Android
 
-## What are we learning?
+## What are you learning?
 
-The basics!
+You'll start by learning how to use Telerik AppBuilder—including how to start NativeScript apps, how to deploy them devices, and how see your changes during development. From there you'll start building a basic NativeScript app.
 
-Bacon ipsum dolor amet meatball venison strip steak drumstick fatback cupim short ribs capicola doner jerky bresaola. Short ribs cupim chuck, ribeye ball tip prosciutto leberkas meatloaf tongue shank rump ham hock ground round. Kevin tongue capicola, shoulder pork belly leberkas kielbasa. Tenderloin pork chop brisket rump bresaola.
+## Step 1: Clone the repo
 
-* TBD
-* TBD
- 
-## Getting Setup
-Create a new application in AppBuilder. [How to create a new application](http://backUpOne.com/backup)
+* On <https://platform.telerik.com> click the blue **Create app** button.
+* On the next screen, select **Start from a blank app**, and give the app a name of ”JustMeme”.
+* Click the green **Create app** button.
+* Click the green **Create AppBuilder Native project**.
+* Select **Clone repository**, use https://step-1-link.git for a Repository Uri, and “MemeGen Lab 1” for a project name.
+* Click the green **Create project** button.
 
-{N} lab projects in Github:
-* [Starting Project](http://tbd.com)
-* [Finished Project](http://tbd.com)
+## Step 2: Deploy to companion app
 
-## NativeScript basics
+After creating the project you're taken into the AppBuilder environment. AppBuilder offers a lot of functionality, including a full IDE and integrated version control, but you'll start by using AppBuilder to get your app onto a device.
 
-There are a number of ways to use NativeScript, including an open source CLI, an installable Windows application, and a Visual Studio Extension. These labs all assume you're using the AppBuilder in-browser client available at <https://platform.telerik.com>. As such, some instructions are specific to the browser environment, but you should be able to follow along in other clients.
+* In the **Run** menu, select **Build**.
+* Choose your device's OS (Android or iOS), make sure the **NativeScript companion app** radio button is selected, and then click the green **Next** button.
+* Open the NativeScript app on your Android or iOS device.
+	* (If you don't have the NativeScript app download it from the [iOS App Store](https://itunes.apple.com/us/app/nativescript/id882561588?mt=8) or [Google Play](https://play.google.com/store/apps/details?id=com.telerik.NativeScript&hl=en)).
+* **Android only**: With the NativeScript app running, open the notification drawer from the top of the screen. Select the **Scan** option and use the integrated scanner to scan the QR code you see in the browser.
+* **iOS only**: Within the NativeScript app, use a two-finger left-to-right swipe (see image below) from the far left to reveal the companion app menu. Select the **QR Scanner** option and use the integrated scanner to scan the QR code you see in the browser.
 
-## Step 0: Clone the repo
+![](swipe.png)
 
-* On <https://platform.telerik.com> click the blue “Create app” button, choose “Start from a blank app”.
-* Select “Start from a blank app”, and give the app a name of “MemeGen”.
-* Click the green “Create app” button.
-* Click the green “Create AppBuilder Native project”.
-* Select “Clone repository”, use https://step-1-link.git for a Repository Uri, and “MemeGen Lab 1” for a project name.
-* Click the green “Create project” button.
+## Step 6: Extension ideas
 
-## Step 1: Deploy to companion app
-
-After creating the project you're taken into the AppBuilder environment. AppBuilder offers a lot of functionality—everything from a coding IDE to
-
-
-LiveSync
