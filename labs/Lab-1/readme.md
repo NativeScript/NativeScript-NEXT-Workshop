@@ -1,9 +1,12 @@
 # 2015 TelerikNEXT NativeScript {N} Workshop - Lab #1
-Contributors: [Clark Sell](http://csell.net) & [TJ Vantoll](http://tjvantoll.com/) & Sebastian Witalec. You can find us on Twitter at: [@csell5](https://twitter.com/csell5), [@tjvantoll](https://twitter.com/tjvantoll), [@sebawita](https://twitter.com/sebawita)
+
+Contributors: [Clark Sell](http://csell.net) & [TJ VanToll](http://tjvantoll.com/) & Sebastian Witalec. You can find us on Twitter at: [@csell5](https://twitter.com/csell5), [@tjvantoll](https://twitter.com/tjvantoll), [@sebawita](https://twitter.com/sebawita)
 
 Tags: TelerikNEXT, NativeScript, {N}, JavaScript, CSS3, iOS, Android
 
 ## What are we learning?
+
+The basics!
 
 Bacon ipsum dolor amet meatball venison strip steak drumstick fatback cupim short ribs capicola doner jerky bresaola. Short ribs cupim chuck, ribeye ball tip prosciutto leberkas meatloaf tongue shank rump ham hock ground round. Kevin tongue capicola, shoulder pork belly leberkas kielbasa. Tenderloin pork chop brisket rump bresaola.
 
