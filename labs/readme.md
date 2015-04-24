@@ -6,6 +6,6 @@ Tags: TelerikNEXT, NativeScript, {N}, JavaScript, CSS3, iOS, Android
 
 ## Contents
 
-* [Lab 1](Lab-1/readme.me)
-* [Lab 2](Lab-2/readme.me)
-* [Lab 3](Lab-3/readme.me)
+* [Lab 1](Lab-1/readme.md)
+* [Lab 2](Lab-2/readme.md)
+* [Lab 3](Lab-3/readme.md)
