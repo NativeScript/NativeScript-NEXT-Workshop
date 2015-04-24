@@ -7,6 +7,13 @@ var platformNames;
 var device = (function () {
     function device() {
     }
+    Object.defineProperty(device, "manufacturer", {
+        get: function () {
+            return "Apple";
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(device, "os", {
         get: function () {
             return platformNames.ios;

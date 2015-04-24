@@ -15,6 +15,16 @@ var device = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(device, "manufacturer", {
+        get: function () {
+            if (!device._manufacturer) {
+                device._manufacturer = android.os.Build.MANUFACTURER;
+            }
+            return device._manufacturer;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(device, "osVersion", {
         get: function () {
             if (!device._osVersion) {

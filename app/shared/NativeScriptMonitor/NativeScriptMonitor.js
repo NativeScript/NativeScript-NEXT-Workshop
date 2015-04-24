@@ -2,7 +2,7 @@ var http = require('http'),
     LocationManager = require('location').LocationManager,
     analytics = require('./EqatecMonitor'),
     deviceInfo = require('./DeviceInfo'),
-    UserPreferences = require('local-settings');
+    UserPreferences = require('application-settings');
 
 function generateUUID() {
     var d = new Date().getTime();
