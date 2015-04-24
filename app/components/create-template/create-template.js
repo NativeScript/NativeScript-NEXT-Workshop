@@ -28,10 +28,13 @@ exports.navigatedTo = function(args) {
 function invokeCamera() {
 	//https://github.com/NativeScript/docs/blob/master/camera.md
 	
-	cameraModule.takePicture(
-		applicationModule.ios ? 300 : 750,
-		applicationModule.ios ? 200 : 450,
-		true)
+	var pictureOptions = {
+		width: applicationModule.ios ? 300 : 750,
+		height: applicationModule.ios ? 200 : 450,
+		keepAspectRatio: true
+	};
+
+	cameraModule.takePicture(pictureOptions)
 		.then(function(r) {
 			analyticsMonitor.trackFeature("CreateTemplate.TakePicture");
 			console.log("***** Invoke Camera Return *****", r);
