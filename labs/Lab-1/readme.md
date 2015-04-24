@@ -65,9 +65,7 @@ The `<Image>` element's `src` attribute points at an image within the project, a
 
 ## Step 5: (Optional) Explore
 
-That's the end of this lab. In the next lab you'll build a more complex page that uses data binding, CSS styling, and more.
-
-If you have some extra time at the end of this lab, here are a few things you can play around with:
+That's the end of this lab. In the next lab you'll build a more complex page that uses data binding, CSS styling, and more. If you have some extra time at the end of this lab, here are a few things you can play around with:
 
 ### Add more UI widgets
 
@@ -77,7 +75,3 @@ This lab used an `<Image>` element, but there are numerous other UI widgets you 
 * [`<Switch>`](http://docs.nativescript.org/ApiReference/ui/switch/HOW-TO.html)
 * [`<TabView>`](http://docs.nativescript.org/ApiReference/ui/tab-view/HOW-TO.html)
 * [`<TextField>`](http://docs.nativescript.org/ApiReference/ui/text-field/HOW-TO.html)
-
-### Add icons
-
-The
