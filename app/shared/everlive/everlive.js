@@ -1,6 +1,7 @@
 var imageSourceModule = require("image-source");
 var httpModule = require("http");
 var enumsModule = require("ui/enums");
+var analyticsMonitor = require("../analytics");
 
 module.exports = {
 	
@@ -27,11 +28,13 @@ function _addTemplate (fileName, imageSource) {
 			console.log("***** Everlive upload image status code", uploadResponse.statusCode);
 			console.log("***** Everlive payload result:", JSON.stringify(uploadResponse));
 
+			//ERROR INTRODUCED ON PURPOSE.....
 			var result = JSON.parse(uploadResponse.content).Result;
 			
 			console.log("***** RESULT FROM EVERLIVE after:", result.Id);
 			_addTemplateToContentType(fileName, result.Id, result.Uri);
 		}).catch(function(error){
+			analyticsMonitor.trackException(error, "Everlive.UploadFile");
 			console.log("***** Add Tempalte ERROR", error);
 		}); 
 }
