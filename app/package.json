@@ -1,9 +1,9 @@
 {
-	"name": "tns-template-hello-world",
+	"name": "JustMeme",
 	"main": "app.js",
-	"version": "0.10.0",
+	"version": "0.11.0",
 	"author": "Telerik <support@telerik.com>",
-	"description": "Nativescript hello-world template",
+	"description": "JustMeme is the best Meme generator on the interwebs!",
 	"license": "BSD",
 	"keywords": [
 		"telerik",
@@ -11,6 +11,6 @@
 		"template"
 	],
 	"repository": {
-		"url": "https://github.com/NativeScript/cross-platform-modules/commit/27a20f5b425e81231ebe53e61a986102a52b7124"
+		"url": "https://github.com/NativeScript/NativeScript-NEXT-Workshop"
 	}
 }

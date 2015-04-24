@@ -1,5 +1,5 @@
 {
-	"id": "org.nativescript.telerikmemegenerator",
+	"id": "net.csell.justmeme",
 	"tns-ios": {
 		"version": "0.10.0"
 	},
