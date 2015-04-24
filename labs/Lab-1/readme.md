@@ -11,7 +11,7 @@ You'll start by learning how to use Telerik AppBuilder—including how to start 
 ## Step 1: Clone the repo
 
 * On <https://platform.telerik.com> click the blue **Create app** button.
-* On the next screen, select **Start from a blank app**, and give the app a name of ”JustMeme”.
+* On the next screen, select **Start from a blank app**, and give the app a name of “JustMeme”.
 * Click the green **Create app** button.
 * Click the green **Create AppBuilder Native project**.
 * Select **Clone repository**, use https://step-1-link.git for a Repository Uri, and “MemeGen Lab 1” for a project name.
@@ -30,5 +30,48 @@ After creating the project you're taken into the AppBuilder environment. AppBuil
 
 ![](swipe.png)
 
-## Step 6: Extension ideas
+If all goes right you should see the text “Hello NativeScript!” on your screen. If you have multiple devices, feel free to deploy your app to all of them—it'll make testing more fun as you work through these labs.
 
+## Step 3: AppBuilder LiveSync
+
+Now that you have your app on your device let's make some changes to it. Start by locating the **Project Navigator** on the right-hand side of the screen. This contains the files that make up your NativeScript app. Find the **components/splashscreen/splashscreen.xml** file and double click it to open the file for editing. You should see a simple file that looks like this:
+
+```xml
+<Page>
+    <Label text="Hello NativeScript!" />
+</Page>
+```
+
+Next, change the `<Label>` element's `text` attribute, for instance `<Label text="OMG OMG OMG" />`. With that change in place, you *could* regenerate a QR code to view your updated app, but AppBuilder provides a much easier mechanism known as AppBuilder LiveSync. Let's look at how it works.
+
+* **Android only**: With the NativeScript app running, open the notification drawer from the top of the screen and select the **Sync** option.
+* **iOS only**: Within the NativeScript app, tap with three-fingers and hold until a popup appears (see image below).
+
+![](three-finger-tap.png)
+
+If all goes well you should see your change on your device. Try making a few more changes and LiveSyncing them to your device so you can get the workflow down.
+
+## Step 4: Using UI widgets
+
+NativeScript provides a number of UI widgets you can use to build your apps. You've seen one of these already (`<Label>`), now let's add a few more. Start by changing your splashscreen.xml file to use the code below:
+
+```xml
+<Page>
+    <Image src="~/images/splashScreenBackground.png" stretch="aspectFill" />
+</Page>
+```
+
+The `<Image>` element's `src` attribute points at an image within the project, and the `stretch` attribute controls how NativeScript should stretch the image when it places it on the screen. All UI widgets have an API reference and a how-to guide. For example here are the `<Image>` element's [API docs](http://docs.nativescript.org/ApiReference/ui/image/Image.html) and [how-to reference](http://docs.nativescript.org/ApiReference/ui/image/HOW-TO.html).
+
+## Step 5: (Optional) Explore
+
+That's the end of this lab. In the next lab you'll build a more complex page that uses data binding, CSS styling, and more. If you have some extra time at the end of this lab, here are a few things you can play around with:
+
+### Add more UI widgets
+
+This lab used an `<Image>` element, but there are numerous other UI widgets you can add to your XML. For instance you might want to try out the following:
+
+* [`<Slider>`](http://docs.nativescript.org/ApiReference/ui/slider/HOW-TO.html)
+* [`<Switch>`](http://docs.nativescript.org/ApiReference/ui/switch/HOW-TO.html)
+* [`<TabView>`](http://docs.nativescript.org/ApiReference/ui/tab-view/HOW-TO.html)
+* [`<TextField>`](http://docs.nativescript.org/ApiReference/ui/text-field/HOW-TO.html)
