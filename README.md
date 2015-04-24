@@ -29,16 +29,16 @@ We’ve chosen to walk your through building mobile application which exercises 
 # WorkShop Agenda
 * 09:00 - 09:30 	 - Setup and Configuration
 * 09:30 - 10:30  - [Introductions and Welcome to NativeScript {N}, @tjvantoll](http://tbd.com)
-* 10:30 - 11:00 - [Lab #1](http://tbd.com) 
+* 10:30 - 11:00 - [Lab #1](labs/Lab-1/readme.md) 
 * 11:00 - 11:15 - Break 
 * 11:15 - 12:15 - [Beyond the Basics, @csell5](http://tbd.com) 
-* 12:15 - 12:30 - [Lab #2 Start](http://tbd.com)
+* 12:15 - 12:30 - [Lab #2 Start](labs/Lab-2/readme.md)
 * 12:30 - 13:30 - Lunch
 * 13:30 - 14:00 - [Lab #2 Continued](http://tbd.com)
-* 14:00 - 15:00 	- [Diving Deep with {N}, @sebawita](http://tbd.com) 
-* 15:00 - 15:15 	- Break
-* 15:15 - 16:00 	- [Lab #3](http://tbd.com)
-* 16:00 - 16:30 	- Panel Q&A and Wrap Up
+* 14:00 - 15:00 - [Diving Deep with {N}, @sebawita](http://tbd.com) 
+* 15:00 - 15:15 - Break
+* 15:15 - 16:00 - [Lab #3](labs/Lab-3/readme.md)
+* 16:00 - 16:30 - Panel Q&A and Wrap Up
 
 # Presentations
 
@@ -56,15 +56,15 @@ The lab steps are all contained in this repository which serves as our master re
 Now of course we’re human, so if you find a mistake, please feel free to submit a patch.
 
 1. Your first {N} app
-* [Instructions](http://tbd.com)
+* [Instructions](labs/Lab-1/readme.md)
 * [Starting Solution](http://tbd.com)
 * [Finished Solution](http://tbd.com)
 2. Beyond the basics
-* [Instructions](http://tbd.com)
+* [Instructions](labs/Lab-2/readme.md)
 * [Starting Solution](http://tbd.com)
 * [Finished Solution](http://tbd.com)
 3. Diving in deep
-* [Instructions](http://tbd.com)
+* [Instructions](labs/Lab-3/readme.md)
 * [Starting Solution](http://tbd.com)
 * [Finished Solution](http://tbd.com)
 
