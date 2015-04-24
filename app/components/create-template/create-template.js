@@ -29,9 +29,9 @@ function invokeCamera() {
 	//https://github.com/NativeScript/docs/blob/master/camera.md
 	
 	var pictureOptions = {
-		width: applicationModule.ios ? 300 : 750,
-		height: applicationModule.ios ? 200 : 450,
-		keepAspectRatio: true
+		width: applicationModule.ios ? 320 : 640,
+		height: applicationModule.ios ? 240 : 480,
+		keepAspectRatio: false
 	};
 
 	cameraModule.takePicture(pictureOptions)
