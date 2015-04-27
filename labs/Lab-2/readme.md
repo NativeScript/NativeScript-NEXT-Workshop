@@ -155,20 +155,23 @@ Before we can properly navigate we need to setup some the details on how to navi
 * context: the object that we want to pass along to the next page.
 * animated: show the native page transitions.
 
+See the following example:
+
 	var navigationEntry = {
-  	moduleName: “details-page”,
-  	context: { info: “something you want to pass to your page” },
-  	animated: false
+		moduleName: “details-page”,
+		context: { info: “something you want to pass to your page” },
+		animated: false
 	};
 
-From there we just need to call navigate.
+With that in place, we just need to call navigate passing our navigation entry to it.
+
 	top.navigate(navigationEntry);
 
-The completed ‘SplashScreen.js’ should look similar to the following. Below we’ve used some shorthand syntax to add a little sugar into today’s lab:
+Now the completed ‘SplashScreen.js’ should look similar to what you see listed below. Here we've used some shorthand syntax to add a little sugar into today’s lab:
 
 	// load the frame module
 	var frameModule = require(“ui/frame”);
-
+	
 	// expose our load function to the page’s loaded event
 	exports.load = function(args) {
 		// Fake some work
