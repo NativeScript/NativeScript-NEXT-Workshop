@@ -1,7 +1,5 @@
 {
 	"id": "net.csell.justmeme",
-	"DisplayName": "JustMeme",
-	"BundleVersion": "1.1",
 	"tns-ios": {
 		"version": "0.10.0"
 	},
