@@ -5,17 +5,20 @@ var dialogsModule = require("ui/dialogs");
 var platformModule = require("platform");
 
 // Comment this to stop tracing
+
 /*
 var trace = require("trace");
 trace.enable();
 trace.setCategories(trace.categories.concat(
     trace.categories.Debug
     , "TabView"
+    , "Camera"
     //, trace.categories.Navigation
     //, trace.categories.ViewHierarchy
     //, trace.categories.VisualTreeEvents
     ));
 */
+
 application.mainModule = "./components/splashscreen/splashscreen";
 application.cssFile = "./app.css";
 

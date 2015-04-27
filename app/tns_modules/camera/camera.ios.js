@@ -30,31 +30,45 @@ var UIImagePickerControllerDelegateImpl = (function (_super) {
         return this;
     };
     UIImagePickerControllerDelegateImpl.prototype.imagePickerControllerDidFinishPickingMediaWithInfo = function (picker, info) {
+        console.log("here 1");
         if (info) {
             var source = info.valueForKey(UIImagePickerControllerOriginalImage);
+            console.log("here 2");
             if (source) {
                 var image = null;
                 if (this._width || this._height) {
                     var newSize = null;
                     if (this._keepAspectRatio) {
+                        console.log("here 3");
                         var aspectSafeSize = common.getAspectSafeDimensions(source.size.width, source.size.height, this._width, this._height);
                         newSize = CGSizeMake(aspectSafeSize.width, aspectSafeSize.height);
+                        console.log("here 4");
                     }
                     else {
                         newSize = CGSizeMake(this._width, this._height);
                     }
+                    console.log("here 5");
                     UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0);
+                    console.log("here 6");
                     source.drawInRect(CGRectMake(0, 0, newSize.width, newSize.height));
+                    console.log("here 7");
                     image = UIGraphicsGetImageFromCurrentImageContext();
+                    console.log("here 8");
                     UIGraphicsEndImageContext();
+                    console.log("here 9");
                 }
+                console.log("here 10");
                 var imageSourceResult = image ? imageSource.fromNativeSource(image) : imageSource.fromNativeSource(source);
+                console.log("here 11");
                 if (this._callback) {
+                    console.log("here 12");
                     this._callback(imageSourceResult);
                 }
             }
         }
+        console.log("here 13");
         picker.presentingViewController.dismissViewControllerAnimatedCompletion(true, null);
+        console.log("here 14");
     };
     UIImagePickerControllerDelegateImpl.prototype.imagePickerControllerDidCancel = function (picker) {
         picker.presentingViewController.dismissViewControllerAnimatedCompletion(true, null);
@@ -86,6 +100,7 @@ exports.takePicture = function (options) {
             imagePickerController.sourceType = UIImagePickerControllerSourceType.UIImagePickerControllerSourceTypeCamera;
         }
         imagePickerController.modalPresentationStyle = UIModalPresentationStyle.UIModalPresentationCurrentContext;
+        
         var topMostFrame = frame.topmost();
         if (topMostFrame) {
             var viewController = topMostFrame.currentPage && topMostFrame.currentPage.ios;
