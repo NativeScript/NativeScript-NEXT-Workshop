@@ -155,9 +155,9 @@ Before we can properly navigate we need to setup some the details on how to navi
 * animated: show the native page transitions.
 
 	var navigationEntry = {
-    	moduleName: “details-page”,
-    context: { info: “something you want to pass to your page” },
-    animated: false
+		moduleName: “details-page”,
+		context: { info: “something you want to pass to your page” },
+		animated: false
 	};
 
 From there we just need to call navigate.
