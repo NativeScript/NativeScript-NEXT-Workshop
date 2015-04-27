@@ -25,12 +25,12 @@ Create a new application in AppBuilder. [How to create a new application](http:/
 
 ### Step #0 - Creating the home.xml shell
 
-In an effort to keep our app always running, before we can navigate away from the splash screen we will need something to navigate to. To get started, let’s create the basic shell of home that we will later redirect our splash screen too.
+In an effort to keep our app always running, before we can navigate away from the splash screen we will need something to navigate to. To start, let’s create the basic shell of our home screen that we will later redirect our splash screen too.
 
 **Creating Home**
 
 1. In our components folder ‘/app/components’ let’s create a new folder called *home* that will contain all of our home’s components.
-2. Every view can have three components. The layout (xml), the style (css), and the view’s code (js). When those files all have the same root name, in our case *home*, the {N} runtime will load them accordinaly.
+2. Every view can have three components. The layout (xml), the style (css), and the view’s code (js). When those files all have the same root name, in our case *home*, the {N} runtime will load them accordingly.
 3. Let’s create those three file that we will need to display our home page:
 
 * /app/components/home/**home.xml**
@@ -43,11 +43,11 @@ With those three files in place, let’s update our *home.xml* to include the wo
 		<Label text=“hi from home”/>
 	</Page>
 
-### Step #1 - OnLoaded page events
+### Step #1 - onLoaded page events
 
 With our home view now in place let’s turn our attention back to the ‘SplashScreen.xml’ that we built in the first lab. 
 
-Let’s setup our scenario. Today it’s not uncommon to use a SplashScreen to start loading app information that might be used on your home screen. For our purposes here, we can just simulate it with a simple ‘setTimeout()’. Something like such:
+Let’s setup the scenario. Today it’s not uncommon to use a SplashScreen to start loading app information that might be used later in your app. For our purposes here we’re going to fake it.   To simulate some kind of load we’re going to call ‘setTimeout()’ to create a delay. Something like such:
 
 	//Pretending we’re calling some awesome service.
 	setTimeout(function () {
