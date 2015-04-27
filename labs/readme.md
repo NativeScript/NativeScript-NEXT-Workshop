@@ -12,6 +12,6 @@ Tags: TelerikNEXT, NativeScript, {N}, JavaScript, CSS3, iOS, Android
 
 ## Screen Shots
 
-![](SS-1.png)
-![](SS-2.png)
-![](SS-3.png)
+![](ss.png)
+![](ss2.png)
+![](ss3.png)
