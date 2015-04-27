@@ -19,18 +19,17 @@ exports.loaded = function(args) {
 	if (applicationModule.ios) {
 		_page.ios.title = "Create Template";
 	}
-};
 
-exports.navigatedTo = function(args) {	
 	_page.bindingContext = _viewData;
 
 	_uniqueImageNameForSession = utilities.generateUUID() + ".png";
 	_viewData.set("pictureTaken", false);
 	_viewData.set("isBusy", false);
 	_viewData.set("imageSource", null);
-	
-	invokeCamera();
+};
 
+exports.navigatedTo = function(args) {	
+	invokeCamera();
 };
 
 function invokeCamera() {
