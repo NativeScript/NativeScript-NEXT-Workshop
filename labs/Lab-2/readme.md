@@ -150,9 +150,10 @@ We can easily get our topmost frame by calling
 	var top = frameModule.topmost();
 
 Before we can properly navigate we need to setup some the details on how to navigate. Let’s create a navigationEntry that we will later pass to navigate. There are three properties that we can set:
+
 * moduleName: This is the path to the page that we want to be redirect to.
 * context: [optional] the object that we want to pass along to the next page.
-* animated: show the native page transitions.
+* animated: show the native page transitions
 
 	var navigationEntry = {
   	moduleName: “details-page”,
