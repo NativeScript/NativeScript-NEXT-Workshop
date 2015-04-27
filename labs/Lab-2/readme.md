@@ -42,20 +42,29 @@ With those three files in place, let’s update our *home.xml* to include the wo
 		<Label text=“hi from home”/>
 	</Page>
 
+What are we proving here? Nothing other than navigation works correctly when we get to that point.
+
 ### Step #1 - onLoaded page events
 
 With our home view now in place let’s turn our attention back to the ‘SplashScreen.xml’ that we built in the first lab. 
 
-Let’s setup the scenario. Today it’s not uncommon to use a SplashScreen to start loading app information that might be used later in your app. For our purposes here we’re going to fake it.   To simulate some kind of load we’re going to call ‘setTimeout()’ to create a delay. Something like such:
+Let’s setup the scenario. Today it’s not uncommon to use a SplashScreen to start loading app information that might be used later in your app. For our purposes here we’re going to fake it and use this as an opportunity to explain a few things. 
+
+To simulate some kind of business processing we’re going to call ‘setTimeout()’ to create a slight delay. Something like such:
 
 	//Pretending we’re calling some awesome service.
 	setTimeout(function () {
-			//Got it. Now let’s navigate.
+			// Do something really awesome… 
+			// Finished doing something awesome.
+			// Now let’s navigate.
 	}, 100); 
 
-Now at this point we don’t actually have anywhere to put our code, good time to introduce [{N} Page Events](http://docs.nativescript.org/ApiReference/ui/core/view/knownEvents/README)
+Now at this point we don’t actually have anywhere to put our code which means it’s a good time to introduce [{N} Page Events](http://docs.nativescript.org/ApiReference/ui/core/view/knownEvents/README)
 
-Let’s add this simulated logic to the Page’s ‘onLoaded’ event. To start we need to start by telling our view what function should run when the loaded event is fire. We do this by just adding an attribute to our Page element, ‘loaded=“load”’.  
+To complete our scenario, when the page loads, we want to wait a some time then just redirect to our new home page. To do so
+let’s add the ‘setTimeout’ to our Page’s ‘onLoaded’ event. 
+
+To start we need to tell our view what function should run when the loaded event is fired. We can easily do this by just adding an attribute to our Page’s *Page* element, ‘loaded=“load”’.  
 
 	<Page 	loaded=“load”>
 
@@ -64,30 +73,41 @@ Now let’s open our SplashScreen’s code file, ‘splashscreen.js’. Right no
 	exports.load = function(args) {
 	};
 
+With that in place, our function should now run when the page’s loaded event is fired. Now lets add our setTimeout logic in that function.
+
+	exports.load = function(args) {
+		setTimeout(function () {
+				// Do something really awesome… 
+				// Finished doing something awesome.
+				// Now let’s navigate.
+		}, 100); 
+	};
+
+Awesome. Now we just need to navigate to our home page.
 
 ### Step #2 - Loading your first module
 
-To navigate to another page within your application we first have to get a reference to the topmost frame. The [frame](http://docs.nativescript.org/ApiReference/ui/frame/Frame) as defined:
+To navigate to a page within your application we first have to get a reference to the topmost frame. The [frame](http://docs.nativescript.org/ApiReference/ui/frame/Frame) as defined:
 
 > Represents the logical View unit that is responsible for navigation within an application.
 
-For use to use the frame we first have to load that module. We do that by calling *require* and passing the path reference to our module.
+For us to leverage the frame API we first have to load that module. We do that by calling *require* and passing the path reference to the module we require. If you’ve done any node.js development this should be more than familiar.
 
 	var frameModule = require(“ui/frame”);
 
-Now that we’ve successful loaded our frame module I am sure you’re asking, what’s a module and where did you find that? Well as it turns out they’re in a folder called *tns_modules*, where else?
+Now that we’ve successful loaded our frame module, I’m sure you’re asking, what’s a module and where did you find that? Well as it turns out they’re in a folder called *tns_modules*, where else?
 
-Ok let’s back up. A [module](http://docs.nativescript.org/modules) is defined as: 
+Ok, let’s back up. A [module](http://docs.nativescript.org/modules) is defined as: 
 
 > To let you access the native device and platform capabilities of your target platform, NativeScript uses a modular design pattern. All device, platform or user interface functionalities reside in separate modules. To access the functionality provided by a module, you need to require the module.
 
 > In your project, the files for each module reside in a 	dedicated subdirectory in the {N}_modules directory. Each default module comes along with a package.json file which declares how the module should be called within your call and which file contains its respective code.
 
-Ok, if you’re using AppBuilder that part is actually hidden. 
+Ok, if you’re using AppBuilder that part is sorta hidden. 
 
 **Extra Credit**
 
-Open your terminal/cmd. Assuming you have the {N} cli installed, ‘run tns create [someAppName]’. In doing so this will create a sample shell application that you can take and build upon.  
+Open your terminal/cmd. Assuming you have the {N} cli installed, run ‘tns create [someAppName]’. In doing so this will create a sample shell application that you can take and build upon.  
 
 After running *create*, you should see a file & folder structure similar to what you see listed below. Look closely and you will find the tns_modules folder. This is where all of the default modules are hiding.
 
@@ -124,14 +144,35 @@ After running *create*, you should see a file & folder structure similar to what
 
 ### Step #3 - Take me Home.xml
 
-Now that we have our frame, we want our topmost 
+Now that we have our frame, we need to get a reference to our topmost frame and call navigate. Navigate takes a number of parameters which tell it where and how to navigate.
 
-Finished ‘SplashScreen.js’ code:
+We can easily get our topmost frame by calling
+	var top = frameModule.topmost();
 
+Before we can properly navigate we need to setup some the details on how to navigate. Let’s create a navigationEntry that we will later pass to navigate. There are three properties that we can set:
+* moduleName: This is the path to the page that we want to be redirect to.
+* context: [optional] the object that we want to pass along to the next page.
+* animated: show the native page transitions.
+
+	var navigationEntry = {
+    	moduleName: “details-page”,
+    context: { info: “something you want to pass to your page” },
+    animated: false
+	};
+
+From there we just need to call navigate.
+	top.navigate(navigationEntry);
+
+The completed ‘SplashScreen.js’ code should look similar to the following:
+
+	// load the frame module
 	var frameModule = require(“ui/frame”);
 
+	// expose our load function to the page’s loaded event
 	exports.load = function(args) {
+		// Fake some work
 		setTimeout(function () {
+			// Call the frameModule and navigate away
 			frameModule.topmost().navigate({
 				moduleName: “~/app/components/home/home”,
 				animated: true
