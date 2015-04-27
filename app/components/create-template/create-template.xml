@@ -8,7 +8,7 @@
 
 		<ActivityIndicator busy="{{ isBusy }}" width="50" height="50"/>
 
-		<Button text="Save Locally" tap="saveLocally" />
+		<Button text="Import Picture" tap="saveLocally" />
 		<Button text="Submit For Approval" tap="submitToEverlive" />
 	</StackLayout>
 	

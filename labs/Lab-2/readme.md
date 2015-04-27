@@ -15,9 +15,8 @@ In this lab we’re going to build upon the splash screen we built  in the first
 * Basic Modules
  
 ## Getting Setup
-Create a new application in AppBuilder. [How to create a new application](http://backUpOne.com/backup)
+In the first lab you learned how to [clone an existing project](https://github.com/NativeScript/NativeScript-NEXT-Workshop/tree/master/labs/Lab-1#step-1-clone-the-repo) in AppBuilder. For this lab here is the starting and ending points:
 
-{N} lab projects in Github:
 * [Starting Project](http://tbd.com)
 * [Finished Project](http://tbd.com)
 
