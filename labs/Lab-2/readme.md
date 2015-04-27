@@ -66,7 +66,8 @@ let’s add the ‘setTimeout’ to our Page’s ‘onLoaded’ event.
 
 To start we need to tell our view what function should run when the loaded event is fired. We can easily do this by just adding an attribute to our Page’s *Page* element, ‘loaded=“load”’.  
 
-	<Page 	loaded=“load”>
+	<Page 
+		loaded=“load”>
 
 Now let’s open our SplashScreen’s code file, ‘splashscreen.js’. Right now we have no code but it’s time to add that load  function we we just defined in our view. To do so we need to follow the [CommonJS](http://www.commonjs.org/) pattern for defining and exporting a function. In our case we need to define a function called *load* and export to our view such that it can later be called when our *loaded* event is fired.
 
@@ -80,10 +81,13 @@ With that in place, our function should now run when the page’s loaded event i
 				// Do something really awesome… 
 				// Finished doing something awesome.
 				// Now let’s navigate.
+				conosle.log('Hi There!!!')
 		}, 100); 
 	};
 
-Awesome. Now we just need to navigate to our home page.
+**Run the application**
+
+Awesome. Now we just need to navigate to our home page. Let's run the application and see if after 100 milliseconds our console statement prints out 'Hi There!!!'.
 
 ### Step #2 - Loading your first module
 
@@ -160,10 +164,12 @@ See the following example:
 	var navigationEntry = {
 		moduleName: “details-page”,
 		context: { info: “something you want to pass to your page” },
-		animated: false
+		animated: true
 	};
 
-With that in place, we just need to call navigate passing our navigation entry to it.
+Now in our case our moduleName should be the path to our home.xml page './components/home/home' and we also don't have anything to pass along to the home page so we can omit the context. 
+
+With this we just need to call navigate passing our navigation entry to it.
 
 	top.navigate(navigationEntry);
 
@@ -171,20 +177,27 @@ Now the completed ‘SplashScreen.js’ should look similar to what you see list
 
 	// load the frame module
 	var frameModule = require(“ui/frame”);
-	
+
 	// expose our load function to the page’s loaded event
 	exports.load = function(args) {
 		// Fake some work
 		setTimeout(function () {
 			// Call the frameModule and navigate away
 			frameModule.topmost().navigate({
-				moduleName: “~/app/components/home/home”,
+				moduleName: “./app/components/home/home”,
 				animated: true
 			});
 		}, 100);
 	};
 
+**Run the application**
+
+You should see the application startup, pause on our splashscreen for the set number of milliseconds, then redirect itself to the home.xml page.
+
 ### Step #4 - Laying out Home.xml
+
+
+
 ### Step #5 - Adding Controls to Home.xml
 ### Step #6 - Handle Page Events
 ### Step #7 - XXX
@@ -193,8 +206,3 @@ Now the completed ‘SplashScreen.js’ should look similar to what you see list
 
 * [Page Navigation](http://docs.nativescript.org/navigation#navigation)
 * [Page Layout](http://docs.nativescript.org/layouts)
-
-
-## Step 1: Deploy to companion app
-
-After creating the project you're taken into the AppBuilder environment. AppBuilder offers a lot of functionality—everything from a coding IDE to
