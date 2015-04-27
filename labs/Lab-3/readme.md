@@ -5,10 +5,17 @@ Tags: TelerikNEXT, NativeScript, {N}, JavaScript, CSS3, iOS, Android
 
 ## What are we learning?
 
-Bacon ipsum dolor amet meatball venison strip steak drumstick fatback cupim short ribs capicola doner jerky bresaola. Short ribs cupim chuck, ribeye ball tip prosciutto leberkas meatloaf tongue shank rump ham hock ground round. Kevin tongue capicola, shoulder pork belly leberkas kielbasa. Tenderloin pork chop brisket rump bresaola.
+In this lab we are going to learn about:
 
-* TBD
-* TBD
+* Implementing MVVM with {N}
+	* How to build an Observable ViewModel
+	* How to connect a View to its ViewModel
+	* (optional) More of the same but with TypeScript
+* How to add Analytics
+	* Importing analytics (external JS library)
+	* Wrapping it in a module
+	* Tracking feature use
+	* Tracking Exceptions
  
 ## Getting Setup
 Create a new application in AppBuilder. [How to create a new application](http://backUpOne.com/backup)
