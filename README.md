@@ -53,20 +53,22 @@ You will find each lab in its own GitHub repository. Our desire is to easily ena
 
 The lab steps are all contained in this repository which serves as our master repository.
 
-Now of course we’re human, so if you find a mistake, please feel free to submit a patch.
+Now of course we’re human, so if you find a mistake, please feel free to submit a pull request.
 
 1. Your first {N} app
-* [Instructions](labs/Lab-1/readme.md)
-* [Starting Solution](http://tbd.com)
-* [Finished Solution](http://tbd.com)
+	* [Instructions](labs/Lab-1/readme.md)
+	* [Starting Solution](http://tbd.com)
+	*	[Finished Solution](http://tbd.com)
+
 2. Beyond the basics
-* [Instructions](labs/Lab-2/readme.md)
-* [Starting Solution](http://tbd.com)
-* [Finished Solution](http://tbd.com)
+	* [Instructions](labs/Lab-2/readme.md)
+	* [Starting Solution](http://tbd.com)
+	* [Finished Solution](http://tbd.com)
+
 3. Diving in deep
-* [Instructions](labs/Lab-3/readme.md)
-* [Starting Solution](http://tbd.com)
-* [Finished Solution](http://tbd.com)
+	* [Instructions](labs/Lab-3/readme.md)
+	* [Starting Solution](http://tbd.com)
+	* [Finished Solution](http://tbd.com)
 
 # Running the application found in this repo
  

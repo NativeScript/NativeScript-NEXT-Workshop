@@ -4,13 +4,13 @@ Contributors: [Clark Sell](http://csell.net) & [TJ Vantoll](http://tjvantoll.com
 
 Tags: TelerikNEXT, NativeScript, {N}, JavaScript, CSS3, iOS, Android
 
-## Contents
+## Labs
 
 * [Lab 1](Lab-1/readme.md)
 * [Lab 2](Lab-2/readme.md)
 * [Lab 3](Lab-3/readme.md)
 
-## Screen Shots
+## Application Screen Shots
 
 ![](ss.png)
 ![](ss2.png)
