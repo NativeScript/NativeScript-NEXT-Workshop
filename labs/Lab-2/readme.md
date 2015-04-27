@@ -152,7 +152,7 @@ We can easily get our topmost frame by calling
 Before we can properly navigate we need to setup some the details on how to navigate. Let’s create a navigationEntry that we will later pass to navigate. There are three properties that we can set:
 
 * moduleName: This is the path to the page that we want to be redirect to.
-* context: [optional] the object that we want to pass along to the next page.
+* context:the object that we want to pass along to the next page.
 * animated: show the native page transitions
 
 	var navigationEntry = {
@@ -164,7 +164,7 @@ Before we can properly navigate we need to setup some the details on how to navi
 From there we just need to call navigate.
 	top.navigate(navigationEntry);
 
-The completed ‘SplashScreen.js’ code should look similar to the following:
+The completed ‘SplashScreen.js’ should look similar to the following. Below we’ve used some shorthand syntax to add a little sugar into today’s lab:
 
 	// load the frame module
 	var frameModule = require(“ui/frame”);
