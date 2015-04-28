@@ -1,4 +1,3 @@
-var observable = require("data/observable");
 var imageManipulation = require("../image-manipulation/image-manipulation");
 var localStorage = require("../../shared/local-storage/local-storage");
 var socialShare = require("../social-share/social-share");
@@ -6,16 +5,17 @@ var utilities = require("../../shared/utilities");
 var dialogsModule = require("ui/dialogs");
 var analyticsMonitor = require("../../shared/analytics");
 
+var observable = require("data/observable");
 var viewModel = new observable.Observable();
 
-viewModel.prepareNewMeme = function(baseImage) {
-	this.selectedImage = baseImage;
+viewModel.prepareNewMeme = function(selectedImage) {
+	this.selectedImage = selectedImage;
 
 	this.set("topText", "");
 	this.set("bottomText", "");
 	this.set("fontSize", 40);
 	this.set("isBlackText", false);
-	this.set("memeImage", baseImage);
+	this.set("memeImage", selectedImage);
 
 	this.uniqueImageName = utilities.generateUUID() + ".png";
 };

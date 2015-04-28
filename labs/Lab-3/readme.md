@@ -3,7 +3,7 @@ Contributors: [Clark Sell](http://csell.net) & [TJ Vantoll](http://tjvantoll.com
 
 Tags: TelerikNEXT, NativeScript, {N}, JavaScript, CSS3, iOS, Android
 
-## What are we learning?
+## What are we learning?c
 
 In this lab we are going to learn about:
 
@@ -66,7 +66,7 @@ And now copy the contents of **exports.navigatedTo** into prepareNewMeme.
 
 Finally we need to tweak it a bit:
 
-a) 
+a) SelectedImage assignment tweak
 
 	_selectedImageSource = _page.navigationContext;
 
@@ -74,7 +74,7 @@ changes to:
 
 	this.selectedImage = selectedImage;
 
-b)
+b) Properties tweak
 
 	_viewData.set("topText", "");
 	_viewData.set("bottomText", "");
@@ -90,7 +90,7 @@ changes to:
 	this.set("memeImage", selectedImage);
 
 
-c)
+c) Unique Image Name tweak
 
 	_uniqueImageName = utilities.generateUUID() + ".png";
 
@@ -100,7 +100,7 @@ changes to:
 
 
 You probably noticed the pattern.
-Change _viewData to this and place any variable inside this.
+Change **_viewData** to **this** and place any variable inside this.
 Also we no longer refernce the page, as the ViewModel shouldn't be aware of the view.
 
 You are probably thinking what is the difference between **this.x = 1** and **this.set("x", 1);** and when to use which.
@@ -199,10 +199,85 @@ We call **viewModel.refreshMeme();** not **this.refreshMeme();** because propert
 
 The same propertyChangeEvent is raised regardless of which property of the ViewModel changes. This is why there is a bit of code that checks is the **propertyName** is "memeImage".
 
-#### Step #7 - Update and clear up create-meme.js
+#### Step #7 - Update create-meme.js - Add ViewModel
+Open create-meme.js
 
-#### Step #8 - Update create-meme.xml
+We no longer need var _viewData, as this is replaced by our ViewModel. So replace
 
+	var _viewData = new observableModule.Observable();
+	
+with
+
+	var createMemeViewModel = require("./view-model").viewModel;
+
+To explain the above. **require("./view-model")** retrieves our ViewModel Module. While **.viewModel** retrieves the exported viewModel instance.
+
+#### Step #8 - Update loaded and navigatedTo
+
+Now let's update **exports.loaded** function
+bindingContex should be set to createMemeViewModel
+and we no longer need the call to addRefreshOnChange, as that is handled inside the ViewModel.
+
+You should end up with:
+
+	exports.loaded = function(args) {
+		_page = args.object;
+		_page.bindingContext = createMemeViewModel;
+	};
+
+Now let's update **exports.navigatedTo** function
+Everything that is happening in this function is handled by prepareNewMeme
+
+So let's replace its content with a call to the viewModel.
+
+You should get something like:
+
+	exports.navigatedTo = function(args) {
+		//grab the image from the navigation context.
+		var selectedImage = _page.navigationContext;
+		createMemeViewModel.prepareNewMeme(selectedImage);
+	};
+
+
+#### Step #9 - Clean up create-meme.js
+Once we added the ViewModel, we no longer need the require imports at the top of the file, so delete them all, leaving only the one that loads the ViewModel.
+
+Also we no longer need 
+* function refreshMeme(), 
+* exports.saveLocally(),
+* exports.share() and
+* function addRefreshOnChange()
+
+Finally var _page is the only variable that we are still using, so delete the rest.
+
+The final version of create-meme.js should look as follows:
+
+	var createMemeViewModel = require("./view-model").viewModel;
+	
+	var _page;
+	
+	exports.loaded = function(args) {
+		_page = args.object;
+		_page.bindingContext = createMemeViewModel;
+	};
+	
+	exports.navigatedTo = function(args) {
+		//grab the image from the navigation context.
+		var selectedImage = _page.navigationContext;
+		createMemeViewModel.prepareNewMeme(selectedImage);
+	};
+
+#### Step #10 Update create-meme.xml
+The final step is to setup bindings on the buttons.
+
+Open crete-meme.xml and find the 2 button definitions. Change tap events bindings to the ViewModel functions, by adding {{ }} around the name of the function.
+
+The buttons should look as follows:
+
+	<Button text="Save" tap="{{ saveLocally }}" />
+	<Button text="Share" tap="{{ share }}" />
+
+**tap="{{ saveLocally }}"** means: on tap -> go to the ViewModel -> and call **viewModel.saveLocally**
 
 ## Resource List:
 
