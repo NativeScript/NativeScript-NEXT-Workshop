@@ -27,8 +27,8 @@ viewModel.refreshMeme = function () {
 };
 
 viewModel.saveLocally = function () {
-	this.refreshMeme();
 	analyticsMonitor.trackFeature("CreateMeme.SaveLocally");
+	this.refreshMeme();
 	var saved = localStorage.saveLocally(this.uniqueImageName, this.memeImage);
 
 	if (!saved) {
