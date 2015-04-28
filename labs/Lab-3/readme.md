@@ -11,11 +11,10 @@ In this lab we are going to learn about:
 	* How to build an Observable ViewModel
 	* How to connect a View to its ViewModel
 	* (optional) More of the same but with TypeScript
-* How to add Analytics
-	* Importing analytics (external JS library)
-	* Wrapping it in a module
-	* Tracking feature use
-	* Tracking Exceptions
+* How to use Analytics
+	* Creating Analytics Project
+	* Linking it with your app
+	* Tracking feature use and Exceptions
  
 ## Getting Setup
 Create a new application in AppBuilder. [How to create a new application](http://backUpOne.com/backup)
@@ -277,7 +276,7 @@ The buttons should look as follows:
 	<Button text="Save" tap="{{ saveLocally }}" />
 	<Button text="Share" tap="{{ share }}" />
 
-Quick exmplanation:
+Quick explanation:
 **tap="{{ saveLocally }}"** means: on tap -> go to the ViewModel -> and call **viewModel.saveLocally**
 
 #### Step #11 [view-model-v2.ts] ViewModel using TypeScript
@@ -364,6 +363,123 @@ Now paste and save the following code:
 
 Now expand view-model-v2.ts (you might need to right click on it and select "Compile to JavaScript" first) and open the .js file. This is the code that is generated from the TypeScript version.
 
-## Resource List:
+#### Step #12 - Create Analytics project
+
+Go back to Telerik Platform and create a new Analytics project and make sure to select **JavaScript** as the target platform.
+
+[Instructions: How to Create a new Analytics Project] (http://docs.telerik.com/platform/help/projects/create/analytics-project)
+
+Once the new project is ready go to Getting Started -> SDK. Note the string passed into createSettings
+
+	var settings = _eqatec.createSettings("1234567890asdfghjkl23456789");
+
+This is your Analytics Key. Make a copy of it, we will use it in a moment.
+
+#### Step #13 - Add Analytics Key
+
+Go to app->shared->analytics.js and paste your Analytics key where is says **'analytics-key-here'**
+
+This will link the Analytics Monitor with your Analytics project.
+
+#### Step #14 - Add Analytics Module to create-meme
+
+Open view-model.js in create-meme folder and add require the analytics module:
+
+	var analyticsMonitor = require("../../shared/analytics");
+
+From now you can:
+
+* Track Feature Usage
+	
+		analyticsMonitor.trackFeature('MyCategory.MyFeature');
+
+* Track Used Values
+
+		analyticsMonitor.trackFeatureValue('MyCategory.MyValue', 1000);
+
+* Track How Long It Takes To Run Something
+	
+		analyticsMonitor.trackFeatureStart('MyCategory.MyFeature');
+		//Do something here
+		analyticsMonitor.trackFeatureStop('MyCategory.MyFeature');
+
+* Track Raised Exceptions
+
+		analyticsMonitor.trackException(new Error('some error'), 'some error message');
+
+or
+
+		try {
+			//do something
+		} catch (exception) {
+			analyticsMonitor.trackException(exception, 'some error message');
+		}
+
+
+**IMPORTANT**
+
+	There is 1 day delay for the feature tracking to appear in the Analytics Portal, so please be patient.
+	However you can see current and recently connected devices at Developer Reports -> Live
+
+#### Step #15 Tracking the usage of saveLocally() and share()
+
+Go to viewModel.saveLocally() and insert the following code, as the first line of the function:
+
+	analyticsMonitor.trackFeature("CreateMeme.SaveLocally");
+	
+
+Now do the same for viewModel.share():
+
+	analyticsMonitor.trackFeature("CreateMeme.Share");
+
+
+This should look like:
+
+	//Save Locally
+	viewModel.saveLocally = function() {
+		analyticsMonitor.trackFeature("CreateMeme.SaveLocally");
+		this.refreshMeme();
+		var saved = localStorage.saveLocally(this.uniqueImageName, this.memeImage);
+	
+		if (!saved) {
+			console.log("New meme not saved....");
+		} else {
+			var options = {
+				title: "Meme Saved",
+				message: "Congratulations, Meme Saved!",
+				okButtonText: "OK"
+			};
+	
+			dialogsModule.alert(options);
+		}
+	}
+	
+	//Share
+	viewModel.share = function() {
+		analyticsMonitor.trackFeature("CreateMeme.Share");
+		socialShare.share(this.memeImage);
+	}
+#### Step #16 Exception tracking for refreshMeme
+
+Go to viewModel.refreshMeme() and wrap its content with try and catch (like it is shown in Step 14) and add an error message inside the trackException call.
+
+You should get something like:
+
+	viewModel.refreshMeme = function () {
+		try {
+			var image = imageManipulation.addText(viewModel.selectedImage, viewModel.topText, viewModel.bottomText, viewModel.fontSize, viewModel.isBlackText);
+			viewModel.set("memeImage", image);
+		} catch (exception) {
+			analyticsMonitor.trackException(exception, 'Failed Refreshing Meme Image');
+		}
+	};
+
+#### Step #17 Experiment with Analytics
+
+It is up to you now to go around the project and experiment with Analytics. Try to look for other opportunities within this project to track features or exceptions. 
+
+You can also check the final project to see other places where we added Analytics tracking.
+
+## Resource List
 
 * [TBD](http://tbd.com)
