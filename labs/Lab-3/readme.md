@@ -3,7 +3,7 @@ Contributors: [Clark Sell](http://csell.net) & [TJ Vantoll](http://tjvantoll.com
 
 Tags: TelerikNEXT, NativeScript, {N}, JavaScript, CSS3, iOS, Android
 
-## What are we learning?c
+## What are we learning?
 
 In this lab we are going to learn about:
 
@@ -30,8 +30,8 @@ Create a new application in AppBuilder. [How to create a new application](http:/
 Go to app->components->create-meme folder and open "view-model.js"
 Here you can see the code to create a new ViewModel
 
-	var observableModule = require("data/observable");
-	var viewModel = new observableModule.Observable();
+	var observable = require("data/observable");
+	var viewModel = new observable.Observable();
 	
 And finally the ViewModel is exposed from the module, through:
 
@@ -204,7 +204,7 @@ Open create-meme.js
 
 We no longer need var _viewData, as this is replaced by our ViewModel. So replace
 
-	var _viewData = new observableModule.Observable();
+	var _viewData = new observable.Observable();
 	
 with
 
