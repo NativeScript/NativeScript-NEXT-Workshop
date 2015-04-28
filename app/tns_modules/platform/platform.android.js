@@ -81,6 +81,16 @@ var device = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(device, "language", {
+        get: function () {
+            if (!device._language) {
+                device._language = java.util.Locale.getDefault().toString();
+            }
+            return device._language;
+        },
+        enumerable: true,
+        configurable: true
+    });
     device.MIN_TABLET_PIXELS = 600;
     return device;
 })();
