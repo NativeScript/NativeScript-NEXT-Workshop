@@ -478,7 +478,7 @@ You should get something like:
 
 It is up to you now to go around the project and experiment with Analytics. Try to look for other opportunities within this project to track features or exceptions. 
 
-You can also check the final project to see other places where we added Analytics tracking.
+You can also check **app/components/home/home.js** and **app/components/create-template/create-template.js** and look for commented out code with analyticsMonitor.
 
 ## Resource List
 
