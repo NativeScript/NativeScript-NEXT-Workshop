@@ -50,6 +50,15 @@ First we have to start with copying over the module imports from the beginning o
 
 Open create-meme.js and copy the first 6 lines (which import the required modules) and paste them in view-model.js just below //---MODULE IMPORTS---//
 
+You should get something like:
+	
+	//---MODULE IMPORTS---//
+	var imageManipulation = require("../image-manipulation/image-manipulation");
+	var localStorage = require("../../shared/local-storage/local-storage");
+	var socialShare = require("../social-share/social-share");
+	var utilities = require("../../shared/utilities");
+	var dialogsModule = require("ui/dialogs");
+
 ### Step #2 - [view-model.js] Implement prepareNewMeme
 
 Let's start with implementing the method that should reset the ViewModel to default values and set the selectedImage as the basis for image manipulation.
@@ -108,6 +117,7 @@ The first approach is for internal use only: any changes to it shouldn't affect 
 
 Here is how your prepareNewMeme should look like:
 
+	//Prepare New Meme
 	viewModel.prepareNewMeme = function(selectedImage) {
 		this.selectedImage = selectedImage;
 	
@@ -132,6 +142,7 @@ First add refreshMeme to the ViewModel
 Now copy the contents from **refreshMeme** from edit-meme.js.
 Replace **_viewData** with **viewModel** and replace **_selectedImageSource** with **viewModel.selectedImage**. Finally you should end up with something like:
 
+	//Refresh Meme
 	viewModel.refreshMeme = function () {
 		var image = imageManipulation.addText(viewModel.selectedImage, viewModel.topText, viewModel.bottomText, viewModel.fontSize, viewModel.isBlackText);
 	
@@ -151,6 +162,7 @@ Now copy the contents from **saveLocally** from edit-meme.js.
 refreshMeme() is a function of the viewModel (not a global function), so we have to refer to it as this.refreshMeme().
 Also the two parameters passed to localStorage.saveLocally come from the ViewModel, therefore we should change it to this.uniqueImageName and this.memeImage. As a result you should get:
 
+	//Save Locally
 	viewModel.saveLocally = function () {
 		this.refreshMeme();
 		var saved = localStorage.saveLocally(this.uniqueImageName, this.memeImage);
@@ -173,6 +185,7 @@ This is the last and the easiest of the functions that we need to implement.
 
 So this will be without a surprise that you should get something like:
 
+	//Share
 	viewModel.share = function() {
 		socialShare.share(this.memeImage);
 	}
@@ -181,6 +194,7 @@ So this will be without a surprise that you should get something like:
 
 Add following code to the **//---EVENT HANDLER---//** section:
 
+	//---EVENT HANDLER---//
 	viewModel.addEventListener(observable.Observable.propertyChangeEvent, function(changes) {
 		//skip if memeImage changes
 		if (changes.propertyName === "memeImage") {
@@ -377,7 +391,8 @@ This is your Analytics Key. Make a copy of it, we will use it in a moment.
 
 #### Step #13 - Add Analytics Key
 
-Go to app->shared->analytics.js and paste your Analytics key where is says **'analytics-key-here'**
+Go back to your NativeScript project and then open app/shared/analytics.js.
+Paste your Analytics key where it says **'analytics-key-here'**
 
 This will link the Analytics Monitor with your Analytics project.
 
@@ -482,4 +497,6 @@ You can also check **app/components/home/home.js** and **app/components/create-t
 
 ## Resource List
 
-* [TBD](http://tbd.com)
+* [Observable](http://docs.nativescript.org/ApiReference/data/observable/HOW-TO.html)
+* [Analytics Overview] (http://docs.telerik.com/platform/analytics/getting-started/introduction)
+* [Analytics SDK](http://docs.telerik.com/platform/analytics/sdk/js/classes/AnalyticsMonitor.html)
