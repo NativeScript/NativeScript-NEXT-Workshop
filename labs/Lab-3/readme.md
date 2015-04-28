@@ -45,13 +45,13 @@ There are also few placeholders prepared to implement the functionality of the V
 
 **EVENT HANDLER**: here is where we are going to add on property change handler
 
-### Step #1 - Copy imports
+### Step #1 - [view-model.js] Copy imports
 
 First we have to start with copying over the module imports from the beginning of create-meme.js.
 
 Open create-meme.js and copy the first 6 lines (which import the required modules) and paste them in view-model.js just below //---MODULE IMPORTS---//
 
-### Step #2 - Implement prepareNewMeme
+### Step #2 - [view-model.js] Implement prepareNewMeme
 
 Let's start with implementing the method that should reset the ViewModel to default values and set the selectedImage as the basis for image manipulation.
 This method will be called every time a new image is selected.
@@ -121,7 +121,7 @@ Here is how your prepareNewMeme should look like:
 		this.uniqueImageName = utilities.generateUUID() + ".png";
 	};
 
-### Step #3 - Refresh Meme
+### Step #3 - [view-model.js] Refresh Meme
 From here things get even easier.
 
 First add refreshMeme to the ViewModel
@@ -139,7 +139,7 @@ Replace **_viewData** with **viewModel** and replace **_selectedImageSource** wi
 		viewModel.set("memeImage", image);
 	};
 
-### Step #4 - Save Locally
+### Step #4 - [view-model.js] Save Locally
 
 First add refreshMeme to the ViewModel
 
@@ -169,7 +169,7 @@ Also the two parameters passed to localStorage.saveLocally come from the ViewMod
 		}
 	};
 
-### Step #5 - Share
+### Step #5 - [view-model.js] Share
 This is the last and the easiest of the functions that we need to implement.
 
 So this will be without a surprise that you should get something like:
@@ -178,7 +178,7 @@ So this will be without a surprise that you should get something like:
 		socialShare.share(this.memeImage);
 	}
 
-### Step #6 - On Property Changed
+### Step #6 - [view-model.js] On Property Changed
 
 Add following code to the **//---EVENT HANDLER---//** section:
 
@@ -199,7 +199,7 @@ We call **viewModel.refreshMeme();** not **this.refreshMeme();** because propert
 
 The same propertyChangeEvent is raised regardless of which property of the ViewModel changes. This is why there is a bit of code that checks is the **propertyName** is "memeImage".
 
-#### Step #7 - Update create-meme.js - Add ViewModel
+#### Step #7 - [create-meme.js] Add ViewModel
 Open create-meme.js
 
 We no longer need var _viewData, as this is replaced by our ViewModel. So replace
@@ -212,7 +212,7 @@ with
 
 To explain the above. **require("./view-model")** retrieves our ViewModel Module. While **.viewModel** retrieves the exported viewModel instance.
 
-#### Step #8 - Update create-meme.js - loaded and navigatedTo
+#### Step #8 - [create-meme.js] loaded and navigatedTo
 
 Now let's update **exports.loaded** function
 bindingContex should be set to createMemeViewModel
@@ -239,7 +239,7 @@ You should get something like:
 	};
 
 
-#### Step #9 - Clean up create-meme.js
+#### Step #9 - [create-meme.js] Clean up
 Once we added the ViewModel, we no longer need the require imports at the top of the file, so delete them all, leaving only the one that loads the ViewModel.
 
 Also we no longer need 
@@ -267,7 +267,7 @@ The final version of create-meme.js should look as follows:
 		createMemeViewModel.prepareNewMeme(selectedImage);
 	};
 
-#### Step #10 Update create-meme.xml
+#### Step #10 [create-meme.xml] Binding reference update
 The final step is to setup bindings on the buttons.
 
 Open crete-meme.xml and find the 2 button definitions. Change tap events bindings to the ViewModel functions, by adding {{ }} around the name of the function.
@@ -277,7 +277,92 @@ The buttons should look as follows:
 	<Button text="Save" tap="{{ saveLocally }}" />
 	<Button text="Share" tap="{{ share }}" />
 
+Quick exmplanation:
 **tap="{{ saveLocally }}"** means: on tap -> go to the ViewModel -> and call **viewModel.saveLocally**
+
+#### Step #11 [view-model-v2.ts] ViewModel using TypeScript
+
+Right click on **create-meme** folder -> Add -> New File. Select TypeScript and call it view-model-v2.ts
+
+Now paste and save the following code:
+
+	var imageManipulation = require("../image-manipulation/image-manipulation");
+	var localStorage = require("../../shared/local-storage/local-storage");
+	var socialShare = require("../social-share/social-share");
+	var utilities = require("../../shared/utilities");
+	var dialogsModule = require("ui/dialogs");
+	var observable = require("data/observable");
+	
+	export class CreateMemeViewModel extends observable.Observable {
+		public topText: string = "";
+		public bottomText: string = "";
+		public fontSize: number = 40;
+		public isBlackText: boolean = false;
+		private selectedImage: any;
+		public memeImage: any;
+		private uniqueImageName: string;
+		
+		public prepareEditor(image: any) {
+			this.selectedImage = image;
+	
+			this.set("topText", "");
+			this.set("bottomText", "");
+		    this.set("fontSize", 40);
+		    this.set("isBlackText", false);
+			this.set("memeImage", image);
+			
+			this.refreshUniqueName();
+		}
+		
+		public refreshMeme() {
+			var image = imageManipulation.addText(
+				this.selectedImage, this.topText, this.bottomText, this.fontSize, this.isBlackText);
+	
+			this.set("memeImage", image);
+		}
+		
+		public addRefreshOnChange() {
+			var viewModel = this;
+			
+			this.addEventListener(observable.Observable.propertyChange, function(changes) {
+				//skip if memeImage changes
+				if(changes.propertyName === "memeImage")
+					return;
+				
+				viewModel.refreshMeme();
+	        });
+	    }
+	
+	    refreshUniqueName() {
+			this.uniqueImageName = utilities.generateUUID() + ".png";
+	    }
+	
+		public saveLocally() {
+			this.refreshMeme();
+			var saved = localStorage.saveLocally(this.uniqueImageName, this.memeImage);
+	
+			if (!saved) {
+				console.log("New meme not saved....");
+			} else {
+				var options = {
+					title: "Meme Saved",
+					message: "Congratulations, Meme Saved!",
+					okButtonText: "OK"
+				};
+	
+				dialogsModule.alert(options);
+			}
+	    }
+	
+	    public share() {
+	        socialShare.share(this.memeImage);
+	    }
+	}
+	
+	export var viewModel = new CreateMemeViewModel();
+	viewModel.addRefreshOnChange();
+
+Now expand view-model-v2.ts (you might need to right click on it and select "Compile to JavaScript" first) and open the .js file. This is the code that is generated from the TypeScript version.
 
 ## Resource List:
 
