@@ -212,7 +212,7 @@ with
 
 To explain the above. **require("./view-model")** retrieves our ViewModel Module. While **.viewModel** retrieves the exported viewModel instance.
 
-#### Step #8 - Update loaded and navigatedTo
+#### Step #8 - Update create-meme.js - loaded and navigatedTo
 
 Now let's update **exports.loaded** function
 bindingContex should be set to createMemeViewModel
