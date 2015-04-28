@@ -268,7 +268,16 @@ The final version of create-meme.js should look as follows:
 	};
 
 #### Step #10 Update create-meme.xml
+The final step is to setup bindings on the buttons.
 
+Open crete-meme.xml and find the 2 button definitions. Change tap events bindings to the ViewModel functions, by adding {{ }} around the name of the function.
+
+The buttons should look as follows:
+
+	<Button text="Save" tap="{{ saveLocally }}" />
+	<Button text="Share" tap="{{ share }}" />
+
+**tap="{{ saveLocally }}"** means: on tap -> go to the ViewModel -> and call **viewModel.saveLocally**
 
 ## Resource List:
 
