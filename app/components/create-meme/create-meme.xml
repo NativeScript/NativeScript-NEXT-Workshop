@@ -17,7 +17,7 @@
 				<Switch row="1" col="1" cssClass="settingsRight" checked="{{ isBlackText }}" />
 			</GridLayout>
 			
-			<Button id="saveButton" text="Save" tap="{{ saveLocally }}" />
+			<Button text="Save" tap="{{ saveLocally }}" />
 			<Button text="Share" tap="{{ share }}" />
 		</StackLayout>
 	</ScrollView>
