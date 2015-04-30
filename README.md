@@ -61,13 +61,13 @@ Now of course we’re human, so if you find a mistake, please feel free to submi
 
 2. Beyond the basics
 	* [Instructions](labs/Lab-2/readme.md)
-	* [Starting Solution](http://tbd.com)
-	* [Finished Solution](http://tbd.com)
+	* [Starting Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab2-Start)
+	* [Finished Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab2-Finish)
 
 3. Diving in deep
 	* [Instructions](labs/Lab-3/readme.md)
-	* [Starting Solution](http://tbd.com)
-	* [Finished Solution](http://tbd.com)
+	* [Starting Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab3-Start)
+	* [Finished Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab3-Finish)
 
 # Running the application found in this repo
  
