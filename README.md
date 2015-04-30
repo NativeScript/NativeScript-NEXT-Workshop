@@ -57,8 +57,7 @@ Now of course we’re human, so if you find a mistake, please feel free to submi
 
 1. Your first {N} app
 	* [Instructions](labs/Lab-1/readme.md)
-	* [Starting Solution](http://tbd.com)
-	*	[Finished Solution](http://tbd.com)
+	* [Starting Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab1-Start)
 
 2. Beyond the basics
 	* [Instructions](labs/Lab-2/readme.md)
