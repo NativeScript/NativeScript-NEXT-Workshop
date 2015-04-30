@@ -1,5 +1,5 @@
 # 2015 TelerikNEXT NativeScript {N} Workshop - Lab #2
-Contributors: [Clark Sell](http://csell.net) & [TJ Vanoll](http://tjvantoll.com/) & Sebastian Witalec. You can find us on Twitter at: [@csell5](https://twitter.com/csell5), [@tjvantoll](https://twitter.com/tjvantoll), [@sebawita](https://twitter.com/sebawita)
+Contributors: [Clark Sell](http://csell.net) & [TJ VanToll](http://tjvantoll.com/) & Sebastian Witalec. You can find us on Twitter at: [@csell5](https://twitter.com/csell5), [@tjvantoll](https://twitter.com/tjvantoll), [@sebawita](https://twitter.com/sebawita)
 
 Tags: TelerikNEXT, NativeScript, {N}, JavaScript, CSS3, iOS, Android
 
@@ -17,8 +17,8 @@ In this lab we’re going to build upon the splash screen we built  in the first
 ## Getting Setup
 In the first lab you learned how to [clone an existing project](https://github.com/NativeScript/NativeScript-NEXT-Workshop/tree/master/labs/Lab-1#step-1-clone-the-repo) in AppBuilder. For this lab here is the starting and ending points:
 
-* [Starting Project](http://tbd.com)
-* [Finished Project](http://tbd.com)
+* [Starting Project](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab2-Start)
+* [Finished Project](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab2-Finish)
 
 ## The Lab
 
