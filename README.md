@@ -71,7 +71,7 @@ Now of course we’re human, so if you find a mistake, please feel free to submi
 
 # Running the application found in this repo
  
-To run the application found in *this* repository it requires the [NativeScript CLI](https://github.com/nativescript/nativescript-cli). Once you have the [CLI prerequisites](https://github.com/nativescript/nativescript-cli#system-requirements) installed, you can run this app by cloning this repo and running `{N} run iOS —emulator` or `{N} run android —emulator`.
+To run the application found in *this* repository it requires the [NativeScript CLI](https://github.com/nativescript/nativescript-cli). Once you have the [CLI prerequisites](https://github.com/nativescript/nativescript-cli#system-requirements) installed, you can run this app by cloning this repo and running `tns run iOS --emulator` or `tns run android --emulator`.
 
 # Great NativeScript References
 * [{N} Website](http://NativeScript.org)
