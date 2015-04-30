@@ -1,5 +1,5 @@
 # 2015 TelerikNEXT NativeScript {N} Workshop - Lab #3
-Contributors: [Clark Sell](http://csell.net) & [TJ Vantoll](http://tjvantoll.com/) & Sebastian Witalec. You can find us on Twitter at: [@csell5](https://twitter.com/csell5), [@tjvantoll](https://twitter.com/tjvantoll), [@sebawita](https://twitter.com/sebawita)
+Contributors: [Clark Sell](http://csell.net) & [TJ VanToll](http://tjvantoll.com/) & Sebastian Witalec. You can find us on Twitter at: [@csell5](https://twitter.com/csell5), [@tjvantoll](https://twitter.com/tjvantoll), [@sebawita](https://twitter.com/sebawita)
 
 Tags: TelerikNEXT, NativeScript, {N}, JavaScript, CSS3, iOS, Android
 
@@ -19,9 +19,9 @@ In this lab we are going to learn about:
 ## Getting Setup
 Create a new application in AppBuilder. [How to create a new application](http://backUpOne.com/backup)
 
-{N} lab projects in Github:
-* [Starting Project](http://tbd.com)
-* [Finished Project](http://tbd.com)
+{N} lab projects in GitHub:
+* [Starting Project](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab3-Start)
+* [Finished Project](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab3-Finish)
 
 ## The Lab
 

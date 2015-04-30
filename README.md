@@ -28,7 +28,7 @@ We’ve chosen to walk your through building mobile application which exercises 
 
 # WorkShop Agenda
 * 09:00 - 09:30 - Setup and Configuration
-* 09:30 - 10:30 - [Introductions and Welcome to NativeScript {N}, @tjvantoll](http://tbd.com)
+* 09:30 - 10:30 - [Introductions and Welcome to NativeScript {N}, @tjvantoll](slides/1-Intro/intro.pdf)
 * 10:30 - 11:00 - [Lab #1](labs/Lab-1/readme.md) 
 * 11:00 - 11:15 - Break 
 * 11:15 - 12:15 - [Beyond the Basics, @csell5](http://tbd.com) 
@@ -42,7 +42,7 @@ We’ve chosen to walk your through building mobile application which exercises 
 
 # Presentations
 
-1. [Welcome to NativeScript](http://tbd.com)
+1. [Welcome to NativeScript](slides/1-Intro/intro.pdf)
 2. [Beyond the Basics](http://tbd.com) 
 3. [Diving Deep with {N}](http://tbd.com) 
 
@@ -57,22 +57,21 @@ Now of course we’re human, so if you find a mistake, please feel free to submi
 
 1. Your first {N} app
 	* [Instructions](labs/Lab-1/readme.md)
-	* [Starting Solution](http://tbd.com)
-	*	[Finished Solution](http://tbd.com)
+	* [Starting Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab1-Start)
 
 2. Beyond the basics
 	* [Instructions](labs/Lab-2/readme.md)
-	* [Starting Solution](http://tbd.com)
-	* [Finished Solution](http://tbd.com)
+	* [Starting Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab2-Start)
+	* [Finished Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab2-Finish)
 
 3. Diving in deep
 	* [Instructions](labs/Lab-3/readme.md)
-	* [Starting Solution](http://tbd.com)
-	* [Finished Solution](http://tbd.com)
+	* [Starting Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab3-Start)
+	* [Finished Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab3-Finish)
 
 # Running the application found in this repo
  
-To run the application found in *this* repository it requires the [NativeScript CLI](https://github.com/nativescript/nativescript-cli). Once you have the [CLI prerequisites](https://github.com/nativescript/nativescript-cli#system-requirements) installed, you can run this app by cloning this repo and running `{N} run iOS —emulator` or `{N} run android —emulator`.
+To run the application found in *this* repository it requires the [NativeScript CLI](https://github.com/nativescript/nativescript-cli). Once you have the [CLI prerequisites](https://github.com/nativescript/nativescript-cli#system-requirements) installed, you can run this app by cloning this repo and running `tns run iOS --emulator` or `tns run android --emulator`.
 
 # Great NativeScript References
 * [{N} Website](http://NativeScript.org)
