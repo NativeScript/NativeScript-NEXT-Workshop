@@ -28,7 +28,7 @@ We’ve chosen to walk your through building mobile application which exercises 
 
 # WorkShop Agenda
 * 09:00 - 09:30 - Setup and Configuration
-* 09:30 - 10:30 - [Introductions and Welcome to NativeScript {N}, @tjvantoll](http://tbd.com)
+* 09:30 - 10:30 - [Introductions and Welcome to NativeScript {N}, @tjvantoll](slides/1-Intro/intro.pdf)
 * 10:30 - 11:00 - [Lab #1](labs/Lab-1/readme.md) 
 * 11:00 - 11:15 - Break 
 * 11:15 - 12:15 - [Beyond the Basics, @csell5](http://tbd.com) 
@@ -42,7 +42,7 @@ We’ve chosen to walk your through building mobile application which exercises 
 
 # Presentations
 
-1. [Welcome to NativeScript](http://tbd.com)
+1. [Welcome to NativeScript](slides/1-Intro/intro.pdf)
 2. [Beyond the Basics](http://tbd.com) 
 3. [Diving Deep with {N}](http://tbd.com) 
 
