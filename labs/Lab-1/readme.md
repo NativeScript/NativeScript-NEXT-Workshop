@@ -11,7 +11,7 @@ You'll start by learning how to use Telerik AppBuilder—including how to start 
 ## Step 1: Clone the repo
 
 * On <https://platform.telerik.com> click the blue **Create app** button.
-* On the next screen, select **Start from a blank app**, and give the app a name of “JustMeme”.
+* On the next screen, select **Native app**, **Start from a blank app**, and then give the app a name of “JustMeme”.
 * Click the green **Create app** button.
 * Click the green **Create AppBuilder Native project**.
 * Select **Clone repository**, use https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab1-Start.git for a Repository Uri, and “JustMeme Lab 1” for a project name.
