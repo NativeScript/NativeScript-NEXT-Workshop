@@ -71,7 +71,12 @@ That's the end of this lab. In the next lab you'll build a more complex page tha
 
 This lab used an `<Image>` element, but there are numerous other UI widgets you can add to your XML. For instance you might want to try out the following:
 
+* [`<Label>`](http://docs.nativescript.org/ApiReference/ui/label/HOW-TO.html)
 * [`<Slider>`](http://docs.nativescript.org/ApiReference/ui/slider/HOW-TO.html)
 * [`<Switch>`](http://docs.nativescript.org/ApiReference/ui/switch/HOW-TO.html)
 * [`<TabView>`](http://docs.nativescript.org/ApiReference/ui/tab-view/HOW-TO.html)
 * [`<TextField>`](http://docs.nativescript.org/ApiReference/ui/text-field/HOW-TO.html)
+
+### Play with layouts
+
+In the next lab you'll learn how to use layouts to arrange your UI elements on the screen, but if you have time try playing around with the [`<StackLayout>`](http://docs.nativescript.org/ApiReference/ui/layouts/stack-layout/HOW-TO.html), and [`<GridLayout>`](http://docs.nativescript.org/ApiReference/ui/layouts/grid-layout/HOW-TO.html) elements.
