@@ -195,7 +195,7 @@ So this will be without a surprise that you should get something like:
 Add following code to the **//---EVENT HANDLER---//** section:
 
 	//---EVENT HANDLER---//
-	viewModel.addEventListener(observable.Observable.propertyChangeEvent, function(changes) {
+	viewModel.addEventListener(observable.knownEvents.propertyChangeEvent, function(changes) {
 		//skip if memeImage changes
 		if (changes.propertyName === "memeImage") {
 			return;
@@ -337,7 +337,7 @@ Now paste and save the following code:
 		public addRefreshOnChange() {
 			var viewModel = this;
 			
-			this.addEventListener(observable.Observable.propertyChange, function(changes) {
+			this.addEventListener(observable.knownEvents.propertyChange, function(changes) {
 				//skip if memeImage changes
 				if(changes.propertyName === "memeImage")
 					return;
