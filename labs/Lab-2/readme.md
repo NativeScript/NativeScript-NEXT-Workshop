@@ -13,7 +13,7 @@ In this lab we’re going to build upon the splash screen we built  in the first
 * UI Controls
 * Control Events
 * Basic Modules
- 
+
 ## Getting Setup
 In the first lab you learned how to [clone an existing project](https://github.com/NativeScript/NativeScript-NEXT-Workshop/tree/master/labs/Lab-1#step-1-clone-the-repo) in AppBuilder. For this lab here is the starting and ending points:
 
@@ -36,7 +36,7 @@ In an effort to keep our app always running, before we can navigate away from th
 * /app/components/home/**home.js**
 * /app/components/home/**home.css**
 
-With those three files in place, let’s update our *home.xml* to include the worlds simplest {N} page markup. 
+With those three files in place, let’s update our *home.xml* to include the worlds simplest {N} page markup.
 
 	<Page>
 		<Label text=“hi from home”/>
@@ -46,27 +46,27 @@ What are we proving here? Nothing other than navigation works correctly when we 
 
 ### Step #1 - onLoaded page events
 
-With our home view now in place let’s turn our attention back to the ‘SplashScreen.xml’ that we built in the first lab. 
+With our home view now in place let’s turn our attention back to the ‘SplashScreen.xml’ that we built in the first lab.
 
-Let’s setup the scenario. Today it’s not uncommon to use a SplashScreen to start loading app information that might be used later in your app. For our purposes here we’re going to fake it and use this as an opportunity to explain a few things. 
+Let’s setup the scenario. Today it’s not uncommon to use a SplashScreen to start loading app information that might be used later in your app. For our purposes here we’re going to fake it and use this as an opportunity to explain a few things.
 
 To simulate some kind of business processing we’re going to call ‘setTimeout()’ to create a slight delay. Something like such:
 
 	//Pretending we’re calling some awesome service.
 	setTimeout(function () {
-			// Do something really awesome… 
+			// Do something really awesome…
 			// Finished doing something awesome.
 			// Now let’s navigate.
-	}, 100); 
+	}, 100);
 
 Now at this point we don’t actually have anywhere to put our code which means it’s a good time to introduce [{N} Page Events](http://docs.nativescript.org/ApiReference/ui/core/view/knownEvents/README)
 
 To complete our scenario, when the page loads, we want to wait a some time then just redirect to our new home page. To do so
-let’s add the ‘setTimeout’ to our Page’s ‘onLoaded’ event. 
+let’s add the ‘setTimeout’ to our Page’s ‘onLoaded’ event.
 
 To start we need to tell our view what function should run when the loaded event is fired. We can easily do this by just adding an attribute to our Page’s *Page* element, ‘loaded=“load”’.  
 
-	<Page 
+	<Page
 		loaded=“load”>
 
 Now let’s open our SplashScreen’s code file, ‘splashscreen.js’. Right now we have no code but it’s time to add that load  function we we just defined in our view. To do so we need to follow the [CommonJS](http://www.commonjs.org/) pattern for defining and exporting a function. In our case we need to define a function called *load* and export to our view such that it can later be called when our *loaded* event is fired.
@@ -78,11 +78,11 @@ With that in place, our function should now run when the page’s loaded event i
 
 	exports.load = function(args) {
 		setTimeout(function () {
-				// Do something really awesome… 
+				// Do something really awesome…
 				// Finished doing something awesome.
 				// Now let’s navigate.
 				conosle.log('Hi There!!!')
-		}, 100); 
+		}, 100);
 	};
 
 **Run the application**
@@ -101,13 +101,13 @@ For us to leverage the frame API we first have to load that module. We do that b
 
 Now that we’ve successful loaded our frame module, I’m sure you’re asking, what’s a module and where did you find that? Well as it turns out they’re in a folder called *tns_modules*, where else?
 
-Ok, let’s back up. A [module](http://docs.nativescript.org/modules) is defined as: 
+Ok, let’s back up. A [module](http://docs.nativescript.org/modules) is defined as:
 
 > To let you access the native device and platform capabilities of your target platform, NativeScript uses a modular design pattern. All device, platform or user interface functionalities reside in separate modules. To access the functionality provided by a module, you need to require the module.
 
 > In your project, the files for each module reside in a 	dedicated subdirectory in the {N}_modules directory. Each default module comes along with a package.json file which declares how the module should be called within your call and which file contains its respective code.
 
-Ok, if you’re using AppBuilder that part is sorta hidden. 
+Ok, if you’re using AppBuilder that part is sorta hidden.
 
 **Extra Credit**
 
@@ -150,7 +150,7 @@ After running *create*, you should see a file & folder structure similar to what
 
 Now that we have our frame, we need to get a reference to our topmost frame and call navigate. Navigate takes a number of parameters which tell it where and how to navigate.
 
-We can easily get our topmost frame by calling
+We can easily get our topmost frame by calling 
 	var top = frameModule.topmost();
 
 Before we can properly navigate we need to setup some the details on how to navigate. Let’s create a navigationEntry that we will later pass to navigate. There are three properties that we can set:
@@ -167,7 +167,7 @@ See the following example:
 		animated: true
 	};
 
-Now in our case our moduleName should be the path to our home.xml page './components/home/home' and we also don't have anything to pass along to the home page so we can omit the context. 
+Now in our case our moduleName should be the path to our home.xml page './components/home/home' and we also don't have anything to pass along to the home page so we can omit the context.
 
 With this we just need to call navigate passing our navigation entry to it.
 
@@ -184,7 +184,7 @@ Now the completed ‘SplashScreen.js’ should look similar to what you see list
 		setTimeout(function () {
 			// Call the frameModule and navigate away
 			frameModule.topmost().navigate({
-				moduleName: “./app/components/home/home”,
+				moduleName: “./components/home/home”,
 				animated: true
 			});
 		}, 100);
@@ -196,11 +196,100 @@ You should see the application startup, pause on our splashscreen for the set nu
 
 ### Step #4 - Laying out Home.xml
 
+Welcome home! Now that you're here it's time to get our house setup. Let's start by looking at what we're going to build.
+
+![](../ss.png)
+
+This screen is comprised of a few different elements.
+1. [TabView](http://docs.nativescript.org/ApiReference/ui/tab-view/HOW-TO.html). This is what we're using to "swap" between the meme templates an the memes you've created.
+2. In each [TabViewItem](http://docs.nativescript.org/ApiReference/ui/tab-view/TabViewItem.html), we have a [WrapLayout](http://docs.nativescript.org/ApiReference/ui/layouts/wrap-layout/HOW-TO.html). We will dynamically populate this based on the images that we find.
+3. Now assuming this is the most popular app in the AppStore that means we will have more memes to show than the screen can fit. We can fix that by introducing a [ScrollView](http://docs.nativescript.org/ApiReference/ui/scroll-view/HOW-TO.html).
+
+**Adding the TabView**
+
+Simple enough, right? Since our view is really just a TabView, we don't need to worry about our overall layout here. Let's replace the Label we created earlier with a TabView.
+
+	<TabView>
+	</TabView>
+
+Not hard, but also not useful. Let's add our two tab items:
+* Templates
+* MyMemes
+
+We need to define an items array. In that it will have two Items (Templates, MyMemes), and each of those will need a view.
+
+	<TabView.items>
+      <TabViewItem>
+        <TabViewItem.view>
+        </TabViewItem.view>
+      </TabViewItem>
+      <TabViewItem>
+        <TabViewItem.view>
+        </TabViewItem.view>
+      </TabViewItem>
+    </TabView.items>
+
+If you run that, you will see two tab, but without any titles. Let's add a title attribute to our TabViewItem. Our first TabViewItem should be:
+
+	<TabViewItem title="Templates">
+
+and the second:
+
+	<TabViewItem title="My Memes">
+
+The completed TabView should look like the following:
+
+	<TabView>
+		<TabView.items>
+			<TabViewItem title="Templates">
+				<TabViewItem.view>
+				</TabViewItem.view>
+			</TabViewItem>
+			<TabViewItem title="My Memes">
+				<TabViewItem.view>
+				</TabViewItem.view>
+			</TabViewItem>
+		</TabView.items>
+	</TabView>
+
+**Adding the WrapLayout**
+
+With out tabs in place we now need to move onto how we're going to layout the images that we find. For this we're going to use a WrapLayout. The Wrap layout
+
+**Adding the ScrollView**
+
+
+**Run the application**
+
+You should see an empty TabView.
 
 
 ### Step #5 - Adding Controls to Home.xml
+
+This is where we will call our services to get the memes
+
+Two places to load memes:
+* From our apps
+* from everlive.
+
+**From the app**
+
+**From the the cloud**
+
+
+
 ### Step #6 - Handle Page Events
-### Step #7 - XXX
+
+Now that we have images we need to add a gesture to them.
+
+
+### Step #7 - Action Sheets
+
+
+### Step #8 - Extra Credit
+
+Clear the screen
+
 
 ## Resource List:
 
