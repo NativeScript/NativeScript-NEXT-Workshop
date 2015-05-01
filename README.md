@@ -31,7 +31,7 @@ We’ve chosen to walk your through building mobile application which exercises 
 * 09:30 - 10:30 - [Introductions and Welcome to NativeScript {N}, @tjvantoll](slides/1-Intro/intro.pdf)
 * 10:30 - 11:00 - [Lab #1](labs/Lab-1/readme.md) 
 * 11:00 - 11:15 - Break 
-* 11:15 - 12:15 - [Beyond the Basics, @csell5](http://tbd.com) 
+* 11:15 - 12:15 - [Beyond the Basics, @csell5](slides/2-BeyondTheBasics/Going%20Beyond%20the%20Basics.pdf) 
 * 12:15 - 12:30 - [Lab #2 Start](labs/Lab-2/readme.md)
 * 12:30 - 13:30 - Lunch
 * 13:30 - 14:00 - Lab #2 Continued
@@ -43,7 +43,7 @@ We’ve chosen to walk your through building mobile application which exercises 
 # Presentations
 
 1. [Welcome to NativeScript](slides/1-Intro/intro.pdf)
-2. [Beyond the Basics](http://tbd.com) 
+2. [Beyond the Basics](slides/2-BeyondTheBasics/Going%20Beyond%20the%20Basics.pdf) 
 3. [Diving Deep with {N}](http://tbd.com) 
 
 # Labs
