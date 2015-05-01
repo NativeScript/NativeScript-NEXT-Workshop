@@ -150,7 +150,7 @@ After running *create*, you should see a file & folder structure similar to what
 
 Now that we have our frame, we need to get a reference to our topmost frame and call navigate. Navigate takes a number of parameters which tell it where and how to navigate.
 
-We can easily get our topmost frame by calling 
+We can easily get our topmost frame by calling
 	var top = frameModule.topmost();
 
 Before we can properly navigate we need to setup some the details on how to navigate. Let’s create a navigationEntry that we will later pass to navigate. There are three properties that we can set:
@@ -252,19 +252,69 @@ The completed TabView should look like the following:
 		</TabView.items>
 	</TabView>
 
+**Run the application**
+
+  You should see an empty TabView and be able to navigate between them.
+
 **Adding the WrapLayout**
 
-With out tabs in place we now need to move onto how we're going to layout the images that we find. For this we're going to use a WrapLayout. The Wrap layout
+With out tabs in place we now need to move onto how we're going to layout the images that we find. For this we're going to use a WrapLayout. The WrapLayout will work great for us here. It will flow our images across and down without us needing to worry about anything when the phone is in portrait or landscape mode.
+
+Let's add a WrapLayout to each of our TabViewItem.view.
+
+	<WrapLayout>
+	</WrapLayout>
+
+Now we're going to populate these WrapLayout from code since we don't have a clue what kind of images we're working with. That means we will need to be able to get the correct element from JavaScript and add elements to it. Let's assign each WrapLayout a unique id that we can later use.
+
+	<WrapLayout id="templateContainer">
+
+and
+
+	<WrapLayout id="myMemeContainer">
+
+Easy enough. Let's also pretty this up slightly. Our images could be quite large. To make sure things don't get out of hand and we're scrolling forever, let's just set their height to only 100px. To such we can add an attribute to our WrapLayout called 'itemHeight' like this 'itemHeight="100"''.
+
+	<WrapLayout id="templateContainer" itemHeight="100">
+	<WrapLayout id="myMemeContainer" itemHeight="100">
 
 **Adding the ScrollView**
 
+Of course the massive popularity of such a smash hit has our app with 10s of memes. To make our WrapLayout scroll, we just need to wrap the WrapLayout with a 'ScrollView'. This will take care of the black magic for us.
+
+	<ScrollView>
+		<WrapLayout id="templateContainer" itemHeight="100">
+		</WrapLayout>
+	</ScrollView>
 
 **Run the application**
 
-You should see an empty TabView.
+Well not much will happen other than making sure we didn't fat finger something. Our completed TabView should look similar to the following:
 
+	<TabView>
+		<TabView.items>
+			<TabViewItem title="Templates">
+				<TabViewItem.view>
+					<ScrollView>
+						<WrapLayout id="templateContainer" itemHeight="100">
+						</WrapLayout>
+					</ScrollView>
+				</TabViewItem.view>
+			</TabViewItem>
+			<TabViewItem title="My Memes">
+				<TabViewItem.view>
+					<ScrollView>
+						<WrapLayout id="myMemeContainer" itemHeight="100">
+						</WrapLayout>
+					</ScrollView>
+				</TabViewItem.view>
+			</TabViewItem>
+		</TabView.items>
+	</TabView>
 
-### Step #5 - Adding Controls to Home.xml
+### Step #5 - Adding Widgets!
+
+Enough of this </> goo. It's time to throw around a few functions and callbacks.
 
 This is where we will call our services to get the memes
 
