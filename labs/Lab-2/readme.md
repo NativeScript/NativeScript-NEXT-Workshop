@@ -312,15 +312,54 @@ Well not much will happen other than making sure we didn't fat finger something.
 		</TabView.items>
 	</TabView>
 
-### Step #5 - Adding Widgets!
+### Step #6 - Handle Page Events
 
-Enough of this </> goo. It's time to throw around a few functions and callbacks.
+**onLoaded**
 
-This is where we will call our services to get the memes
+We need to get our page setup. To do such, we're going to start with implementing view's loaded event. We do so by adding the 'loaded' attribute to our home.xml page element. 
 
-Two places to load memes:
-* From our apps
-* from everlive.
+home.xml
+
+	<Page 
+		xmlns="http://www.nativescript.org/tns.xsd"
+		loaded="load">
+
+Let's implement that load event we just told our page to call. We will also take the page object and put in scope such that we can use it from other functions.
+
+home.js
+
+	var _page;
+	exports.load = function(args) {
+		_page = args.object;
+	};
+
+**navigatedTo**
+
+Now our page's loaded event might not called each time we navigate the user to that page. It will depend on if {N} unloads it. Given that, let's also implement the navigatedTo event. We will use this event to populate/refresh our screen every time we take our users to this page.
+
+home.xml
+
+	<Page 
+		xmlns="http://www.nativescript.org/tns.xsd"
+		loaded="load"
+		navigatedTo="navigatedTo">
+
+home.js
+
+	exports.navigatedTo = function(args) {
+	};
+
+
+
+### Step #6 - Adding Widgets!
+
+Now this is where the fun happens. In short we have to get our Memes from two different places. 
+
+* From our app itself. As it turns our we've included a few templates so the app just didn't look empty on it's first start.
+* From the cloud. JustMeme is the best social Meme app in the entire world so we need to call those services and get our images.
+
+
+
 
 **From the app**
 
