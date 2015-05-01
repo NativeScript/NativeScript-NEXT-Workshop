@@ -11,7 +11,7 @@
 	<TabView>
 		<TabView.items>
 
-			<TabViewItem cssClass="test" title="Templates">
+			<TabViewItem title="Templates">
 				<TabViewItem.view>
 					<ScrollView>
 						<WrapLayout id="templateContainer" itemHeight="100" horizontalAlignment="center">
