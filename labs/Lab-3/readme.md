@@ -244,7 +244,7 @@ Add following code to the **//---EVENT HANDLER---//** section:
 
 ```JavaScript
 //---EVENT HANDLER---//
-viewModel.addEventListener(observable.knownEvents.propertyChangeEvent, function(changes) {
+viewModel.addEventListener(observable.knownEvents.propertyChange, function(changes) {
 	//skip if memeImage changes
 	if (changes.propertyName === "memeImage") {
 		return;
