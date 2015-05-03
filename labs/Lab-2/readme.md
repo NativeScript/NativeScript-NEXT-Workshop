@@ -20,7 +20,11 @@ In the first lab you learned how to [clone an existing project](https://github.c
 * [Starting Project](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab2-Start)
 * [Finished Project](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab2-Finish)
 
-## The Lab
+For purposes of this lab all path reference seen here are relative from the app.js file found in:
+
+	NativeScript-NEXT-Workshop-Lab2-Finish/Lab2-Finish/app
+
+Consider that the root of our application. 
 
 ### Step #0 - Creating the home.xml shell
 
@@ -28,13 +32,13 @@ In an effort to keep our app always running, before we can navigate away from th
 
 **Creating Home**
 
-1. In our components folder ‘/app/components’ let’s create a new folder called *home* that will contain all of our home’s components.
+1. In our components folder ‘./components’ lets create a new folder called 'home' this will contain all of our home’s components.
 2. Every view can have three components. The layout (xml), the style (css), and the view’s code (js). When those files all have the same root name, in our case *home*, the {N} runtime will load them accordingly.
-3. Let’s create those three file that we will need to display our home page:
+3. Lets create those three file that we will need to display our home page:
 
-* /app/components/home/**home.xml**
-* /app/components/home/**home.js**
-* /app/components/home/**home.css**
+* ./components/home/**home.xml**
+* ./components/home/**home.js**
+* ./components/home/**home.css**
 
 With those three files in place, let’s update our *home.xml* to include the worlds simplest {N} page markup.
 
@@ -291,6 +295,8 @@ Of course the massive popularity of such a smash hit has our app with 10s of mem
 
 Well not much will happen other than making sure we didn't fat finger something. Our completed TabView should look similar to the following:
 
+***home.xml***
+
 	<TabView>
 		<TabView.items>
 			<TabViewItem title="Templates">
@@ -318,7 +324,7 @@ Well not much will happen other than making sure we didn't fat finger something.
 
 We need to get our page setup. To do such, we're going to start with implementing view's loaded event. We do so by adding the 'loaded' attribute to our home.xml page element. 
 
-home.xml
+***home.xml***
 
 	<Page 
 		xmlns="http://www.nativescript.org/tns.xsd"
@@ -326,7 +332,7 @@ home.xml
 
 Let's implement that load event we just told our page to call. We will also take the page object and put in scope such that we can use it from other functions.
 
-home.js
+***home.js***
 
 	var _page;
 	exports.load = function(args) {
@@ -335,52 +341,240 @@ home.js
 
 **navigatedTo**
 
-Now our page's loaded event might not called each time we navigate the user to that page. It will depend on if {N} unloads it. Given that, let's also implement the navigatedTo event. We will use this event to populate/refresh our screen every time we take our users to this page.
+Now our page's loaded event might not fire each time we navigate the user to a given page. A page doesn't just unload when a user navigates away.
 
-home.xml
+For our scenario we want to refresh all of the images every time a user is taken to the home page. To achieve this, let's also implement the pages navigatedTo event. It's here where we can populate/refresh our screen every time we send our users to the home page.
+
+***home.xml***
 
 	<Page 
 		xmlns="http://www.nativescript.org/tns.xsd"
 		loaded="load"
 		navigatedTo="navigatedTo">
 
-home.js
+***home.js***
 
 	exports.navigatedTo = function(args) {
 	};
 
-
-
 ### Step #6 - Adding Widgets!
 
-Now this is where the fun happens. In short we have to get our Memes from two different places. 
+Now this is where the fun happens. In short, we're going to dynamically build the images seen in our WrapLayout. We'll get those Meme's from two different sources:
 
-* From our app itself. As it turns our we've included a few templates so the app just didn't look empty on it's first start.
-* From the cloud. JustMeme is the best social Meme app in the entire world so we need to call those services and get our images.
+* First from our app itself. As it turns our we've included a few templates so the app just didn't look empty on it's first start.
+* Next from the cloud. As you know JustMeme is the best social Meme app in the entire world, so we'll need to call those services and get our images.
+
+Let's add a function called 'populateTemplates'. We can use this function to get our memes and build our UI tree.
+
+	function populateTemplates() {
+	}
+
+Now before we get our memes we'll need reference to the WrapLayout that we plan to populate. Earlier when we assigned one of our WrapLayouts with an id of 'tempalateContainer'. Also when our page is loaded, we grabbed our page object and saved that to _page. On that object is a great function called 'getViewById'. As you might guess, we just need to call that passing the id of the element we would like to have a reference to, in our case that wrap layout.
+
+	var container = _page.getViewById("templateContainer");
+
+With a reference to our container (the WrapLayout element), we just need to populate it with some memes.
+
+Since our time together is short, we've actually already provided the logic to interact with local storage, call our services, and such. Take a look in the shared folder. You will find ./shared/templates/templates.js. This is a API that we've created to help you managed templates. It also depends on ./shared/everlive/everlive.js which is our wrapper on calling Telerik's Back End Services.
+
+Having said that, we still have work to do. Let's add a reference to templates.js
+
+	var templates = require( "../../shared/templates/templates");
+
+Since we're adding new modules let's also add the Image module.
+
+	var imageModule = require("ui/image");
+
+Back to 'populateTemplates'. We need to call 'templates.getTemplates' and pass that a callback. getTemplates (as it implies) will get all of the meme templates from the right places. It then call our callback passing the ImageSource of the meme when it finds one.
+
+This callback is where we will create a new [Image element]() and add it to our WrapLayout.
+
+Let's start by calling getTemplates passing our callback:
+
+	templates.getTemplates(function(imageSource){
+	});
+
+In that callback, let's create a new Image widget:
+	
+	var image = new imageModule.Image();
+
+Assign its imageSource to what we received when we got called:
+
+	image.imageSource = imageSource;
+
+Lastly we just need to add that to our WrapLayout. We got reference to that earlier.
+
+	container.addChild(image);
+
+Rock On!
+
+**Completed templates.getTemplates**
+
+	templates.getTemplates(function(imageSource){
+		var image = new imageModule.Image();
+		image.imageSource = imageSource;
+		container.addChild(image);
+	});
+
+**Calling populateTemplates**
+
+Now we just need to call our PopulateTemplate function. Where do you think? navigatedTo sounds like a great place.
+
+**Run the application**
+
+Are you getting images? Tap them, What happens? Nothing right? Why?
+
+**Completed populateTemplates **
+
+	function populateTemplates() {
+		var container = _page.getViewById("templateContainer");
+	
+		templates.getTemplates(function(imageSource){
+			var image = new imageModule.Image();
+			image.imageSource = imageSource;
+			
+			container.addChild(image);
+		});
+	}
 
 
+### Step #6 - Tap that image!
+
+Look we have images but they do nothing. Expected right? After all it's just an image, they have no inherit behaviors and we didn't actually add anything to them. Good time to introduce [Gestures]()!
+
+Gestures are
+	> AWESOME
+
+Let's pull in our Gestures Module so we can use it.
+
+	var gesturesModule = require("ui/gestures");
+
+Now what we want to do is add a tap event to each image. Then when the user taps it we're going to call a new function (templateSelected) who's only job is to take an ImageSource and navigate the user to 'create-meme' passing that [ImageSource]().
+
+Let's first start by creating an empty function called 'templateSelected' who accepts an imageSource. We'll add its behavior later.
+
+	function templateSelected(selectedImageSource) {	
+	}
+
+Next we need to connect the two, the image's tap to the the function 'tempalteSelected'. 
+
+Staying in our callback that we created to pass to 'templates.getTemplates' let's continue to extend image.
+
+Image has a method called [observe](). Guess what observe takes? Yep, gestures, and a callback. Perfect! Lets pass it a [tap]() and a new callback which calls templateSelected passing along our image.
+
+	image.observe(gesturesModule.GestureTypes.tap, function () { 
+		templateSelected(imageSource); 
+	});
+
+**Run the application**
+
+Go ahead and tap. Tap, Tap, Tap. Blerge, boring. Let's add a little behavior to our empty templateSelected.
+
+	alert("HI THERE!");
+
+Run again? Feel a little better? You should be seeing a dialog pop when you tap an image.
+
+**Completed populateTemplate**
+
+	function populateTemplates() {
+		var container = _page.getViewById("templateContainer");
+	
+	
+		templates.getTemplates(function(imageSource){
+			var image = new imageModule.Image();
+			image.imageSource = imageSource;
+		
+			image.observe(gesturesModule.GestureTypes.tap, function () { 
+				templateSelected(imageSource); 
+			});
+			
+			container.addChild(image);
+		});
+	}
 
 
-**From the app**
+### Step #7 - Navigate to CreateMeme
 
-**From the the cloud**
+Now we've already learned about how to navigate the user from one page to another but this time things are a bit different. This time we need to pass the imageSource of which the user tapped. We need to pass this image along to 'create-meme' such that 'create-meme' can later edit it.
+
+Earlier we added the tapGesture to each image and when tapped we called 'tempalteSelected(imageSource)' where we passed that [ImageSource]() to that function.
+
+Time for you to try and make that function.
+
+**Run the application**
+
+At this point you should be able to run your application, see the images populate the WrapLayout, and when you tap an image we should be trying to navigate the user to 'create-meme' or blow up if we don't have a 'create-meme' placeholder.
+
+**Completed templateSelected function**
+
+	function templateSelected(selectedImageSource) {	
+		frameModule.topmost().navigate({
+			moduleName: "./components/create-meme/create-meme",
+			context: imageSource,
+			animated: true
+		});
+	}
+
+### Step #8 - Extra Credit - Clearing the screen.
+
+Earlier we created a function which would fire when the 'navigatedTo' event fires. We did that to keep the images fresh every time the user is navigated to our home page.
+
+To keep that screen fresh we need to make sure we clear the images in it. Now we could debate on the best way to do such, but for our purposes here we're just going to grab the WrapLayout and delete all of it's children. Then we just populate it using what we just built.
+
+What do we want to do?
+* Get our container.
+* Get the count on the number of children in that container.
+	- [hint]()
+* Loop backwards
+	* removing that child.
+		- [hint]()
+	* Get ourselves our of potential memory issues.
+	* Wash, Rinse, Repeat.
+
+Oh yea, we need to call this from somewhere? Where?
+
+**Question**
+
+Why did we loop backwards?
+
+**Run the application**
+
+Ok, little weird here since we only have essentially two pages and the first time we run the application we're in fact going through the initial page load. 
+
+**Completed function to clear our memes**
+
+	function clearOldMemes(container) {
+	
+		for (var i = container.getChildrenCount() - 1; i >= 0; i-- ) {
+			var childItem = container.getChildAt(i);
+			container.removeChild(childItem);
+			
+			// Prevent possible memory leaks
+			childItem.imageSource.setNativeSource(null);
+			childItem.imageSource = null;
+			childItem = null;
+		}
+		utils.GC();
+	}
+
+### Step #9 - extra EXTRA credit. Build My Memes. 
+
+Extend what we've built so far but now populate the My Memes tab. In the next lab you will be creating the 'create-meme' page. 'create-meme' will take that image source we passed to it, then save it to local storage. That's great but we would love to see those memes appear on our My Memes tab in our TabView.
+
+A few times already we've referenced our shared folder. This is where we've abstracted away some of our logic to get the memes, call local storage, etc.
+
+To help get you started let's recap some of the steps we've gone through to populate the WrapLayout for the meme templates tab:
+
+1. We created a function that we called from onNavigatedTo.
+2. In that function we got a reference to our WrapLayout.
+3. Then we called our Templates API to get our images. 
+4. The Templates API took a callback which did the work to populate the WrapLayout.
+5. Lastly (if you did the extra credit) we created another function which cleared the UI elements for the container passed to it. This just helps keep our images fresh and new without any orphans. 
+
+Feel free to browse around the source found in our master to see what all we did. You might find a few more items than we discussed here. 
+
+**Run the application**
+
+Enjoy
 
 
-
-### Step #6 - Handle Page Events
-
-Now that we have images we need to add a gesture to them.
-
-
-### Step #7 - Action Sheets
-
-
-### Step #8 - Extra Credit
-
-Clear the screen
-
-
-## Resource List:
-
-* [Page Navigation](http://docs.nativescript.org/navigation#navigation)
-* [Page Layout](http://docs.nativescript.org/layouts)
