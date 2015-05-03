@@ -71,11 +71,11 @@ Now at this point we don’t actually have anywhere to put our code, which means
 
 To complete our scenario, when the page loads we'll just wait some time then redirect to our new home page. To do so, let’s add the `setTimeout` to our Page’s `onLoaded` event.
 
-To start we need to tell our view what function should run when the `loaded` event fires. We can easily do this by just adding an attribute to our Page’s *Page* element, `loaded=“load”`.  
+To start we need to tell our view what function should run when the `loaded` event fires. We can easily do this by just adding an attribute to our Page’s *Page* element, `loaded="load"`.  
 
 ```xml
 	<Page
-		loaded=“load”>
+		loaded="load">
 ```
 
 Now let’s open our SplashScreen’s code file, `splashscreen.js`. Right now we have no code but it’s time to add that `load` function we we just defined in our view. To do so we need to follow the [CommonJS](http://www.commonjs.org/) pattern for defining and exporting a function. In our case we need to define a function called *load* and export to our view such that it can later be called when our *loaded* event fires.
