@@ -293,7 +293,7 @@ Once we added the ViewModel, we no longer need the require imports at the top of
 
 Also we no longer need:
 
-* The refreshMeme() function, 
+* The `refreshMeme()` function, 
 * `exports.saveLocally()`,
 * `exports.share()` and
 * `function addRefreshOnChange()`
@@ -452,32 +452,32 @@ var analyticsMonitor = require("../../shared/analytics");
 From now you can:
 
 * Track Feature Usage
-	
-		`analyticsMonitor.trackFeature('MyCategory.MyFeature');`
-
+```JavaScript	
+analyticsMonitor.trackFeature('MyCategory.MyFeature');`
+```
 * Track Used Values
-
-		`analyticsMonitor.trackFeatureValue('MyCategory.MyValue', 1000);`
-
-* Track How Long It Takes To Run Something
-	
 ```JavaScript
-	analyticsMonitor.trackFeatureStart('MyCategory.MyFeature');
-	//Do something here
-	analyticsMonitor.trackFeatureStop('MyCategory.MyFeature');
+analyticsMonitor.trackFeatureValue('MyCategory.MyValue', 1000);
+```
+* Track How Long It Takes To Run Something
+```JavaScript
+analyticsMonitor.trackFeatureStart('MyCategory.MyFeature');
+//Do something here
+analyticsMonitor.trackFeatureStop('MyCategory.MyFeature');
 ```
 
 * Track Raised Exceptions
-
-		`analyticsMonitor.trackException(new Error('some error'), 'some error message');`
-
+```JavaScript
+analyticsMonitor.trackException(new Error('some error'), 'some error message');
+```
 or
-
-	try {
-		//do something
-	} catch (exception) {
-		analyticsMonitor.trackException(exception, 'some error message');
-	}
+```JavaScript
+try {
+	//do something
+} catch (exception) {
+	analyticsMonitor.trackException(exception, 'some error message');
+}
+```
 
 **IMPORTANT**
 
