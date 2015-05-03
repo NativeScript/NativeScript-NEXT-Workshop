@@ -589,10 +589,8 @@ To keep that screen fresh we need to make sure we clear the images in it. Now we
 What do we want to do?
 * Get our container.
 * Get the count on the number of children in that container.
-	- [hint]()
 * Loop backwards
 	* removing that child.
-		- [hint]()
 	* Get ourselves out of potential memory issues.
 	* Wash, Rinse, Repeat.
 
