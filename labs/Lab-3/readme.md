@@ -26,8 +26,13 @@ In the first lab you learned how to [clone an existing project](https://github.c
 
 ## The Lab
 
-### Step #0 - Examine the ViewModel of the Create Meme page
-Go to app->components->create-meme folder and open "view-model.js" file
+The lab is divided into few sections:
+* Steps 1-10 will take you through an excersise of converting create-meme page to use MVVM, by moving the app logic from `create-meme.js` to `View-model.js`. The purpose of this excersise is to show you how you can migrate from one approach (app logic mixed with view's code-behind) to the other (app logic in the ViewModel) and to show you how a ViewModel should be strucutred.
+* Step 11 shows you how a ViewModel looks when implemented in TypeScript. TypeScript is a great language that can speed up and simplyfy the process building JavaScript modules. The best thing is that TypeScript compiles into JavaScript, so you are never missing out.
+* Steps 12-17 show you how to add app usage Analytics to your app, so that you could see how often/which features people use.
+
+### Step #0.1- Examine the ViewModel of the Create Meme page
+Go to app->components->create-meme folder and open `view-model.js` file
 Here you can see the code to create a new ViewModel
 
 ```JavaScript
@@ -48,6 +53,19 @@ There are also a few placeholders prepared to implement the functionality of the
 **VIEW MODEL METHOD PLACEHOLDERS**: This is where we're going to implement the methods of the ViewModel
 
 **EVENT HANDLER**: this is where we're going to add on the property change handler
+
+### Step #0.2 - Examine `create-meme.js` file
+Go to app->components->create-meme folder and open `create-meme.js`file.
+
+Here we have:
+* `exports.loaded` - provides the code for the `loaded` event in the view. Here is where we initialise the page and add the `propertyChange` event,
+* `exports.navigatedTo` - provides the code for the `navigatedTo` event in the view. Here is were we retrieve the image passed in through `_page.navigationContext` and then reset the values to their default state,
+* `function refreshMeme()` - this function refreshes the MemeImage
+* `exports.saveLocally` - provides the code for the `tap` event of the Save button in the View `<Button text="Save" tap="saveLocally" />`. It contains the necessary code to save the Meme to a file.
+* `exports.share` - provides the code for the `tap` event of the Save button in the View `<Button text="Share" tap="share" />`. It contains the necessary code to share the Meme Image with other apps.
+* `function addRefreshOnChange()` - adds a change event handler, which is raised every time there is a change made to `_viewData` calling `refreshMeme()`, unless the event is raised by a change to `memeImage`.
+
+You can note that the part of code begin with `exports.` are exposed to the View (`create-meme.xml`).
 
 ### Step #1 - [view-model.js] Copy imports
 
