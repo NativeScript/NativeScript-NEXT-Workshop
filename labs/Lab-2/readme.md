@@ -497,8 +497,6 @@ function populateTemplates() {
 
 Look we have images but they do nothing. Expected, right? After all it's just an image, they have no inherit behaviors and we didn't actually add anything to them. Good time to introduce Gestures!
 
-TODOTODO: Do a thing
-
 Gestures are
 	> AWESOME
 
@@ -576,7 +574,7 @@ At this point you should be able to run your application, see the images populat
 function templateSelected(selectedImageSource) {	
 	frameModule.topmost().navigate({
 		moduleName: "./components/create-meme/create-meme",
-		context: imageSource,
+		context: selectedImageSource,
 		animated: true
 	});
 }
