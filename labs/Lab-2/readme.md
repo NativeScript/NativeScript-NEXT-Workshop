@@ -230,10 +230,12 @@ We need to define an items array. In that it will have two Items (Templates, MyM
 <TabView.items>
   <TabViewItem>
     <TabViewItem.view>
+      <Label text="templates" />
     </TabViewItem.view>
   </TabViewItem>
   <TabViewItem>
     <TabViewItem.view>
+      <Label text="memes" />
     </TabViewItem.view>
   </TabViewItem>
 </TabView.items>
@@ -258,10 +260,12 @@ The completed TabView should look like the following:
 	<TabView.items>
 		<TabViewItem title="Templates">
 			<TabViewItem.view>
+				<Label text="templates" />
 			</TabViewItem.view>
 		</TabViewItem>
 		<TabViewItem title="My Memes">
 			<TabViewItem.view>
+				<Label text="memes" />
 			</TabViewItem.view>
 		</TabViewItem>
 	</TabView.items>
