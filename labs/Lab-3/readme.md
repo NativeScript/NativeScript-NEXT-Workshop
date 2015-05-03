@@ -17,7 +17,8 @@ In this lab we are going to learn about:
 	* Tracking feature use and Exceptions
  
 ## Getting Setup
-Create a new application in AppBuilder. [How to create a new application](http://backUpOne.com/backup)
+
+In the first lab you learned how to [clone an existing project](https://github.com/NativeScript/NativeScript-NEXT-Workshop/tree/master/labs/Lab-1#step-1-clone-the-repo) in AppBuilder. For this lab here is the starting and ending points:
 
 {N} lab projects in GitHub:
 * [Starting Project](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab3-Start)
