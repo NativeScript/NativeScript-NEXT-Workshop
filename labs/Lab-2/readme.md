@@ -32,66 +32,75 @@ In an effort to keep our app always running, before we can navigate away from th
 
 **Creating Home**
 
-1. In our components folder ‘./components’ lets create a new folder called 'home' this will contain all of our home’s components.
+1. In our components folder, `./components`, let's create a new folder called “home”. This will contain all of our home page’s components.
 2. Every view can have three components. The layout (xml), the style (css), and the view’s code (js). When those files all have the same root name, in our case *home*, the {N} runtime will load them accordingly.
-3. Lets create those three file that we will need to display our home page:
+3. Let's create the three files that we will need to display our home page:
 
 * ./components/home/**home.xml**
 * ./components/home/**home.js**
 * ./components/home/**home.css**
 
-With those three files in place, let’s update our *home.xml* to include the worlds simplest {N} page markup.
+With those three files in place, let’s update our *home.xml* to include the world's simplest {N} page markup.
 
-	<Page>
-		<Label text=“hi from home”/>
-	</Page>
+```xml
+<Page>
+	<Label text="hi from home"/>
+</Page>
+```
 
 What are we proving here? Nothing other than navigation works correctly when we get to that point.
 
 ### Step #1 - onLoaded page events
 
-With our home view now in place let’s turn our attention back to the ‘SplashScreen.xml’ that we built in the first lab.
+With our home view now in place, let’s turn our attention back to the `SplashScreen.xml` file that we built in the first lab.
 
 Let’s setup the scenario. Today it’s not uncommon to use a SplashScreen to start loading app information that might be used later in your app. For our purposes here we’re going to fake it and use this as an opportunity to explain a few things.
 
 To simulate some kind of business processing we’re going to call ‘setTimeout()’ to create a slight delay. Something like such:
 
-	//Pretending we’re calling some awesome service.
+```JavaScript
+//Pretending we’re calling some awesome service.
+setTimeout(function () {
+		// Do something really awesome…
+		// Finished doing something awesome.
+		// Now let’s navigate.
+}, 100);
+```
+
+Now at this point we don’t actually have anywhere to put our code, which means it’s a good time to introduce [{N} Page Events](http://docs.nativescript.org/ApiReference/ui/core/view/knownEvents/README).
+
+To complete our scenario, when the page loads we'll just wait some time then redirect to our new home page. To do so, let’s add the `setTimeout` to our Page’s `onLoaded` event.
+
+To start we need to tell our view what function should run when the `loaded` event fires. We can easily do this by just adding an attribute to our Page’s *Page* element, `loaded=“load”`.  
+
+```xml
+	<Page
+		loaded=“load”>
+```
+
+Now let’s open our SplashScreen’s code file, `splashscreen.js`. Right now we have no code but it’s time to add that `load` function we we just defined in our view. To do so we need to follow the [CommonJS](http://www.commonjs.org/) pattern for defining and exporting a function. In our case we need to define a function called *load* and export to our view such that it can later be called when our *loaded* event fires.
+
+```JavaScript
+exports.load = function(args) {
+};
+```
+
+With that in place, our function should now run when the page’s `loaded` event is fired. Now let's add our `setTimeout` logic in that function.
+
+```JavaScript
+exports.load = function(args) {
 	setTimeout(function () {
 			// Do something really awesome…
 			// Finished doing something awesome.
 			// Now let’s navigate.
+			alert('Hi There!!!');
 	}, 100);
-
-Now at this point we don’t actually have anywhere to put our code which means it’s a good time to introduce [{N} Page Events](http://docs.nativescript.org/ApiReference/ui/core/view/knownEvents/README)
-
-To complete our scenario, when the page loads, we want to wait a some time then just redirect to our new home page. To do so
-let’s add the ‘setTimeout’ to our Page’s ‘onLoaded’ event.
-
-To start we need to tell our view what function should run when the loaded event is fired. We can easily do this by just adding an attribute to our Page’s *Page* element, ‘loaded=“load”’.  
-
-	<Page
-		loaded=“load”>
-
-Now let’s open our SplashScreen’s code file, ‘splashscreen.js’. Right now we have no code but it’s time to add that load  function we we just defined in our view. To do so we need to follow the [CommonJS](http://www.commonjs.org/) pattern for defining and exporting a function. In our case we need to define a function called *load* and export to our view such that it can later be called when our *loaded* event is fired.
-
-	exports.load = function(args) {
-	};
-
-With that in place, our function should now run when the page’s loaded event is fired. Now lets add our setTimeout logic in that function.
-
-	exports.load = function(args) {
-		setTimeout(function () {
-				// Do something really awesome…
-				// Finished doing something awesome.
-				// Now let’s navigate.
-				conosle.log('Hi There!!!')
-		}, 100);
-	};
+};
+```
 
 **Run the application**
 
-Awesome. Now we just need to navigate to our home page. Let's run the application and see if after 100 milliseconds our console statement prints out 'Hi There!!!'.
+Awesome. Now we just need to navigate to our home page. Let's run the application and see if after 100 milliseconds our alert shows.
 
 ### Step #2 - Loading your first module
 
@@ -101,9 +110,11 @@ To navigate to a page within your application we first have to get a reference t
 
 For us to leverage the frame API we first have to load that module. We do that by calling *require* and passing the path reference to the module we require. If you’ve done any node.js development this should be more than familiar.
 
-	var frameModule = require(“ui/frame”);
+```JavaScript
+var frameModule = require("ui/frame");
+```
 
-Now that we’ve successful loaded our frame module, I’m sure you’re asking, what’s a module and where did you find that? Well as it turns out they’re in a folder called *tns_modules*, where else?
+Now that we’ve successfully loaded our frame module, I’m sure you’re asking, what’s a module and where did you find that? Well as it turns out they’re in a folder called *tns_modules*, where else?
 
 Ok, let’s back up. A [module](http://docs.nativescript.org/modules) is defined as:
 
@@ -111,88 +122,79 @@ Ok, let’s back up. A [module](http://docs.nativescript.org/modules) is defined
 
 > In your project, the files for each module reside in a 	dedicated subdirectory in the {N}_modules directory. Each default module comes along with a package.json file which declares how the module should be called within your call and which file contains its respective code.
 
-Ok, if you’re using AppBuilder that part is sorta hidden.
+You can find the tns_modules directory directly within your project's `app` folder:
 
-**Extra Credit**
-
-Open your terminal/cmd. Assuming you have the {N} cli installed, run ‘tns create [someAppName]’. In doing so this will create a sample shell application that you can take and build upon.  
-
-After running *create*, you should see a file & folder structure similar to what you see listed below. Look closely and you will find the tns_modules folder. This is where all of the default modules are hiding.
-
-	├── app
-	│   ├── App_Resources
-	│   │   ├── Android
-	│   │   │   ├── …
-	│   │   └── iOS
-	│   │       ├── …
-	│   ├── LICENSE
-	│   ├── README.md
-	│   ├── app
-	│   │   ├── app.css
-	│   │   ├── app.js
-	│   │   ├── bootstrap.js
-	│   │   ├── main-page.js
-	│   │   ├── main-page.xml
-	│   │   ├── main-view-model.js
-	│   │   └── package.json
-	│   ├── package.json
-	│   └── tns_modules
-	│       ├── LICENSE
-	│       ├── application
-	│       │   ├── application-common.js
-	│       │   ├── application.android.js
-	│       │   ├── application.ios.js
-	│       │   └── package.json
-	│       ├── camera
-	│       │   ├── camera.android.js
-	│       │   ├── camera.ios.js
-	│       │   └── package.json
-	│       ├── …
-	└── platforms
+```
+	└── app
+        ├── app.css
+        ├── app.js
+        ├── ...
+        └── tns_modules
+            ├── LICENSE
+            ├── application
+            │   ├── application-common.js
+            │   ├── application.android.js
+            │   ├── application.ios.js
+            │   └── package.json
+            ├── camera
+            │   ├── camera.android.js
+            │   ├── camera.ios.js
+            │   └── package.json
+            └── ...
+```
 
 ### Step #3 - Take me Home.xml
 
 Now that we have our frame, we need to get a reference to our topmost frame and call navigate. Navigate takes a number of parameters which tell it where and how to navigate.
 
 We can easily get our topmost frame by calling
-	var top = frameModule.topmost();
 
-Before we can properly navigate we need to setup some the details on how to navigate. Let’s create a navigationEntry that we will later pass to navigate. There are three properties that we can set:
+```JavaScript
+var top = frameModule.topmost();
+```
 
-* moduleName: this is the path to the page that we want to be redirect to.
-* context: the object that we want to pass along to the next page.
-* animated: show the native page transitions.
+Before we can properly navigate we need to setup some the details on how to navigate. Let’s create a `navigationEntry` that we will later pass to navigate. There are three properties that we can set:
+
+* `moduleName`: this is the path to the page that we want to be redirect to.
+* `context`: the object that we want to pass along to the next page.
+* `animated`: show the native page transitions.
 
 See the following example:
 
-	var navigationEntry = {
-		moduleName: “details-page”,
-		context: { info: “something you want to pass to your page” },
-		animated: true
-	};
+```JavaScript
+var navigationEntry = {
+	moduleName: "details-page",
+	context: { info: "something you want to pass to your page" },
+	animated: true
+};
+```
 
-Now in our case our moduleName should be the path to our home.xml page './components/home/home' and we also don't have anything to pass along to the home page so we can omit the context.
+Now in our case our `moduleName` should be the path to our home.xml page `./components/home/home` and we also don't have anything to pass along to the home page so we can omit the `context`.
 
 With this we just need to call navigate passing our navigation entry to it.
 
-	top.navigate(navigationEntry);
+```JavaScript
+top.navigate(navigationEntry);
+```
 
 Now the completed ‘SplashScreen.js’ should look similar to what you see listed below. Here we've used some shorthand syntax to add a little sugar into today’s lab:
 
-	// load the frame module
-	var frameModule = require(“ui/frame”);
+```JavaScript
+// load the frame module
+var frameModule = require("ui/frame");
 
-	// expose our load function to the page’s loaded event
-	exports.load = function(args) {
-		// Fake some work
-		setTimeout(function () {
-			// Call the frameModule and navigate away
-			frameModule.topmost().navigate({
-				moduleName: “./components/home/home”,
-				animated: true
-			});
-		}, 100);
-	};
+// expose our load function to the page’s loaded event
+exports.load = function(args) {
+	// Fake some work
+	setTimeout(function () {
+		// Call the frameModule and navigate away
+		frameModule.topmost().navigate({
+			moduleName: "./components/home/home",
+			animated: true
+		});
+	}, 100);
+};
+```
 
 **Run the application**
 
@@ -205,7 +207,7 @@ Welcome home! Now that you're here it's time to get our house setup. Let's start
 ![](../ss.png)
 
 This screen is comprised of a few different elements.
-1. [TabView](http://docs.nativescript.org/ApiReference/ui/tab-view/HOW-TO.html). This is what we're using to "swap" between the meme templates an the memes you've created.
+1. [TabView](http://docs.nativescript.org/ApiReference/ui/tab-view/HOW-TO.html). This is what we're using to "swap" between the meme templates and the memes you've created.
 2. In each [TabViewItem](http://docs.nativescript.org/ApiReference/ui/tab-view/TabViewItem.html), we have a [WrapLayout](http://docs.nativescript.org/ApiReference/ui/layouts/wrap-layout/HOW-TO.html). We will dynamically populate this based on the images that we find.
 3. Now assuming this is the most popular app in the AppStore that means we will have more memes to show than the screen can fit. We can fix that by introducing a [ScrollView](http://docs.nativescript.org/ApiReference/ui/scroll-view/HOW-TO.html).
 
@@ -213,8 +215,10 @@ This screen is comprised of a few different elements.
 
 Simple enough, right? Since our view is really just a TabView, we don't need to worry about our overall layout here. Let's replace the Label we created earlier with a TabView.
 
-	<TabView>
-	</TabView>
+```xml
+<TabView>
+</TabView>
+```
 
 Not hard, but also not useful. Let's add our two tab items:
 * Templates
@@ -222,39 +226,47 @@ Not hard, but also not useful. Let's add our two tab items:
 
 We need to define an items array. In that it will have two Items (Templates, MyMemes), and each of those will need a view.
 
-	<TabView.items>
-      <TabViewItem>
-        <TabViewItem.view>
-        </TabViewItem.view>
-      </TabViewItem>
-      <TabViewItem>
-        <TabViewItem.view>
-        </TabViewItem.view>
-      </TabViewItem>
-    </TabView.items>
+```xml
+<TabView.items>
+  <TabViewItem>
+    <TabViewItem.view>
+    </TabViewItem.view>
+  </TabViewItem>
+  <TabViewItem>
+    <TabViewItem.view>
+    </TabViewItem.view>
+  </TabViewItem>
+</TabView.items>
+```
 
-If you run that, you will see two tab, but without any titles. Let's add a title attribute to our TabViewItem. Our first TabViewItem should be:
+If you run that, you will see two tabs, but without any titles. Let's add a `title` attribute to our TabViewItem. Our first TabViewItem should be:
 
-	<TabViewItem title="Templates">
+```xml
+<TabViewItem title="Templates">
+```
 
 and the second:
 
-	<TabViewItem title="My Memes">
+```xml
+<TabViewItem title="My Memes">
+```
 
 The completed TabView should look like the following:
 
-	<TabView>
-		<TabView.items>
-			<TabViewItem title="Templates">
-				<TabViewItem.view>
-				</TabViewItem.view>
-			</TabViewItem>
-			<TabViewItem title="My Memes">
-				<TabViewItem.view>
-				</TabViewItem.view>
-			</TabViewItem>
-		</TabView.items>
-	</TabView>
+```xml
+<TabView>
+	<TabView.items>
+		<TabViewItem title="Templates">
+			<TabViewItem.view>
+			</TabViewItem.view>
+		</TabViewItem>
+		<TabViewItem title="My Memes">
+			<TabViewItem.view>
+			</TabViewItem.view>
+		</TabViewItem>
+	</TabView.items>
+</TabView>
+```
 
 **Run the application**
 
@@ -266,30 +278,40 @@ With out tabs in place we now need to move onto how we're going to layout the im
 
 Let's add a WrapLayout to each of our TabViewItem.view.
 
-	<WrapLayout>
-	</WrapLayout>
+```xml
+<WrapLayout>
+</WrapLayout>
+```
 
-Now we're going to populate these WrapLayout from code since we don't have a clue what kind of images we're working with. That means we will need to be able to get the correct element from JavaScript and add elements to it. Let's assign each WrapLayout a unique id that we can later use.
+Now we're going to populate these WrapLayouts from code since we don't have a clue what kind of images we're working with. That means we will need to be able to get the correct element from JavaScript and add elements to it. Let's assign each WrapLayout a unique id that we can later use.
 
-	<WrapLayout id="templateContainer">
+```xml
+<WrapLayout id="templateContainer">
+```
 
 and
 
-	<WrapLayout id="myMemeContainer">
+```xml
+<WrapLayout id="myMemeContainer">
+```
 
-Easy enough. Let's also pretty this up slightly. Our images could be quite large. To make sure things don't get out of hand and we're scrolling forever, let's just set their height to only 100px. To such we can add an attribute to our WrapLayout called 'itemHeight' like this 'itemHeight="100"''.
+Easy enough. Let's also pretty this up slightly. Our images could be quite large. To make sure things don't get out of hand and we're scrolling forever, let's just set their height to only 100px. To this we can add an attribute to our WrapLayout called `itemHeight` like this `itemHeight="100"`.
 
-	<WrapLayout id="templateContainer" itemHeight="100">
-	<WrapLayout id="myMemeContainer" itemHeight="100">
+```xml
+<WrapLayout id="templateContainer" itemHeight="100">
+<WrapLayout id="myMemeContainer" itemHeight="100">
+```
 
 **Adding the ScrollView**
 
 Of course the massive popularity of such a smash hit has our app with 10s of memes. To make our WrapLayout scroll, we just need to wrap the WrapLayout with a 'ScrollView'. This will take care of the black magic for us.
 
-	<ScrollView>
-		<WrapLayout id="templateContainer" itemHeight="100">
-		</WrapLayout>
-	</ScrollView>
+```xml
+<ScrollView>
+	<WrapLayout id="templateContainer" itemHeight="100">
+	</WrapLayout>
+</ScrollView>
+```
 
 **Run the application**
 
@@ -297,128 +319,156 @@ Well not much will happen other than making sure we didn't fat finger something.
 
 ***home.xml***
 
-	<TabView>
-		<TabView.items>
-			<TabViewItem title="Templates">
-				<TabViewItem.view>
-					<ScrollView>
-						<WrapLayout id="templateContainer" itemHeight="100">
-						</WrapLayout>
-					</ScrollView>
-				</TabViewItem.view>
-			</TabViewItem>
-			<TabViewItem title="My Memes">
-				<TabViewItem.view>
-					<ScrollView>
-						<WrapLayout id="myMemeContainer" itemHeight="100">
-						</WrapLayout>
-					</ScrollView>
-				</TabViewItem.view>
-			</TabViewItem>
-		</TabView.items>
-	</TabView>
+```xml
+<TabView>
+	<TabView.items>
+		<TabViewItem title="Templates">
+			<TabViewItem.view>
+				<ScrollView>
+					<WrapLayout id="templateContainer" itemHeight="100">
+					</WrapLayout>
+				</ScrollView>
+			</TabViewItem.view>
+		</TabViewItem>
+		<TabViewItem title="My Memes">
+			<TabViewItem.view>
+				<ScrollView>
+					<WrapLayout id="myMemeContainer" itemHeight="100">
+					</WrapLayout>
+				</ScrollView>
+			</TabViewItem.view>
+		</TabViewItem>
+	</TabView.items>
+</TabView>
+```
 
 ### Step #6 - Handle Page Events
 
 **onLoaded**
 
-We need to get our page setup. To do such, we're going to start with implementing view's loaded event. We do so by adding the 'loaded' attribute to our home.xml page element. 
+We need to get our page setup. To do such, we're going to start with implementing view's `loaded` event. We do so by adding the `loaded` attribute to our home.xml page element. 
 
 ***home.xml***
 
-	<Page 
-		xmlns="http://www.nativescript.org/tns.xsd"
-		loaded="load">
+```xml
+<Page 
+	xmlns="http://www.nativescript.org/tns.xsd"
+	loaded="load">
+```
 
-Let's implement that load event we just told our page to call. We will also take the page object and put in scope such that we can use it from other functions.
+Let's implement that `load` event we just told our page to call. We will also take the page object and put it in scope so that we can use it from other functions.
 
 ***home.js***
 
-	var _page;
-	exports.load = function(args) {
-		_page = args.object;
-	};
+```JavaScript
+var _page;
+exports.load = function(args) {
+	_page = args.object;
+};
+```
 
 **navigatedTo**
 
-Now our page's loaded event might not fire each time we navigate the user to a given page. A page doesn't just unload when a user navigates away.
+Now our page's `loaded` event might not fire each time we navigate the user to a given page. A page doesn't just unload when a user navigates away.
 
-For our scenario we want to refresh all of the images every time a user is taken to the home page. To achieve this, let's also implement the pages navigatedTo event. It's here where we can populate/refresh our screen every time we send our users to the home page.
+For our scenario we want to refresh all of the images every time a user is taken to the home page. To achieve this, let's also implement the page's `navigatedTo` event. It's here where we can populate/refresh our screen every time we send our users to the home page.
 
 ***home.xml***
 
-	<Page 
-		xmlns="http://www.nativescript.org/tns.xsd"
-		loaded="load"
-		navigatedTo="navigatedTo">
+```xml
+<Page 
+	xmlns="http://www.nativescript.org/tns.xsd"
+	loaded="load"
+	navigatedTo="navigatedTo">
+```
 
 ***home.js***
 
-	exports.navigatedTo = function(args) {
-	};
+```JavaScript
+exports.navigatedTo = function(args) {
+};
+```
 
 ### Step #6 - Adding Widgets!
 
-Now this is where the fun happens. In short, we're going to dynamically build the images seen in our WrapLayout. We'll get those Meme's from two different sources:
+Now this is where the fun happens. In short, we're going to dynamically build the images seen in our WrapLayout. We'll get those Memes from two different sources:
 
-* First from our app itself. As it turns our we've included a few templates so the app just didn't look empty on it's first start.
-* Next from the cloud. As you know JustMeme is the best social Meme app in the entire world, so we'll need to call those services and get our images.
+* First from our app itself. As it turns our we've included a few templates so the app just didn't look empty on its first start.
+* Next from the cloud. As you know, JustMeme is the best social Meme app in the entire world, so we'll need to call those services and get our images.
 
-Let's add a function called 'populateTemplates'. We can use this function to get our memes and build our UI tree.
+Let's add a function called `populateTemplates`. We can use this function to get our memes and build our UI tree.
 
-	function populateTemplates() {
-	}
+```JavaScript
+function populateTemplates() {
+}
+```
 
-Now before we get our memes we'll need reference to the WrapLayout that we plan to populate. Earlier when we assigned one of our WrapLayouts with an id of 'tempalateContainer'. Also when our page is loaded, we grabbed our page object and saved that to _page. On that object is a great function called 'getViewById'. As you might guess, we just need to call that passing the id of the element we would like to have a reference to, in our case that wrap layout.
+Now before we get our memes we'll need reference to the WrapLayout that we plan to populate. Earlier when we assigned one of our WrapLayouts with an id of `tempalateContainer`. Also when our page is loaded, we grabbed our page object and saved that to `_page`. On that object is a great function called `getViewById`. As you might guess, we just need to call that by passing the id of the element we would like to have a reference to, in our case that WrapLayout.
 
-	var container = _page.getViewById("templateContainer");
+```JavaScript
+var container = _page.getViewById("templateContainer");
+```
 
 With a reference to our container (the WrapLayout element), we just need to populate it with some memes.
 
-Since our time together is short, we've actually already provided the logic to interact with local storage, call our services, and such. Take a look in the shared folder. You will find ./shared/templates/templates.js. This is a API that we've created to help you managed templates. It also depends on ./shared/everlive/everlive.js which is our wrapper on calling Telerik's Back End Services.
+Since our time together is short, we've actually already provided the logic to interact with local storage, call our services, and such. Take a look in the shared folder. You will find ./shared/templates/templates.js. This is a API that we've created to help you manage templates. It also depends on ./shared/everlive/everlive.js which is our wrapper for calling Telerik's Backend Services.
 
 Having said that, we still have work to do. Let's add a reference to templates.js
 
-	var templates = require( "../../shared/templates/templates");
+```JavaScript
+var templates = require("../../shared/templates/templates");
+```
 
 Since we're adding new modules let's also add the Image module.
 
-	var imageModule = require("ui/image");
+```JavaScript
+var imageModule = require("ui/image");
+```
 
-Back to 'populateTemplates'. We need to call 'templates.getTemplates' and pass that a callback. getTemplates (as it implies) will get all of the meme templates from the right places. It then call our callback passing the ImageSource of the meme when it finds one.
+Back to `populateTemplates`. We need to call `templates.getTemplates` and pass that a callback. getTemplates (as it implies) will get all of the meme templates from the right places. It then calls our callback passing the ImageSource of the meme when it finds one.
 
-This callback is where we will create a new [Image element]() and add it to our WrapLayout.
+This callback is where we will create a new Image element and add it to our WrapLayout.
 
-Let's start by calling getTemplates passing our callback:
+Let's start by calling `getTemplates` passing our callback:
 
-	templates.getTemplates(function(imageSource){
-	});
+```JavaScript
+templates.getTemplates(function(imageSource){
+});
+```
 
 In that callback, let's create a new Image widget:
-	
-	var image = new imageModule.Image();
 
-Assign its imageSource to what we received when we got called:
+```JavaScript
+var image = new imageModule.Image();
+```
 
-	image.imageSource = imageSource;
+Assign its `imageSource` to what we received when our callback was called:
+
+```JavaScript
+image.imageSource = imageSource;
+```
 
 Lastly we just need to add that to our WrapLayout. We got reference to that earlier.
 
-	container.addChild(image);
+```JavaScript
+container.addChild(image);
+```
 
 Rock On!
 
 **Completed templates.getTemplates**
 
-	templates.getTemplates(function(imageSource){
-		var image = new imageModule.Image();
-		image.imageSource = imageSource;
-		container.addChild(image);
-	});
+```JavaScript
+templates.getTemplates(function(imageSource){
+	var image = new imageModule.Image();
+	image.imageSource = imageSource;
+	container.addChild(image);
+});
+```
 
 **Calling populateTemplates**
 
-Now we just need to call our PopulateTemplate function. Where do you think? navigatedTo sounds like a great place.
+Now we just need to call our `populateTemplate` function. Where do you think we should put it? The `navigatedTo` function sounds like a great place.
 
 **Run the application**
 
@@ -426,100 +476,113 @@ Are you getting images? Tap them, What happens? Nothing right? Why?
 
 **Completed populateTemplates **
 
-	function populateTemplates() {
-		var container = _page.getViewById("templateContainer");
-	
-		templates.getTemplates(function(imageSource){
-			var image = new imageModule.Image();
-			image.imageSource = imageSource;
-			
-			container.addChild(image);
-		});
-	}
+```JavaScript
+function populateTemplates() {
+	var container = _page.getViewById("templateContainer");
 
+	templates.getTemplates(function(imageSource){
+		var image = new imageModule.Image();
+		image.imageSource = imageSource;
+		
+		container.addChild(image);
+	});
+}
+```
 
 ### Step #6 - Tap that image!
 
-Look we have images but they do nothing. Expected right? After all it's just an image, they have no inherit behaviors and we didn't actually add anything to them. Good time to introduce [Gestures]()!
+Look we have images but they do nothing. Expected, right? After all it's just an image, they have no inherit behaviors and we didn't actually add anything to them. Good time to introduce Gestures!
+
+TODOTODO: Do a thing
 
 Gestures are
 	> AWESOME
 
 Let's pull in our Gestures Module so we can use it.
 
-	var gesturesModule = require("ui/gestures");
+```JavaScript
+var gesturesModule = require("ui/gestures");
+```
 
-Now what we want to do is add a tap event to each image. Then when the user taps it we're going to call a new function (templateSelected) who's only job is to take an ImageSource and navigate the user to 'create-meme' passing that [ImageSource]().
+Now what we want to do is add a `tap` event to each image. Then when the user taps it, we're going to call a new function (`templateSelected`) whose only job is to take an ImageSource and navigate the user to another page you'll be building later (create meme), passing that ImageSource.
 
-Let's first start by creating an empty function called 'templateSelected' who accepts an imageSource. We'll add its behavior later.
+Let's first start by creating an empty function called `templateSelected` that accepts an ImageSource. We'll add its behavior later.
 
-	function templateSelected(selectedImageSource) {	
-	}
+```JavaScript
+function templateSelected(selectedImageSource) {	
+}
+```
 
-Next we need to connect the two, the image's tap to the the function 'tempalteSelected'. 
+Next we need to connect the two, the image's tap to the `templateSelected` function. 
 
-Staying in our callback that we created to pass to 'templates.getTemplates' let's continue to extend image.
+Staying in the callback that we created to pass to `templates.getTemplates`, let's continue to extend image.
 
-Image has a method called [observe](). Guess what observe takes? Yep, gestures, and a callback. Perfect! Lets pass it a [tap]() and a new callback which calls templateSelected passing along our image.
+Image has a method called `observe`. Guess what `observe` takes? Yep, gestures, and a callback. Perfect! Let's pass it a tap gesture and a new callback, which in turn calls `templateSelected` passing along our image.
 
-	image.observe(gesturesModule.GestureTypes.tap, function () { 
-		templateSelected(imageSource); 
-	});
+```JavaScript
+image.observe(gesturesModule.GestureTypes.tap, function () { 
+	templateSelected(imageSource); 
+});
+```
 
 **Run the application**
 
 Go ahead and tap. Tap, Tap, Tap. Blerge, boring. Let's add a little behavior to our empty templateSelected.
 
-	alert("HI THERE!");
+```JavaScript
+alert("HI THERE!");
+```
 
-Run again? Feel a little better? You should be seeing a dialog pop when you tap an image.
+Run again? Feel a little better? You should now see a dialog when you tap an image.
 
 **Completed populateTemplate**
 
-	function populateTemplates() {
-		var container = _page.getViewById("templateContainer");
+```JavaScript
+function populateTemplates() {
+	var container = _page.getViewById("templateContainer");
+
+	templates.getTemplates(function(imageSource){
+		var image = new imageModule.Image();
+		image.imageSource = imageSource;
 	
-	
-		templates.getTemplates(function(imageSource){
-			var image = new imageModule.Image();
-			image.imageSource = imageSource;
-		
-			image.observe(gesturesModule.GestureTypes.tap, function () { 
-				templateSelected(imageSource); 
-			});
-			
-			container.addChild(image);
+		image.observe(gesturesModule.GestureTypes.tap, function () { 
+			templateSelected(imageSource); 
 		});
-	}
+		
+		container.addChild(image);
+	});
+}
+```
 
+### Step #7 - Navigate to Create Meme
 
-### Step #7 - Navigate to CreateMeme
+Now we've already learned about how to navigate the user from one page to another, but this time things are a bit different. This time we need to pass the ImageSource of the image the user tapped. We need to pass this image along to the create meme page such that that page can later edit it.
 
-Now we've already learned about how to navigate the user from one page to another but this time things are a bit different. This time we need to pass the imageSource of which the user tapped. We need to pass this image along to 'create-meme' such that 'create-meme' can later edit it.
-
-Earlier we added the tapGesture to each image and when tapped we called 'tempalteSelected(imageSource)' where we passed that [ImageSource]() to that function.
+Earlier we added the tapGesture to each image, and when it was tapped we called `tempalteSelected(imageSource)`, where we passed that ImageSource to that function.
 
 Time for you to try and make that function.
 
 **Run the application**
 
-At this point you should be able to run your application, see the images populate the WrapLayout, and when you tap an image we should be trying to navigate the user to 'create-meme' or blow up if we don't have a 'create-meme' placeholder.
+At this point you should be able to run your application, see the images populate the WrapLayout, and when you tap an image we should be trying to navigate the user to the create meme page or blow up if we don't have a page as a placeholder
 
 **Completed templateSelected function**
 
-	function templateSelected(selectedImageSource) {	
-		frameModule.topmost().navigate({
-			moduleName: "./components/create-meme/create-meme",
-			context: imageSource,
-			animated: true
-		});
-	}
+```JavaScript
+function templateSelected(selectedImageSource) {	
+	frameModule.topmost().navigate({
+		moduleName: "./components/create-meme/create-meme",
+		context: imageSource,
+		animated: true
+	});
+}
+```
 
 ### Step #8 - Extra Credit - Clearing the screen.
 
-Earlier we created a function which would fire when the 'navigatedTo' event fires. We did that to keep the images fresh every time the user is navigated to our home page.
+Earlier we created a function which would fire when the `navigatedTo` event fires. We did that to keep the images fresh every time the user is navigated to our home page.
 
-To keep that screen fresh we need to make sure we clear the images in it. Now we could debate on the best way to do such, but for our purposes here we're just going to grab the WrapLayout and delete all of it's children. Then we just populate it using what we just built.
+To keep that screen fresh we need to make sure we clear the images in it. Now we could debate on the best way to achieve this, but for our purposes here we're just going to grab the WrapLayout and delete all of its children. Then we just populate it using what we just built.
 
 What do we want to do?
 * Get our container.
@@ -528,7 +591,7 @@ What do we want to do?
 * Loop backwards
 	* removing that child.
 		- [hint]()
-	* Get ourselves our of potential memory issues.
+	* Get ourselves out of potential memory issues.
 	* Wash, Rinse, Repeat.
 
 Oh yea, we need to call this from somewhere? Where?
@@ -543,29 +606,31 @@ Ok, little weird here since we only have essentially two pages and the first tim
 
 **Completed function to clear our memes**
 
-	function clearOldMemes(container) {
-	
-		for (var i = container.getChildrenCount() - 1; i >= 0; i-- ) {
-			var childItem = container.getChildAt(i);
-			container.removeChild(childItem);
-			
-			// Prevent possible memory leaks
-			childItem.imageSource.setNativeSource(null);
-			childItem.imageSource = null;
-			childItem = null;
-		}
-		utils.GC();
+```JavaScript
+function clearOldMemes(container) {
+
+	for (var i = container.getChildrenCount() - 1; i >= 0; i-- ) {
+		var childItem = container.getChildAt(i);
+		container.removeChild(childItem);
+		
+		// Prevent possible memory leaks
+		childItem.imageSource.setNativeSource(null);
+		childItem.imageSource = null;
+		childItem = null;
 	}
+	utils.GC();
+}
+```
 
 ### Step #9 - extra EXTRA credit. Build My Memes. 
 
-Extend what we've built so far but now populate the My Memes tab. In the next lab you will be creating the 'create-meme' page. 'create-meme' will take that image source we passed to it, then save it to local storage. That's great but we would love to see those memes appear on our My Memes tab in our TabView.
+Extend what we've built so far but now populate the My Memes tab. In the next lab you will be creating the create meme page. This page will take that image source we passed to it, then save it to local storage. That's great but we would love to see those memes appear on our My Memes tab in our TabView.
 
-A few times already we've referenced our shared folder. This is where we've abstracted away some of our logic to get the memes, call local storage, etc.
+We've already reference our shared folder before. This is where we've abstracted away some of our logic to get the memes, call local storage, etc.
 
 To help get you started let's recap some of the steps we've gone through to populate the WrapLayout for the meme templates tab:
 
-1. We created a function that we called from onNavigatedTo.
+1. We created a function that we called from `onNavigatedTo`.
 2. In that function we got a reference to our WrapLayout.
 3. Then we called our Templates API to get our images. 
 4. The Templates API took a callback which did the work to populate the WrapLayout.
