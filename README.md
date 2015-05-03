@@ -35,7 +35,7 @@ We’ve chosen to walk your through building mobile application which exercises 
 * 12:15 - 12:30 - [Lab #2 Start](labs/Lab-2/readme.md)
 * 12:30 - 13:30 - Lunch
 * 13:30 - 14:00 - Lab #2 Continued
-* 14:00 - 15:00 - [Diving Deep with {N}, @sebawita](http://tbd.com) 
+* 14:00 - 15:00 - [Diving Deep with {N}, @sebawita](slides/3-MagicVsScience/MagicVsScience.pdf) 
 * 15:00 - 15:15 - Break
 * 15:15 - 16:00 - [Lab #3](labs/Lab-3/readme.md)
 * 16:00 - 16:30 - Panel Q&A and Wrap Up
@@ -44,7 +44,7 @@ We’ve chosen to walk your through building mobile application which exercises 
 
 1. [Welcome to NativeScript](slides/1-Intro/intro.pdf)
 2. [Beyond the Basics](slides/2-BeyondTheBasics/Going%20Beyond%20the%20Basics.pdf) 
-3. [Diving Deep with {N}](http://tbd.com) 
+3. [Diving Deep with {N}](slides/3-MagicVsScience/MagicVsScience.pdf) 
 
 # Labs
 Each lab is structured in two distinct parts. A starting project and a finished project. Each lab builds on what you completed in the lab prior. While we do provide a starting point each time it’s not required for you to start there if you would like to advance your own project. 
