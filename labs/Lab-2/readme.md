@@ -520,7 +520,7 @@ Staying in the callback that we created to pass to `templates.getTemplates`, let
 Image has a method called `observe`. Guess what `observe` takes? Yep, gestures, and a callback. Perfect! Let's pass it a tap gesture and a new callback, which in turn calls `templateSelected` passing along our image.
 
 ```JavaScript
-image.observe(gesturesModule.GestureTypes.tap, function () { 
+image.observe(gesturesModule.GestureTypes.Tap, function () { 
 	templateSelected(imageSource); 
 });
 ```
@@ -545,7 +545,7 @@ function populateTemplates() {
 		var image = new imageModule.Image();
 		image.imageSource = imageSource;
 	
-		image.observe(gesturesModule.GestureTypes.tap, function () { 
+		image.observe(gesturesModule.GestureTypes.Tap, function () { 
 			templateSelected(imageSource); 
 		});
 		
