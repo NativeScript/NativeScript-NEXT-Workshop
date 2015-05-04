@@ -359,6 +359,7 @@ Right click on the **create-meme** folder -> Add -> New File. Select TypeScript,
 Now paste and save the following code:
 
 ```JavaScript
+module MemeViewModel {
 var imageManipulation = require("../image-manipulation/image-manipulation");
 var localStorage = require("../../shared/local-storage/local-storage");
 var socialShare = require("../social-share/social-share");
@@ -434,6 +435,7 @@ export class CreateMemeViewModel extends observable.Observable {
 
 export var viewModel = new CreateMemeViewModel();
 viewModel.addRefreshOnChange();
+}
 ```
 
 Now expand view-model-v2.ts (you might need to right click on it and select "Compile to JavaScript" first) and open the .js file. This is the code that is generated from the TypeScript version.
