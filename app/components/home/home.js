@@ -29,11 +29,10 @@ exports.load = function(args) {
 		navBar.barStyle = 0;
 		navBar.tintColor = UIColor.blackColor();
 		
-		navBar.titleTextAttributes =
-			new NSDictionary(
-				[UIColor.blackColor()],
-				[NSForegroundColorAttributeName]
-			);
+		navBar.titleTextAttributes = NSDictionary.alloc().initWithObjectsForKeys(
+			[UIColor.blackColor()],
+			[NSForegroundColorAttributeName]
+		);
 	}
 };
 
