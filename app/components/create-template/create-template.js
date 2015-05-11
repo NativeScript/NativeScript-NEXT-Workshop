@@ -17,7 +17,7 @@ exports.loaded = function(args) {
 	_page = args.object;
 
 	if (applicationModule.ios) {
-		_page.ios.title = "Create Template";
+		_page.ios.title = "New Template";
 	}
 
 	_page.bindingContext = _viewData;
@@ -28,13 +28,15 @@ exports.loaded = function(args) {
 	_viewData.set("imageSource", null);
 };
 
-exports.navigatedTo = function(args) {	
+exports.navigatedTo = function(args) {
+	invokeCamera();
+};
+
+exports.newTemplate = function(){
 	invokeCamera();
 };
 
 function invokeCamera() {
-	//https://github.com/NativeScript/docs/blob/master/camera.md
-	
 	var pictureOptions = {
 		width: applicationModule.ios ? 320 : 640,
 		height: applicationModule.ios ? 240 : 480,
@@ -44,10 +46,9 @@ function invokeCamera() {
 	cameraModule.takePicture(pictureOptions)
 		.then(function(r) {
 			analyticsMonitor.trackFeature("CreateTemplate.TakePicture");
-			console.log("***** Invoke Camera Return *****", r);
 
 			_viewData.set("imageSource", r);
-			_viewData.set("pictureTaken", true);			
+			_viewData.set("pictureTaken", true);
 		}, function(error) {
 			analyticsMonitor.trackException(error, "Failed to TakePicture");
 			console.log("***** ERROR *****", error);
@@ -60,20 +61,33 @@ function invokeCamera() {
 exports.saveLocally = function() {
 	_viewData.set("isBusy", true);
 	analyticsMonitor.trackFeature("CreateTemplate.SaveLocally");
-	templates.addNewLocalTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"));
+
+	var image = _viewData.get("imageSource");
+	if (image) {
+		templates.addNewLocalTemplate(_uniqueImageNameForSession, image);
+	}
+
+	//todo ... what should be done without an image?
+	_viewData.set("isBusy", false);
 	navigation.goHome();
 };
 
 //Submit the template to everlive for everyone to use.
 exports.submitToEverlive = function() {
 	_viewData.set("isBusy", true);
-	analyticsMonitor.trackFeatureStart("CreateTemplate.SavedToEverlive");
+	var image = _viewData.get("imageSource");
 
-	templates.addNewPublicTemplate(_uniqueImageNameForSession, _viewData.get("imageSource"))
-	.then(function(){
-		analyticsMonitor.trackFeature("CreateTemplate.SavedToEverlive");
-		analyticsMonitor.trackFeatureStop("CreateTemplate.SavedToEverlive");
+	if (image) {
+		analyticsMonitor.trackFeatureStart("CreateTemplate.SavedToEverlive");
 
-		navigation.goHome();
-	});
+		templates.addNewPublicTemplate(_uniqueImageNameForSession, image)
+		.then(function(){
+			analyticsMonitor.trackFeature("CreateTemplate.SavedToEverlive");
+			analyticsMonitor.trackFeatureStop("CreateTemplate.SavedToEverlive");
+
+			navigation.goHome();
+		});
+	}
+
+	_viewData.set("isBusy", false);
 };

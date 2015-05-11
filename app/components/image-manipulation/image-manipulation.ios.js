@@ -19,8 +19,8 @@ module.exports = {
 		);
 
 		// Create rectangles for each line of text
-		var topRect = CGRectMake(30, 30, image.size.width, image.size.height);
-		var bottomRect = CGRectMake(30, image.size.height - 100, image.size.width, image.size.height);
+		var topRect = CGRectMake(30, 30, image.size.width - 60, image.size.height);
+		var bottomRect = CGRectMake(30, image.size.height - 100, image.size.width - 30, image.size.height);
 
 		// Set the color of the text to white
 		if (isBlackText) {

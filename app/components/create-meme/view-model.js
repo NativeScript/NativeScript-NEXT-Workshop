@@ -13,7 +13,7 @@ viewModel.prepareNewMeme = function(selectedImage) {
 
 	this.set("topText", "");
 	this.set("bottomText", "");
-	this.set("fontSize", 40);
+	this.set("fontSize", 50);
 	this.set("isBlackText", false);
 	this.set("memeImage", selectedImage);
 
@@ -55,7 +55,7 @@ viewModel.addEventListener(observable.Observable.propertyChangeEvent, function(c
 	if (changes.propertyName === "memeImage") {
 		return;
 	}
-	
+
 	//Call refresh meme, but make sure it doesn't get called more often than every 200ms
 	callOncePerGivenTime(viewModel.refreshMeme, 200);
 });
@@ -68,16 +68,16 @@ function callOncePerGivenTime(delegate, delay) {
 		additonalUpdateRequested = true;
 		return;
 	}
-	
+
 	shouldDelayNextCall = true;
-	
+
 	// call the function here
 	delegate();
-	
+
 	//delay the next call by a bit it, to make the app a bit more cost effective
 	setTimeout(function() {
 		shouldDelayNextCall = false;
-		
+
 		//call the function again in case there was a request during the blocking period
 		if (additonalUpdateRequested) {
 			additonalUpdateRequested = false;
@@ -92,9 +92,9 @@ function callOncePerGivenTimeSimple(delegate, delay) {
 	if (shouldDelayNextCall) {
 		return;
 	}
-	
+
 	shouldDelayNextCall = true;
-	
+
 	// call the function with a delay
 	setTimeout(function() {
 		shouldDelayNextCall = false;

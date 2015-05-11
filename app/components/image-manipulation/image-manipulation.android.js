@@ -28,7 +28,7 @@ module.exports = {
 		var canvas = new android.graphics.Canvas(bitmap);
 		canvas.drawText(topText, 50, 50, paint);
 		canvas.drawText(bottomText, 50, bitmap.getHeight() - 50, paint);
-		
+
 		return imageSource.fromNativeSource(bitmap);
 	}
 };
