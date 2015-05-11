@@ -1,4 +1,21 @@
 var imageSource = require("image-source");
+var font;
+var uiImage;
+
+function drawTextOnImage(options) {
+	var rect = CGRectMake(options.x, options.y, options.width, options.height);
+
+	// Set the color of the text to white
+	if (options.blackText) {
+		UIColor.blackColor().set();
+	} else {
+		UIColor.whiteColor().set();
+	}
+
+	// Draw the text into the image
+	var textString = NSString.alloc().initWithString(options.text);
+	textString.drawInRectWithFont(rect, font);
+}
 
 module.exports = {
 	addText: function(image, topText, bottomText, fontSize, isBlackText) {
@@ -6,36 +23,37 @@ module.exports = {
 		bottomText = bottomText || "";
 		fontSize = fontSize || 30;
 
-		var font = UIFont.boldSystemFontOfSize(fontSize);
+		// Set the font size to use for all text
+		font = UIFont.boldSystemFontOfSize(fontSize);
 
-		// Get the UIImage
-		image = image.ios;
+		// Store off a reference to the UIImage
+		uiImage = image.ios;
 
-		UIGraphicsBeginImageContext(image.size);
+		UIGraphicsBeginImageContext(uiImage.size);
 
 		// Draw the original image in
-		image.drawInRect(
-			CGRectMake(0, 0, image.size.width, image.size.height)
+		uiImage.drawInRect(
+			CGRectMake(0, 0, uiImage.size.width, uiImage.size.height)
 		);
 
-		// Create rectangles for each line of text
-		var topRect = CGRectMake(30, 30, image.size.width - 60, image.size.height);
-		var bottomRect = CGRectMake(30, image.size.height - 100, image.size.width - 30, image.size.height);
+		// Draw the top text
+		drawTextOnImage({
+			blackText: isBlackText,
+			text: topText,
+			x: 30,
+			y: 30,
+			width: uiImage.size.width - 60,
+			height: uiImage.size.height
+		});
 
-		// Set the color of the text to white
-		if (isBlackText) {
-			UIColor.blackColor().set();
-		} else {
-			UIColor.whiteColor().set();
-		}
-
-		// Draw the top text into the image
-		var topString = NSString.alloc().initWithString(topText);
-		topString.drawInRectWithFont(topRect, font);
-
-		// Draw the bottom text into the image
-		var bottomString = NSString.alloc().initWithString(bottomText);
-		bottomString.drawInRectWithFont(bottomRect, font);
+		drawTextOnImage({
+			blackText: isBlackText,
+			text: bottomText,
+			x: 30,
+			y: uiImage.size.height - 100,
+			width: uiImage.size.width - 30,
+			height: uiImage.size.height
+		});
 
 		// Get the newly created image
 		var newImage = UIGraphicsGetImageFromCurrentImageContext();
