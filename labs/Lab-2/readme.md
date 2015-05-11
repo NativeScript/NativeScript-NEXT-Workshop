@@ -71,11 +71,11 @@ Now at this point we don’t actually have anywhere to put our code, which means
 
 To complete our scenario, when the page loads we'll just wait some time then redirect to our new home page. To do so, let’s add the `setTimeout` to our Page’s `onLoaded` event.
 
-To start we need to tell our view what function should run when the `loaded` event fires. We can easily do this by just adding an attribute to our Page’s *Page* element, `loaded=“load”`.  
+To start we need to tell our view what function should run when the `loaded` event fires. We can easily do this by just adding an attribute to our Page’s *Page* element, `loaded="load"`.  
 
 ```xml
 	<Page
-		loaded=“load”>
+		loaded="load">
 ```
 
 Now let’s open our SplashScreen’s code file, `splashscreen.js`. Right now we have no code but it’s time to add that `load` function we we just defined in our view. To do so we need to follow the [CommonJS](http://www.commonjs.org/) pattern for defining and exporting a function. In our case we need to define a function called *load* and export to our view such that it can later be called when our *loaded* event fires.
@@ -230,10 +230,12 @@ We need to define an items array. In that it will have two Items (Templates, MyM
 <TabView.items>
   <TabViewItem>
     <TabViewItem.view>
+      <Label text="templates" />
     </TabViewItem.view>
   </TabViewItem>
   <TabViewItem>
     <TabViewItem.view>
+      <Label text="memes" />
     </TabViewItem.view>
   </TabViewItem>
 </TabView.items>
@@ -258,10 +260,12 @@ The completed TabView should look like the following:
 	<TabView.items>
 		<TabViewItem title="Templates">
 			<TabViewItem.view>
+				<Label text="templates" />
 			</TabViewItem.view>
 		</TabViewItem>
 		<TabViewItem title="My Memes">
 			<TabViewItem.view>
+				<Label text="memes" />
 			</TabViewItem.view>
 		</TabViewItem>
 	</TabView.items>
@@ -493,8 +497,6 @@ function populateTemplates() {
 
 Look we have images but they do nothing. Expected, right? After all it's just an image, they have no inherit behaviors and we didn't actually add anything to them. Good time to introduce Gestures!
 
-TODOTODO: Do a thing
-
 Gestures are
 	> AWESOME
 
@@ -520,7 +522,7 @@ Staying in the callback that we created to pass to `templates.getTemplates`, let
 Image has a method called `observe`. Guess what `observe` takes? Yep, gestures, and a callback. Perfect! Let's pass it a tap gesture and a new callback, which in turn calls `templateSelected` passing along our image.
 
 ```JavaScript
-image.observe(gesturesModule.GestureTypes.tap, function () { 
+image.observe(gesturesModule.GestureTypes.Tap, function () { 
 	templateSelected(imageSource); 
 });
 ```
@@ -545,7 +547,7 @@ function populateTemplates() {
 		var image = new imageModule.Image();
 		image.imageSource = imageSource;
 	
-		image.observe(gesturesModule.GestureTypes.tap, function () { 
+		image.observe(gesturesModule.GestureTypes.Tap, function () { 
 			templateSelected(imageSource); 
 		});
 		
@@ -572,7 +574,7 @@ At this point you should be able to run your application, see the images populat
 function templateSelected(selectedImageSource) {	
 	frameModule.topmost().navigate({
 		moduleName: "./components/create-meme/create-meme",
-		context: imageSource,
+		context: selectedImageSource,
 		animated: true
 	});
 }
@@ -587,10 +589,8 @@ To keep that screen fresh we need to make sure we clear the images in it. Now we
 What do we want to do?
 * Get our container.
 * Get the count on the number of children in that container.
-	- [hint]()
 * Loop backwards
 	* removing that child.
-		- [hint]()
 	* Get ourselves out of potential memory issues.
 	* Wash, Rinse, Repeat.
 

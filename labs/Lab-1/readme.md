@@ -34,7 +34,7 @@ If all goes right you should see the text “Hello NativeScript!” on your scre
 
 ## Step 3: AppBuilder LiveSync
 
-Now that you have your app on your device let's make some changes to it. Start by locating the **Project Navigator** on the right-hand side of the screen. This contains the files that make up your NativeScript app. Find the **components/splashscreen/splashscreen.xml** file and double click it to open the file for editing. You should see a simple file that looks like this:
+Now that you have your app on your device let's make some changes to it. Start by locating the **Project Navigator** on the right-hand side of the screen. This contains the files that make up your NativeScript app. Find the **splashscreen.xml** file and double click it to open the file for editing. You should see a simple file that looks like this:
 
 ```xml
 <Page>
