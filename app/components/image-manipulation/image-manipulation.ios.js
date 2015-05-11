@@ -3,7 +3,7 @@ var font;
 var uiImage;
 
 function drawTextOnImage(options) {
-	var rect = CGRectMake(options.x, options.y, options.width, options.height);
+	var rect = CGRectMake(options.x, options.y, uiImage.size.width - 50, uiImage.size.height);
 
 	// Set the color of the text to white
 	if (options.blackText) {
@@ -36,23 +36,36 @@ module.exports = {
 			CGRectMake(0, 0, uiImage.size.width, uiImage.size.height)
 		);
 
+		// Draw an outline for the top text
+		drawTextOnImage({
+			blackText: !isBlackText,
+			text: topText,
+			x: 28,
+			y: 28
+		});
+
 		// Draw the top text
 		drawTextOnImage({
 			blackText: isBlackText,
 			text: topText,
 			x: 30,
-			y: 30,
-			width: uiImage.size.width - 60,
-			height: uiImage.size.height
+			y: 30
 		});
 
+		// Draw an outline for the bottom text
+		drawTextOnImage({
+			blackText: !isBlackText,
+			text: bottomText,
+			x: 28,
+			y: uiImage.size.height - 98
+		});
+
+		// Draw the bottom text
 		drawTextOnImage({
 			blackText: isBlackText,
 			text: bottomText,
 			x: 30,
-			y: uiImage.size.height - 100,
-			width: uiImage.size.width - 30,
-			height: uiImage.size.height
+			y: uiImage.size.height - 100
 		});
 
 		// Get the newly created image
