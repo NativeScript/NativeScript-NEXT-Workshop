@@ -13,14 +13,14 @@ exports.loaded = function(args) {
   if (applicationModule.ios) {
     frameModule.topmost().ios.navBarVisibility = "never";
   }
-  
+
   var webView = _page.getViewById("releaseNotesView");
 
   var releaseNotesFolder = "./components/releases/versionInfo";
   var fullPath = fs.path.join(fs.knownFolders.currentApp().path, releaseNotesFolder);
 
   var releaseFolder = fs.Folder.fromPath(fullPath);
-  var releaseNotes = releaseFolder.getFile("1.2.md");
+  var releaseNotes = releaseFolder.getFile(global.appVersion + ".md");
 
   releaseNotes.readText().then(function(content){
     var convertedReleaseNotes = marked(content);
