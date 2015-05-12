@@ -11,13 +11,13 @@ module.exports = {
 	},
 	goCreateMeme: function (imageSource) {
 		isHome = false;
-		
+
 		frameModule.topmost().navigate({
 			moduleName: global.baseViewDirectory + "create-meme/create-meme",
 			context: imageSource,
 			animated: true
 		});
-		
+
 	},
 	goCreateTemplate: function () {
 		isHome = false;
@@ -26,17 +26,24 @@ module.exports = {
 			animated: true
 		});
 	},
+	goReleaseNotes: function () {
+		isHome = false;
+		frameModule.topmost().navigate({
+			moduleName: global.baseViewDirectory + "releases/releases",
+			animated: false
+		});
+	},
 	goBack: function () {
 		if(isHome === false)
 			frameModule.topmost().goBack();
 	},
-	
+
 	showIOSNavigationBar: function() {
 		// Make sure we're on iOS before configuring the navigation bar
 		if (applicationModule.ios) {
 			// Get access to the native iOS UINavigationController
 			var controller = frameModule.topmost().ios.controller;
-			
+
 			// Call the UINavigationController's setNavigationBarHidden method
 			controller.navigationBarHidden = false;
 		}

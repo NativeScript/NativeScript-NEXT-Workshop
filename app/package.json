@@ -1,16 +1,19 @@
 {
-	"name": "JustMeme",
-	"main": "app.js",
-	"version": "0.11.0",
-	"author": "Telerik <support@telerik.com>",
-	"description": "JustMeme is the best Meme generator on the interwebs!",
-	"license": "BSD",
-	"keywords": [
-		"telerik",
-		"mobile",
-		"template"
-	],
-	"repository": {
-		"url": "https://github.com/NativeScript/NativeScript-NEXT-Workshop"
-	}
+  "name": "JustMeme",
+  "main": "app.js",
+  "version": "0.11.0",
+  "author": "Telerik <support@telerik.com>",
+  "description": "JustMeme is the best Meme generator on the interwebs!",
+  "license": "BSD",
+  "keywords": [
+    "telerik",
+    "mobile",
+    "template"
+  ],
+  "repository": {
+    "url": "https://github.com/NativeScript/NativeScript-NEXT-Workshop"
+  },
+  "dependencies": {
+    "marked": "^0.3.3"
+  }
 }

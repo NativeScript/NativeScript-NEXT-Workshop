@@ -14,11 +14,12 @@ var analyticsMonitor = require("../../shared/analytics");
 var _page;
 
 exports.load = function(args) {
-	console.log("Home loaded Event Fired");
 	_page = args.object;
 
 	if (applicationModule.ios) {
 		_page.ios.title = "JustMeme";
+		frameModule.topmost().ios.navBarVisibility = "auto";
+
 		var controller = frameModule.topmost().ios.controller;
 
 		var navigationItem = controller.visibleViewController.navigationItem;
@@ -28,7 +29,7 @@ exports.load = function(args) {
 		navBar.barTintColor = UIColor.colorWithRedGreenBlueAlpha(.35, .90, .0, 1.0);
 		navBar.barStyle = 0;
 		navBar.tintColor = UIColor.blackColor();
-		
+
 		navBar.titleTextAttributes = NSDictionary.alloc().initWithObjectsForKeys(
 			[UIColor.blackColor()],
 			[NSForegroundColorAttributeName]
@@ -153,16 +154,6 @@ function deleteAllMemes() {
 }
 
 function clearOldMemes(container) {
-
-	/*
-	//you could loop through like this but the visual tree will have to reindex the items and shift things
-	while (container.getChildrenCount() > 0) {
-		container.removeChild(container.getChildAt(0));
-	}
-	*/
-
-	//Or just work backwards picking off the back
-	console.log("***** Clearing X children:", container.getChildrenCount());
 
 	for (var i = container.getChildrenCount() - 1; i >= 0; i-- ) {
 		var childItem = container.getChildAt(i);

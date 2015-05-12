@@ -4,7 +4,7 @@
 	loaded="loaded">
 
 	<Page.optionsMenu>
-		<MenuItem id="navNewTemplate" text="New" tap="newTemplate" android.position="actionBar"/>
+		<MenuItem id="navNewTemplate" icon="~/images/icons/addBtn.png" text="New" tap="newTemplate" android.position="actionBar"/>
 	</Page.optionsMenu>
 
 	<StackLayout>

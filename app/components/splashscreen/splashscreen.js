@@ -1,20 +1,27 @@
 var observableModule = require("data/observable");
 var navigation = require( "../../shared/navigation");
-var absoluteLayoutModule = require("ui/layouts/absolute-layout");
-var labelModule = require("ui/label");
 
 var _viewData = new observableModule.Observable();
 var _page;
 
 exports.load = function(args) {
-	_page = args.object;
 	_viewData.set( "imageSource", "~/images/splashScreenBackground.png" );
 	_viewData.set("appVersion", global.appVersion );
 
-	//Set the binding context on the page.
+	_page = args.object;
 	_page.bindingContext = _viewData;
 
-	setTimeout(function () {
-		navigation.goHome();
-	}, 100);
+	//Get whatever sets the flag
+	var firstTimeForVersion = true;
+	var delay = 100;
+
+	if (firstTimeForVersion) {
+		setTimeout(function () {
+			navigation.goReleaseNotes();
+		}, delay);
+	} else {
+		setTimeout(function () {
+			navigation.goHome();
+		}, delay);
+	}
 };

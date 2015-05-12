@@ -1,0 +1,9 @@
+<Page xmlns="http://www.nativescript.org/tns.xsd"
+  loaded="loaded">
+
+  <GridLayout rows="*, 75" >
+    <WebView id="releaseNotesView" />
+    <Button row="1" text="ok, got it" tap="okGotIt" />
+  </GridLayout>
+
+</Page>
