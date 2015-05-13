@@ -3,7 +3,7 @@ var frameModule = require("ui/frame");
 var fs = require("file-system");
 
 var navigation = require( "../../shared/navigation");
-var marked = require( "../../node_modules/marked");
+var marked = require( "../../node_modules/marked/marked.min");
 
 var _page;
 
