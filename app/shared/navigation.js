@@ -17,7 +17,6 @@ module.exports = {
 			context: imageSource,
 			animated: true
 		});
-
 	},
 	goCreateTemplate: function () {
 		isHome = false;
