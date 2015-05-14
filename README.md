@@ -1,75 +1,75 @@
-# 2015 TelerikNEXT NativeScript {N} Workshop
+# NativeScript {N} Workshop
 
-Contributors: [Clark Sell](http://csell.net) & [TJ VanToll](http://tjvantoll.com/) & Sebastian Witalec. You can find us on Twitter at: [@csell5](https://twitter.com/csell5), [@tjvantoll](https://twitter.com/tjvantoll), [@sebawita](https://twitter.com/sebawita)
+This repository contains a series of presentations and labs for teaching the basics of NativeScript. These materials were first used during the “NativeScript Deep Dive” workshop at [TelerikNEXT](http://teleriknext.com/), however, the materials were designed to let anyone go through the workshop on their own time.
 
-This repository contains the presentations, labs and the {N}  application used in the “NativeScript Deep Dive” workshop at [TelerikNEXT](http://teleriknext.com/).
+The workshop is divided into six steps: three presentations and three hands-on labs. By reading the slides and going through the hands-on labs, you'll learn the basics of how to build apps with NativeScript. You'll also build a [meme generator](https://github.com/NativeScript/JustMeme) you can use to impress (or annoy) your friends and family.
 
-Tags: TelerikNEXT, NativeScript, {N}, JavaScript, CSS3, iOS, Android
+## Pre-Requisites
 
-# Pre-Requisites
+Before you start this workshop you must have the following things in place:
 
-Throughout the workshop we will be working in the [Telerik Platform](http://platform.telerik.com). While the Telerik Platform supports both a web based IDE and the CLI, we will only be working in the Web editor, AppBuilder. From there, you can easily build and deploy the application to either the {N} app or, if you have a device with a developer account, directly to your device.
-
-## Required
-
-* A Browser (Your Choice)
-* [Telerik Platform](http://platform.telerik.com) Account. Free Trial is enough.
-* The NativeScript App
+* A browser (your choice)
+* A [Telerik Platform](http://platform.telerik.com) account (the free trial is enough)
+* At least one Android 4.2+ or iOS 7+ device
+* The NativeScript app installed on your device(s)
     * [iOS App Store](https://itunes.apple.com/us/app/nativescript/id882561588?mt=8)
     * [Google Play](https://play.google.com/store/apps/details?id=com.telerik.NativeScript&hl=en)
 
-## Required if you want to side-load
-* Device and developer account, at least one Android 4.2+ or iOS 7+ device
+## Steps
 
-# Workshop Goals
-Our goal of this workshop is to introduce you to NativeScript or {N}. NativeScript just released and a new world had been born. At the end of the day you will have build a {N} application, while exploring different parts of the {N} architecture, framework and modules. A mixture of both presentations, and labs will run the entirety of the day.
+Steps #1, #3, and #5 are presentations. Steps #2, #4, and #6 are labs. Each presentation was designed to introduce a lab. Therefore the presentation in step #1 provides information you'll use in the lab in step #2; the presentation in step #3 provides information you'll use in step #4; and so on.
 
-We’ve chosen to walk your through building mobile application which exercises {N}, the Telerik Platform and is fun. How do you create fun? By building a Meme generator of course! Our day will be highly interactive with a good mixture of presentations and hand on coding. At the end, you'll have an app, and you'll have spammed your friends with the meme images you've always wanted to build.
+Each of the three labs provide a starting project, a finished project, and instructions that help you work from the starting project to the finished one. Each project resides in its own GitHub repo, so you can run the projects side by side if necessary.
 
-# WorkShop Agenda
-* 09:00 - 09:30 - Setup and Configuration
-* 09:30 - 10:30 - [Introductions and Welcome to NativeScript {N}, @tjvantoll](slides/1-Intro/intro.pdf)
-* 10:30 - 11:00 - [Lab #1](labs/Lab-1/readme.md) 
-* 11:00 - 11:15 - Break 
-* 11:15 - 12:15 - [Beyond the Basics, @csell5](slides/2-BeyondTheBasics/Going%20Beyond%20the%20Basics.pdf) 
-* 12:15 - 12:30 - [Lab #2 Start](labs/Lab-2/readme.md)
-* 12:30 - 13:30 - Lunch
-* 13:30 - 14:00 - Lab #2 Continued
-* 14:00 - 15:00 - [Diving Deep with {N}, @sebawita](slides/3-MagicVsScience/MagicVsScience.pdf) 
-* 15:00 - 15:15 - Break
-* 15:15 - 16:00 - [Lab #3](labs/Lab-3/readme.md)
-* 16:00 - 16:30 - Panel Q&A and Wrap Up
+If you run into any issues completing the workshop, or you find a bug we haven't noticed, please [create an issue](https://github.com/NativeScript/NativeScript-NEXT-Workshop/issues/new) or send a pull request.
 
-# Presentations
+### Step #1
 
-1. [Welcome to NativeScript](slides/1-Intro/intro.pdf)
-2. [Beyond the Basics](slides/2-BeyondTheBasics/Going%20Beyond%20the%20Basics.pdf) 
-3. [Diving Deep with {N}](slides/3-MagicVsScience/MagicVsScience.pdf) 
+* Presentation
+	* [Introductions and Welcome to NativeScript {N}](slides/1-Intro/intro.pdf) (pdf)
 
-# Labs
-Each lab is structured in two distinct parts. A starting project and a finished project. Each lab builds on what you completed in the lab prior. While we do provide a starting point each time it’s not required for you to start there if you would like to advance your own project. 
+### Step #2
 
-You will find each lab in its own GitHub repository. Our desire is to easily enable you to run each of these side by side in Telerik’s AppBuilder. 
-
-The lab steps are all contained in this repository which serves as our master repository.
-
-Now of course we’re human, so if you find a mistake, please feel free to submit a pull request.
-
-1. Your first {N} app
+* Lab
 	* [Instructions](labs/Lab-1/readme.md)
 	* [Starting Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab1-Start)
 
-2. Beyond the basics
+### Step #3
+
+* Presentation
+	* [Beyond the Basics](slides/2-BeyondTheBasics/Going%20Beyond%20the%20Basics.pdf) (pdf)
+
+### Step #4
+
+* Lab
 	* [Instructions](labs/Lab-2/readme.md)
 	* [Starting Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab2-Start)
 	* [Finished Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab2-Finish)
 
-3. Diving in deep
+### Step #5
+ 
+* Presentation
+	* [Diving Deep with {N}, @sebawita](slides/3-MagicVsScience/MagicVsScience.pdf) (pdf)
+
+### Step #6
+
+* Lab
 	* [Instructions](labs/Lab-3/readme.md)
 	* [Starting Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab3-Start)
 	* [Finished Solution](https://github.com/NativeScript/NativeScript-NEXT-Workshop-Lab3-Finish)
 
-# Great NativeScript References
+## Contributors
+
+The following people put this material together:
+
+* [Clark Sell](http://csell.net) | [@csell5](https://twitter.com/csell5)
+* [TJ VanToll](http://tjvantoll.com/) | [@tjvantoll](https://twitter.com/tjvantoll)
+* Sebastian Witalec | [@sebawita](https://twitter.com/sebawita)
+
+## Resources
+
+Here are some additional NativeScript resources:
+
 * [{N} Website](http://NativeScript.org)
 * [{N} Documentation](http://docs.nativescript.org/)
 * [{N} Google Group](https://groups.google.com/forum/#!forum/nativescript)
@@ -80,7 +80,6 @@ Now of course we’re human, so if you find a mistake, please feel free to submi
 * [{N} on StackOverflow](http://stackoverflow.com/questions/tagged/nativescript)
 * [{N} on IRC](http://webchat.freenode.net/?channels=nativescript)
 * [{N} on YouTube](https://www.youtube.com/playlist?list=PLvmaC-XMqeBbaD1EoQwHmnxiENYBeNckt)
-
 * [Telerik Platform](http://platform.telerik.com)
 * [{N} and the Telerik Platform](http://docs.telerik.com/platform/appbuilder/nativescript/index)
 * [Telerik Platform Documentation](http://docs.telerik.com/platform)
