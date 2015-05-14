@@ -1,9 +1,0 @@
-{
-	"id": "net.csell.justmeme",
-	"tns-ios": {
-		"version": "1.0.1"
-	},
-	"tns-android": {
-		"version": "1.0.0"
-	}
-}
