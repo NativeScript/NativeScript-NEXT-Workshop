@@ -2,7 +2,11 @@
 
 This repository contains a series of presentations and labs for teaching the basics of NativeScript. These materials were first used during the “NativeScript Deep Dive” workshop at [TelerikNEXT](http://teleriknext.com/), however, the materials were designed to let anyone go through the workshop on their own time.
 
-The workshop is divided into six steps: three presentations and three hands-on labs. By reading the slides and going through the hands-on labs, you'll learn the basics of how to build apps with NativeScript. You'll also build a [meme generator](https://github.com/NativeScript/JustMeme) you can use to impress (or annoy) your friends and family.
+The workshop is divided into six steps: three presentations and three hands-on labs. By reading the slides and going through the hands-on labs, you'll learn the basics of how to build apps with NativeScript. You'll also build a [meme generator](https://github.com/NativeScript/JustMeme) you can use to impress (or annoy) your friends and family. Here's what the completed app looks like:
+
+![](ss.png)
+![](ss2.png)
+![](ss3.png)
 
 ## Pre-Requisites
 
