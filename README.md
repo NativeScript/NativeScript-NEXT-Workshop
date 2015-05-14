@@ -4,9 +4,9 @@ This repository contains a series of presentations and labs for teaching the bas
 
 The workshop is divided into six steps: three presentations and three hands-on labs. By reading the slides and going through the hands-on labs, you'll learn the basics of how to build apps with NativeScript. You'll also build a [meme generator](https://github.com/NativeScript/JustMeme) you can use to impress (or annoy) your friends and family. Here's what the completed app looks like:
 
-![](ss.png)
-![](ss2.png)
-![](ss3.png)
+![](labs/ss.png)
+![](labs/ss2.png)
+![](labs/ss3.png)
 
 ## Pre-Requisites
 
