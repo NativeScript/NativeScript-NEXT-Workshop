@@ -6,7 +6,6 @@ The workshop is divided into six steps: three presentations and three hands-on l
 
 ![](labs/ss.png)
 ![](labs/ss2.png)
-![](labs/ss3.png)
 
 ## Pre-Requisites
 
